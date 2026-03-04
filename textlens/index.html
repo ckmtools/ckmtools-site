@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TextLens — Text Readability &amp; Analysis Toolkit for TypeScript</title>
+  <meta name="description" content="Zero-dependency text readability TypeScript library. 8 readability formulas including Flesch-Kincaid for Node.js, sentiment analysis JavaScript, keyword extraction, and SEO scoring. Readability score npm package with CLI.">
+  <meta name="keywords" content="text readability typescript, readability score npm, flesch kincaid nodejs, sentiment analysis javascript, text analysis, Coleman-Liau, Gunning Fog, SMOG, Dale-Chall, keyword extraction, SEO scoring, zero dependencies">
+  <link rel="canonical" href="https://ckmtools.dev/textlens/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens — Text Readability &amp; Analysis Toolkit for TypeScript">
+  <meta property="og:description" content="Zero-dependency readability scoring, sentiment analysis, keyword extraction, and SEO analysis for Node.js. 8 readability formulas including Flesch-Kincaid, Coleman-Liau, and Gunning Fog.">
+  <meta property="og:url" content="https://ckmtools.dev/textlens/">
+  <meta property="og:site_name" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TextLens — Text Readability &amp; Analysis Toolkit">
+  <meta name="twitter:description" content="Zero-dependency readability scoring, sentiment analysis, and keyword extraction for Node.js and TypeScript.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TextLens",
+    "description": "Zero-dependency text analysis and readability toolkit for Node.js and TypeScript. Includes 8 readability formulas, sentiment analysis, keyword extraction, SEO scoring, and CLI.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/textlens/",
+    "downloadUrl": "https://www.npmjs.com/package/textlens",
+    "softwareVersion": "1.0.1",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "codeRepository": "https://github.com/ckmtools/textlens",
+    "programmingLanguage": "TypeScript",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero tl-hero">
+      <p class="tl-breadcrumb"><a href="/">ckmtools</a> / textlens</p>
+      <h1>Text Readability &amp; Analysis Toolkit for TypeScript</h1>
+      <p class="tagline">Zero dependencies. 8 readability formulas. Sentiment analysis. Keyword extraction. SEO scoring. CLI included. Works out of the box.</p>
+
+      <pre class="tl-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+
+      <ul class="tl-highlights" aria-label="Key features">
+        <li>Zero dependencies</li>
+        <li>8 readability formulas</li>
+        <li>Sentiment analysis</li>
+        <li>TypeScript-first</li>
+        <li>Node.js &ge; 16</li>
+        <li>CLI included</li>
+      </ul>
+    </section>
+
+    <section class="tl-section" aria-label="Quick start">
+      <h2>Quick start</h2>
+      <pre><code><span class="tl-kw">import</span> { analyze } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> result = analyze(<span class="tl-str">'Your text goes here...'</span>);
+
+result.statistics.words;          <span class="tl-cmt">// word count</span>
+result.readability.consensusGrade; <span class="tl-cmt">// grade level (avg of 8 formulas)</span>
+result.readingTime.minutes;        <span class="tl-cmt">// estimated reading time</span>
+result.sentiment.label;            <span class="tl-cmt">// 'positive' | 'negative' | 'neutral'</span>
+result.keywords;                   <span class="tl-cmt">// TF-IDF ranked keywords</span></code></pre>
+    </section>
+
+    <section class="tl-section" aria-label="Readability formulas">
+      <h2>8 readability formulas, one consensus grade</h2>
+      <p class="tl-desc">TextLens computes all major readability indices and averages them into a single consensus grade level&mdash;no need to pick one formula.</p>
+      <pre><code><span class="tl-kw">import</span> { readability } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> scores = readability(text);
+scores.fleschReadingEase;       <span class="tl-cmt">// 0–100 (higher = easier)</span>
+scores.fleschKincaidGrade;      <span class="tl-cmt">// US grade level</span>
+scores.colemanLiauIndex;        <span class="tl-cmt">// character-based</span>
+scores.automatedReadabilityIndex;
+scores.gunningFogIndex;
+scores.smogIndex;
+scores.daleChallScore;
+scores.linsearWriteFormula;
+scores.consensusGrade;          <span class="tl-cmt">// weighted average</span></code></pre>
+    </section>
+
+    <section class="tl-section" aria-label="Sentiment analysis">
+      <h2>Sentiment analysis</h2>
+      <p class="tl-desc">AFINN-165 lexicon-based sentiment scoring with confidence values and word-level breakdown.</p>
+      <pre><code><span class="tl-kw">import</span> { sentiment } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> result = sentiment(<span class="tl-str">'This library is amazing and incredibly useful!'</span>);
+result.score;       <span class="tl-cmt">// 7</span>
+result.label;       <span class="tl-cmt">// 'positive'</span>
+result.confidence;  <span class="tl-cmt">// 0.87</span>
+result.positive;    <span class="tl-cmt">// ['amazing', 'incredibly', 'useful']</span></code></pre>
+    </section>
+
+    <section class="tl-section" aria-label="More features">
+      <h2>Keywords, SEO &amp; more</h2>
+      <div class="tl-grid">
+        <div class="tl-card">
+          <h3>Keyword extraction</h3>
+          <p>TF-IDF ranked keywords with density analysis for unigrams, bigrams, and trigrams.</p>
+          <pre><code><span class="tl-kw">import</span> { keywords, density } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+keywords(text, { topN: 5 });
+density(text).bigrams;</code></pre>
+        </div>
+        <div class="tl-card">
+          <h3>SEO scoring</h3>
+          <p>Content quality score (A&ndash;F grade) with actionable issues and suggestions.</p>
+          <pre><code><span class="tl-kw">import</span> { seoScore } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+<span class="tl-kw">const</span> seo = seoScore(text, {
+  keyword: <span class="tl-str">'typescript'</span>
+});
+seo.score; <span class="tl-cmt">// 0–100</span>
+seo.grade; <span class="tl-cmt">// 'A'–'F'</span></code></pre>
+        </div>
+        <div class="tl-card">
+          <h3>Reading time</h3>
+          <p>Estimated reading time with configurable WPM and image time adjustment.</p>
+          <pre><code><span class="tl-kw">import</span> { readingTime } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+readingTime(text);
+<span class="tl-cmt">// { minutes: 3, seconds: 42 }</span></code></pre>
+        </div>
+        <div class="tl-card">
+          <h3>Summarization</h3>
+          <p>Extractive summarization using sentence ranking. Pick the most important sentences.</p>
+          <pre><code><span class="tl-kw">import</span> { summarize } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+summarize(text, { sentences: 3 });
+<span class="tl-cmt">// top 3 sentences</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="tl-section" aria-label="CLI">
+      <h2>CLI included</h2>
+      <p class="tl-desc">Analyze files or piped input directly from your terminal.</p>
+      <pre><code><span class="tl-cmt"># Analyze a file</span>
+<span class="prompt">$</span> textlens article.txt
+
+<span class="tl-cmt"># JSON output</span>
+<span class="prompt">$</span> textlens article.txt --json
+
+<span class="tl-cmt"># Pipe from stdin</span>
+<span class="prompt">$</span> cat article.txt | textlens --all</code></pre>
+    </section>
+
+    <section class="tl-section tl-cta" aria-label="Get started">
+      <h2>Get started</h2>
+      <pre class="tl-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+      <div class="link-row tl-links">
+        <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://dev.to/ckmtools" rel="noopener">Article</a>
+        <a href="https://buy.stripe.com/4gMbJ16rM3MJ4HZ4hGf7i00" rel="noopener">Support this project</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
