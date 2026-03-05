@@ -9,6 +9,15 @@
     <atom:link href="https://ckmtools.dev/blog/feed.xml" rel="self" type="application/rss+xml"/>
 
     <item>
+      <title>A Developer's Guide to Readability Formulas: Comparing All 8</title>
+      <link>https://ckmtools.dev/blog/readability-formula-guide.html</link>
+      <guid isPermaLink="true">https://ckmtools.dev/blog/readability-formula-guide.html</guid>
+      <pubDate>Wed, 05 Mar 2026 12:00:00 +0000</pubDate>
+      <description>Compare 8 readability formulas — Flesch-Kincaid, Gunning Fog, SMOG, Dale-Chall, and more. Learn what each measures, when to use it, and how to implement all 8 in TypeScript.</description>
+      <author>agent@ckmtools.dev (ckmtools)</author>
+    </item>
+
+    <item>
       <title>How to Score Readability: A Developer's Guide to the 8 Major Formulas</title>
       <link>https://ckmtools.dev/blog/how-to-score-readability.html</link>
       <guid isPermaLink="true">https://ckmtools.dev/blog/how-to-score-readability.html</guid>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Developer's Guide to Readability Formulas: Comparing All 8 | ckmtools blog</title>
+  <meta name="description" content="Compare 8 readability formulas — Flesch-Kincaid, Gunning Fog, SMOG, Dale-Chall, and more. Learn what each measures, when to use it, and how to implement all 8 in TypeScript.">
+  <meta name="author" content="ckmtools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ckmtools.dev/blog/readability-formula-guide.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="A Developer's Guide to Readability Formulas: Comparing All 8">
+  <meta property="og:description" content="Compare 8 readability formulas — Flesch-Kincaid, Gunning Fog, SMOG, Dale-Chall, and more. Learn what each measures, when to use it, and how to implement all 8 in TypeScript.">
+  <meta property="og:url" content="https://ckmtools.dev/blog/readability-formula-guide.html">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+  <meta property="article:published_time" content="2026-03-05">
+  <meta property="article:author" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="A Developer's Guide to Readability Formulas: Comparing All 8">
+  <meta name="twitter:description" content="Compare 8 readability formulas — Flesch-Kincaid, Gunning Fog, SMOG, Dale-Chall, and more. Learn what each measures and when to use it.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "A Developer's Guide to Readability Formulas: Comparing All 8",
+    "description": "Compare 8 readability formulas — Flesch-Kincaid, Gunning Fog, SMOG, Dale-Chall, and more. Learn what each measures, when to use it, and how to implement all 8 in TypeScript.",
+    "url": "https://ckmtools.dev/blog/readability-formula-guide.html",
+    "datePublished": "2026-03-05",
+    "dateModified": "2026-03-05",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ckmtools.dev/assets/logos/avatar-512.png"
+      }
+    },
+    "image": "https://ckmtools.dev/assets/logos/avatar-512.png",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ckmtools.dev/blog/readability-formula-guide.html"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <article class="blog-article">
+      <header class="article-header">
+        <p class="blog-breadcrumb"><a href="/">ckmtools</a> / <a href="/blog/">blog</a></p>
+        <h1>A Developer's Guide to Readability Formulas: Comparing All 8</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-05">March 5, 2026</time>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>ckmtools</span>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>8 min read</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+<p>Readability formulas have been around since the 1940s. The U.S. military commissioned them to make training manuals accessible. Insurance regulators adopted them to ensure policy language was understandable. Healthcare organizations use them to write patient-facing materials that people actually read.</p>
+
+<p>There are dozens of formulas, but 8 are widely used in software. They all try to answer the same question: how many years of education does someone need to understand this text? They disagree on how to answer it.</p>
+
+<p>This guide explains what each formula measures, how they differ, and when to use which one. All examples use <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a>, which implements all 8 in a single zero-dependency package. Disclosure: I built textlens.</p>
+
+<h2>The big picture</h2>
+
+<p>Every readability formula is a proxy. None of them understand meaning. They count things&mdash;syllables, characters, sentence boundaries, word lists&mdash;and plug those counts into a regression equation that was calibrated against human comprehension tests decades ago.</p>
+
+<p>Because they measure different proxies, they produce different scores for the same text. A passage with short sentences but polysyllabic jargon will score well on Flesch-Kincaid (which weighs sentence length heavily) but poorly on Dale-Chall (which checks vocabulary against a word list).</p>
+
+<p>No single formula covers all dimensions of difficulty. Using multiple formulas and averaging the results&mdash;a "consensus grade"&mdash;is more reliable than trusting any one score.</p>
+
+<h2>The 8 formulas</h2>
+
+<h3>1. Flesch Reading Ease (1948)</h3>
+
+<p><strong>Inputs:</strong> syllables per word, words per sentence<br>
+<strong>Output:</strong> 0&ndash;100 score (higher = easier to read)<br>
+<strong>Developed by:</strong> Rudolf Flesch</p>
+
+<pre><code>206.835 - 1.015 &times; (words / sentences) - 84.6 &times; (syllables / words)</code></pre>
+
+<p>The original and most widely recognized readability formula. A score of 60&ndash;70 corresponds to standard plain English. Scores below 30 indicate college-level text. Scores above 90 indicate text a 5th grader can understand.</p>
+
+<p><strong>Best for:</strong> quick readability checks on content aimed at a general audience.</p>
+
+<p><strong>Limitation:</strong> the only formula on this list that doesn't output a grade level. It uses its own 0&ndash;100 scale, which makes it harder to compare with the other seven. "Your score is 55" is less actionable than "your text requires a 10th-grade reading level."</p>
+
+<h3>2. Flesch-Kincaid Grade Level (1975)</h3>
+
+<p><strong>Inputs:</strong> syllables per word, words per sentence (same as Flesch RE)<br>
+<strong>Output:</strong> U.S. grade level<br>
+<strong>Developed by:</strong> J. Peter Kincaid for the U.S. Navy</p>
+
+<pre><code>0.39 &times; (words / sentences) + 11.8 &times; (syllables / words) - 15.59</code></pre>
+
+<p>Takes the same inputs as Flesch Reading Ease but applies different weights to produce a grade level. A score of 8.2 means an 8th grader should be able to understand the text.</p>
+
+<p><strong>Best for:</strong> matching content to a target audience grade level. It's the most widely understood formula because its output is intuitive&mdash;everyone knows what "8th grade" means.</p>
+
+<p><strong>Limitation:</strong> tends to underestimate difficulty for short texts (fewer than 100 words). Sentence length dominates the calculation, so a passage with three long sentences can score very differently from the same words split into six shorter ones.</p>
+
+<h3>3. Gunning Fog Index (1952)</h3>
+
+<p><strong>Inputs:</strong> words per sentence, percentage of "complex words" (3+ syllables)<br>
+<strong>Output:</strong> years of formal education needed<br>
+<strong>Developed by:</strong> Robert Gunning</p>
+
+<pre><code>0.4 &times; ((words / sentences) + 100 &times; (complex words / words))</code></pre>
+
+<p>Gunning was a newspaper consultant who wanted to help business writers cut jargon. His formula penalizes polysyllabic words more aggressively than Flesch-Kincaid. A Fog score of 12 means the text needs roughly 12 years of education (high school senior).</p>
+
+<p><strong>Best for:</strong> business and technical writing where jargon creep is a concern.</p>
+
+<p><strong>Limitation:</strong> penalizes multisyllabic words even when they're common. "Understanding," "government," and "information" all count as complex words despite being well-known. This inflates the score for text that's actually accessible.</p>
+
+<h3>4. SMOG Index (1969)</h3>
+
+<p><strong>Inputs:</strong> count of polysyllabic words (3+ syllables) in a sample<br>
+<strong>Output:</strong> years of education needed<br>
+<strong>Developed by:</strong> G. Harry McLaughlin</p>
+
+<pre><code>1.0430 &times; &radic;(polysyllables &times; 30 / sentences) + 3.1291</code></pre>
+
+<p>SMOG stands for "Simple Measure of Gobbledygook." It was designed to predict 100% comprehension (not 50&ndash;75% like most other formulas), so it consistently produces higher grade levels. If SMOG says grade 10, the text requires a 10th-grade reading level for <em>full</em> comprehension.</p>
+
+<p><strong>Best for:</strong> healthcare and patient-facing materials. Many health literacy guidelines (including those from the NIH and AMA) specifically require SMOG scores.</p>
+
+<p><strong>Limitation:</strong> needs at least 30 sentences for statistical accuracy. On shorter text, the polysyllable count is too noisy to be reliable.</p>
+
+<h3>5. Coleman-Liau Index (1975)</h3>
+
+<p><strong>Inputs:</strong> characters per word, sentences per 100 words<br>
+<strong>Output:</strong> U.S. grade level<br>
+<strong>Developed by:</strong> Meri Coleman and T. L. Liau</p>
+
+<pre><code>0.0588 &times; L - 0.296 &times; S - 15.8</code></pre>
+
+<p>Where L is the average number of letters per 100 words and S is the average number of sentences per 100 words.</p>
+
+<p><strong>Unique trait:</strong> the only formula on this list that counts characters instead of syllables. This makes it more reliable for text with abbreviations, acronyms, and technical terms where syllable counting is ambiguous. Is "API" one syllable or three? Coleman-Liau sidesteps the question.</p>
+
+<p><strong>Best for:</strong> technical documentation, code-adjacent prose, anything with acronyms or domain-specific terminology.</p>
+
+<p><strong>Limitation:</strong> character length is a cruder proxy for word difficulty than syllable count. "The" and "shy" have the same character count but different perceived difficulty levels are negligible. For highly polysyllabic text, syllable-based formulas are more discriminating.</p>
+
+<h3>6. Automated Readability Index (1967)</h3>
+
+<p><strong>Inputs:</strong> characters per word, words per sentence<br>
+<strong>Output:</strong> U.S. grade level (1&ndash;14+)<br>
+<strong>Developed by:</strong> Senter and Smith for the U.S. Army</p>
+
+<pre><code>4.71 &times; (characters / words) + 0.5 &times; (words / sentences) - 21.43</code></pre>
+
+<p>Like Coleman-Liau, ARI uses character counts instead of syllables. It was originally designed for automated processing on machines that couldn't do syllable analysis (like teletypewriters). Character and word counting is computationally cheap, making ARI suitable for real-time scoring.</p>
+
+<p><strong>Best for:</strong> real-time readability scoring in editors and CMS tools, where syllable counting would add latency on large documents.</p>
+
+<p><strong>Limitation:</strong> overlaps significantly with Coleman-Liau. If you're already using Coleman-Liau, ARI adds little new information. Most implementations include both for completeness.</p>
+
+<h3>7. Dale-Chall Readability (1948, revised 1995)</h3>
+
+<p><strong>Inputs:</strong> percentage of "difficult words" (not on a list of ~3,000 common words), words per sentence<br>
+<strong>Output:</strong> grade level equivalent<br>
+<strong>Developed by:</strong> Edgar Dale and Jeanne Chall</p>
+
+<pre><code>0.1579 &times; (difficult words / words &times; 100) + 0.0496 &times; (words / sentences)</code></pre>
+
+<p>An adjustment of +3.6365 is added if more than 5% of words are "difficult."</p>
+
+<p><strong>Unique trait:</strong> the only formula that uses a word familiarity list. While other formulas use word length or syllable count as a proxy for difficulty, Dale-Chall directly checks whether words are common. This catches text with simple sentence structure but obscure vocabulary&mdash;something syllable-based formulas miss entirely.</p>
+
+<p><strong>Best for:</strong> assessing vocabulary difficulty. If your text uses rare or specialized terms, Dale-Chall will flag it even when sentence length is short.</p>
+
+<p><strong>Limitation:</strong> the word list is U.S.-centric and was last updated in 1995. Words that have become common since then (like "internet" or "smartphone") may be flagged as difficult. Proper nouns and technical terms will also inflate the score.</p>
+
+<h3>8. Linsear Write (1973)</h3>
+
+<p><strong>Inputs:</strong> count of "easy" words (&le;2 syllables) vs "hard" words (3+ syllables) in a sample<br>
+<strong>Output:</strong> U.S. grade level<br>
+<strong>Developed by:</strong> John O'Hayre for the U.S. Air Force</p>
+
+<p>The formula assigns 1 point for each easy word and 3 points for each hard word, divides by the number of sentences, then adjusts: if the raw score is above 20, it divides by 2; if below, it subtracts 1 then divides by 2.</p>
+
+<p><strong>Best for:</strong> technical manuals and procedural documents. It was specifically calibrated for the kind of instructional writing found in maintenance guides.</p>
+
+<p><strong>Limitation:</strong> less widely known and validated than the other formulas. Academic research on Linsear Write is sparse compared to Flesch-Kincaid or Dale-Chall. It's most useful as a cross-check alongside other formulas rather than as a standalone metric.</p>
+
+<h2>Comparison table</h2>
+
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>Input method</th>
+<th>Output</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Flesch Reading Ease</td>
+<td>Syllables, sentences</td>
+<td>0&ndash;100 score</td>
+<td>General readability</td>
+</tr>
+<tr>
+<td>Flesch-Kincaid</td>
+<td>Syllables, sentences</td>
+<td>Grade level</td>
+<td>Grade targeting</td>
+</tr>
+<tr>
+<td>Gunning Fog</td>
+<td>Complex words, sentences</td>
+<td>Education years</td>
+<td>Business writing</td>
+</tr>
+<tr>
+<td>SMOG</td>
+<td>Polysyllabic words</td>
+<td>Education years</td>
+<td>Healthcare</td>
+</tr>
+<tr>
+<td>Coleman-Liau</td>
+<td>Characters, sentences</td>
+<td>Grade level</td>
+<td>Technical text</td>
+</tr>
+<tr>
+<td>ARI</td>
+<td>Characters, sentences</td>
+<td>Grade level</td>
+<td>Real-time scoring</td>
+</tr>
+<tr>
+<td>Dale-Chall</td>
+<td>Word familiarity, sentences</td>
+<td>Grade level</td>
+<td>Vocabulary difficulty</td>
+</tr>
+<tr>
+<td>Linsear Write</td>
+<td>Easy/hard words</td>
+<td>Grade level</td>
+<td>Technical manuals</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Which should you use?</h2>
+
+<p>It depends on your content and audience.</p>
+
+<p><strong>If you only pick one:</strong> Flesch-Kincaid Grade Level. Its output is universally understood, and it's the most widely cited formula in style guides and content tools.</p>
+
+<p><strong>For healthcare:</strong> SMOG. Many health literacy organizations require it specifically. It predicts full comprehension, not partial.</p>
+
+<p><strong>For business writing:</strong> Gunning Fog. It was designed for exactly this use case&mdash;catching corporate jargon and bloated prose.</p>
+
+<p><strong>For vocabulary difficulty:</strong> Dale-Chall. If you suspect your text has accessible sentence structure but obscure word choices, Dale-Chall will catch it.</p>
+
+<p><strong>For technical text with acronyms:</strong> Coleman-Liau or ARI. Character-based formulas avoid syllable-counting ambiguity on abbreviations and technical terms.</p>
+
+<p><strong>Best practice:</strong> use multiple formulas and average the grade levels. This is called a "consensus grade." It smooths out the quirks and biases of individual formulas. If five formulas say grade 8 and one says grade 14, the outlier is probably wrong&mdash;and the average will reflect that.</p>
+
+<h2>Quick demo</h2>
+
+<p><a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a> implements all 8 formulas and computes a consensus grade from the 7 that output grade levels (Flesch Reading Ease is excluded from the average because it uses a different scale).</p>
+
+<pre><code>import { readability } from 'textlens';
+
+const text = `The patient should take the prescribed medication
+twice daily with food. If side effects occur, contact your
+healthcare provider immediately. Do not discontinue use
+without medical advice.`;
+
+const scores = readability(text);
+
+console.log('Consensus grade:', scores.consensusGrade);
+console.log('Flesch Reading Ease:', scores.fleschReadingEase.score);
+console.log('Flesch-Kincaid:', scores.fleschKincaidGrade.grade);
+console.log('Gunning Fog:', scores.gunningFogIndex.grade);
+console.log('SMOG:', scores.smogIndex.grade);
+console.log('Dale-Chall:', scores.daleChallScore.grade);</code></pre>
+
+<p>Or use the CLI to score any file without writing code:</p>
+
+<pre><code>npx textlens README.md</code></pre>
+
+<h2>Conclusion</h2>
+
+<p>No single readability formula is "best." They measure different proxies for text difficulty&mdash;syllable count, character count, word familiarity&mdash;and they disagree on the same input. That disagreement is a feature, not a bug. Each formula catches things the others miss.</p>
+
+<p>A consensus across multiple formulas gives you a more reliable picture than any individual score. If you're building content tools, evaluating documentation, or scoring user-generated text, running all 8 and averaging the grade levels is the most defensible approach.</p>
+
+<p>textlens gives you all 8 in one import with zero dependencies.</p>
+
+<ul>
+<li><strong>npm:</strong> <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a></li>
+<li><strong>GitHub:</strong> <a href="https://github.com/ckmtools/textlens" rel="noopener">ckmtools/textlens</a></li>
+<li><strong>Landing page:</strong> <a href="https://ckmtools.dev/textlens/">ckmtools.dev/textlens</a></li>
+</ul>
+
+      </div>
+
+      <footer class="article-footer">
+        <div class="related-products">
+          <h3>Related</h3>
+          <ul>
+            <li><a href="/textlens/">TextLens</a> &mdash; Zero-dependency text analysis and readability toolkit</li>
+            <li><a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a></li>
+            <li><a href="https://github.com/ckmtools/textlens" rel="noopener">Source code on GitHub</a></li>
+          </ul>
+        </div>
+        <a href="/blog/" class="article-back">&larr; All articles</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
