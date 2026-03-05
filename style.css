@@ -332,6 +332,139 @@ pre code {
 .tl-str { color: var(--color-primary); }
 .tl-cmt { color: var(--text-tertiary); }
 
+/* Blog */
+.blog-header {
+  text-align: center;
+  padding: 64px 24px 48px;
+  max-width: var(--max-width-page);
+  margin: 0 auto;
+}
+.blog-tagline {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+.blog-list {
+  max-width: var(--max-width-prose);
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+.blog-card {
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+.blog-card:first-child {
+  border-top: 1px solid var(--border);
+}
+.blog-date {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+.blog-card h2 {
+  font-size: 1.25rem;
+  margin: 4px 0 8px;
+}
+.blog-card h2 a {
+  color: var(--text-primary);
+}
+.blog-card h2 a:hover {
+  color: var(--color-primary);
+}
+.blog-excerpt {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin-bottom: 8px;
+}
+.blog-meta {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+}
+
+/* Article */
+.blog-article {
+  max-width: var(--max-width-prose);
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+.article-header {
+  padding-top: 48px;
+  margin-bottom: 40px;
+}
+.blog-breadcrumb {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.blog-breadcrumb a {
+  color: var(--text-secondary);
+}
+.blog-breadcrumb a:hover {
+  color: var(--color-primary);
+}
+.article-header h1 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+.meta-sep {
+  color: var(--text-tertiary);
+}
+.article-body h2 {
+  margin-top: 2em;
+  margin-bottom: 0.5em;
+}
+.article-body h3 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.article-body p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+.article-body ul {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.article-body li {
+  margin-bottom: 0.5em;
+}
+.article-body pre {
+  margin: 1em 0 1.5em;
+}
+.article-footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.related-products h3 {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.related-products ul {
+  list-style: none;
+  padding: 0;
+}
+.related-products li {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* Active nav */
+.nav-links a[aria-current="page"] {
+  color: var(--text-primary);
+}
+
 /* Responsive */
 @media (min-width: 640px) {
   .hero {

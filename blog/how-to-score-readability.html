@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Score Readability: A Developer's Guide to the 8 Major Formulas — ckmtools</title>
+  <meta name="description" content="Learn how Flesch-Kincaid, Gunning Fog, Coleman-Liau, and 5 other readability formulas work under the hood, and how to use them in your Node.js projects.">
+  <meta name="author" content="ckmtools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ckmtools.dev/blog/how-to-score-readability.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Score Readability: A Developer's Guide to the 8 Major Formulas">
+  <meta property="og:description" content="Learn how Flesch-Kincaid, Gunning Fog, Coleman-Liau, and 5 other readability formulas work under the hood, and how to use them in your Node.js projects.">
+  <meta property="og:url" content="https://ckmtools.dev/blog/how-to-score-readability.html">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+  <meta property="article:published_time" content="2026-03-05">
+  <meta property="article:author" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Score Readability: A Developer's Guide to the 8 Major Formulas">
+  <meta name="twitter:description" content="Learn how Flesch-Kincaid, Gunning Fog, Coleman-Liau, and 5 other readability formulas work under the hood.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to Score Readability: A Developer's Guide to the 8 Major Formulas",
+    "description": "Learn how Flesch-Kincaid, Gunning Fog, Coleman-Liau, and 5 other readability formulas work under the hood, and how to use them in your Node.js projects.",
+    "url": "https://ckmtools.dev/blog/how-to-score-readability.html",
+    "datePublished": "2026-03-05",
+    "dateModified": "2026-03-05",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ckmtools.dev/assets/logos/avatar-512.png"
+      }
+    },
+    "image": "https://ckmtools.dev/assets/logos/avatar-512.png",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ckmtools.dev/blog/how-to-score-readability.html"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <article class="blog-article">
+      <header class="article-header">
+        <p class="blog-breadcrumb"><a href="/">ckmtools</a> / <a href="/blog/">blog</a></p>
+        <h1>How to Score Readability: A Developer's Guide to the 8 Major Formulas</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-05">March 5, 2026</time>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>ckmtools</span>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>5 min read</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <p>Readability scores tell you how easy your text is to understand. They're used everywhere: content marketing, technical writing, accessibility compliance, and SEO optimization. But most developers treat them as a black box&mdash;you pass in text and get a number.</p>
+
+        <p>In this guide, we'll open the box. You'll learn how each of the 8 major readability formulas works, when to use which one, and how to compute all of them in a single function call with <a href="/textlens/">TextLens</a>.</p>
+
+        <h2>Why readability matters</h2>
+
+        <p>Studies consistently show that <strong>simpler text converts better</strong>. The average American reads at a 7th&ndash;8th grade level. If your documentation, marketing copy, or error messages are written at a college level, you're losing readers.</p>
+
+        <p>Search engines care too. Google has used readability as a ranking signal. Content that's easier to read gets more engagement, lower bounce rates, and better rankings.</p>
+
+        <h2>The 8 formulas</h2>
+
+        <p>Each formula uses different text features&mdash;sentence length, word length, syllable count, or character count&mdash;to estimate a grade level. Here's what makes each one unique.</p>
+
+        <h3>1. Flesch Reading Ease</h3>
+
+        <p>The most widely used formula. Developed by Rudolf Flesch in 1948, it returns a score from 0 to 100 where higher means easier. A score of 60&ndash;70 is considered "plain English."</p>
+
+        <pre><code>206.835 - 1.015 &times; (words / sentences) - 84.6 &times; (syllables / words)</code></pre>
+
+        <p>It measures two things: how long your sentences are, and how many syllables your words have. Short sentences with short words score high.</p>
+
+        <h3>2. Flesch-Kincaid Grade Level</h3>
+
+        <p>Same inputs as Flesch Reading Ease, but outputs a US grade level instead of a 0&ndash;100 score. A score of 8.0 means an 8th grader should understand the text.</p>
+
+        <pre><code>0.39 &times; (words / sentences) + 11.8 &times; (syllables / words) - 15.59</code></pre>
+
+        <p>This is the formula the US military uses to assess technical manuals. If you only use one formula, make it this one.</p>
+
+        <h3>3. Coleman-Liau Index</h3>
+
+        <p>Unlike Flesch, Coleman-Liau uses <strong>character counts</strong> instead of syllable counts. This makes it faster to compute and avoids the ambiguity of syllable counting.</p>
+
+        <pre><code>0.0588 &times; L - 0.296 &times; S - 15.8</code></pre>
+
+        <p>Where L is the average number of letters per 100 words and S is the average number of sentences per 100 words.</p>
+
+        <h3>4. Automated Readability Index (ARI)</h3>
+
+        <p>Another character-based formula. ARI was designed to be computed by simple machines&mdash;it only needs character, word, and sentence counts.</p>
+
+        <pre><code>4.71 &times; (characters / words) + 0.5 &times; (words / sentences) - 21.43</code></pre>
+
+        <h3>5. Gunning Fog Index</h3>
+
+        <p>Fog measures "complex words"&mdash;words with 3 or more syllables, excluding common suffixes (-es, -ed, -ing). Developed by Robert Gunning to help newspaper writers.</p>
+
+        <pre><code>0.4 &times; ((words / sentences) + 100 &times; (complex words / words))</code></pre>
+
+        <p>Fog tends to rate text about 2 grade levels higher than Flesch-Kincaid. If Fog says 12, it's more like a 10th-grade level in practice.</p>
+
+        <h3>6. SMOG Index</h3>
+
+        <p>SMOG (Simple Measure of Gobbledygook) is considered the most accurate formula for health literacy materials. It requires at least 30 sentences for reliable results.</p>
+
+        <pre><code>1.0430 &times; &radic;(polysyllables &times; 30 / sentences) + 3.1291</code></pre>
+
+        <p>Polysyllables are words with 3 or more syllables. SMOG tends to produce higher grade levels than other formulas.</p>
+
+        <h3>7. Dale-Chall Score</h3>
+
+        <p>Unlike the other formulas, Dale-Chall uses a <strong>word list</strong>&mdash;a list of 3,000 words that most 4th graders understand. Words not on the list are considered "difficult."</p>
+
+        <pre><code>0.1579 &times; (difficult words / words &times; 100) + 0.0496 &times; (words / sentences)</code></pre>
+
+        <p>Dale-Chall is particularly good at identifying text that uses simple sentence structures but complex vocabulary.</p>
+
+        <h3>8. Linsear Write Formula</h3>
+
+        <p>Originally developed for the US Air Force, Linsear Write classifies each word as "easy" (2 or fewer syllables) or "hard" (3+), then computes a weighted average.</p>
+
+        <p>It's less common than the others but provides a useful cross-check, especially for technical documents.</p>
+
+        <h2>The consensus approach</h2>
+
+        <p>No single formula is best for all text. Flesch-Kincaid underestimates difficulty for text with complex vocabulary but simple sentences. Dale-Chall can overrate text with proper nouns. SMOG needs 30+ sentences to be reliable.</p>
+
+        <p>The solution: <strong>compute all of them and average the results</strong>. This "consensus grade" smooths out the biases of individual formulas.</p>
+
+        <h2>Using TextLens to compute all 8</h2>
+
+        <p>With <a href="/textlens/">TextLens</a>, you get all 8 formulas and a consensus grade in a single call:</p>
+
+        <pre><code><span class="tl-kw">import</span> { readability } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> scores = readability(yourText);
+
+<span class="tl-cmt">// Individual formulas</span>
+scores.fleschReadingEase;         <span class="tl-cmt">// 0–100</span>
+scores.fleschKincaidGrade;        <span class="tl-cmt">// US grade level</span>
+scores.colemanLiauIndex;          <span class="tl-cmt">// US grade level</span>
+scores.automatedReadabilityIndex; <span class="tl-cmt">// US grade level</span>
+scores.gunningFogIndex;           <span class="tl-cmt">// US grade level</span>
+scores.smogIndex;                 <span class="tl-cmt">// US grade level</span>
+scores.daleChallScore;            <span class="tl-cmt">// 0–10 scale</span>
+scores.linsearWriteFormula;       <span class="tl-cmt">// US grade level</span>
+
+<span class="tl-cmt">// Consensus</span>
+scores.consensusGrade;            <span class="tl-cmt">// weighted average grade level</span></code></pre>
+
+        <p>Zero dependencies. Works with Node.js 16+ and TypeScript. Install it with:</p>
+
+        <pre><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+
+        <h2>Practical tips</h2>
+
+        <ul>
+          <li><strong>Aim for grade 8 or below</strong> for general audiences. Grade 6 for consumer-facing content.</li>
+          <li><strong>Use the CLI</strong> to check your README, docs, or blog posts before publishing: <code>textlens README.md</code></li>
+          <li><strong>Don't over-simplify technical docs.</strong> A grade 12 reading level is fine for API references aimed at developers.</li>
+          <li><strong>Test iteratively.</strong> Write a draft, check the score, simplify long sentences, then check again.</li>
+        </ul>
+
+        <h2>Wrapping up</h2>
+
+        <p>Readability scoring isn't just for writers&mdash;it's a tool for any developer building content-heavy applications. Whether you're scoring user-generated content, optimizing marketing copy, or enforcing style guides, having all 8 formulas at your fingertips makes the job easier.</p>
+
+        <p>Give <a href="/textlens/">TextLens</a> a try. It does one thing well.</p>
+      </div>
+
+      <footer class="article-footer">
+        <div class="related-products">
+          <h3>Related</h3>
+          <ul>
+            <li><a href="/textlens/">TextLens</a> &mdash; Zero-dependency text analysis and readability toolkit</li>
+            <li><a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a></li>
+            <li><a href="https://github.com/ckmtools/textlens" rel="noopener">Source code on GitHub</a></li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
