@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to Score Your Content for Readability and SEO with TypeScript — ckmtools</title>
+  <meta name="description" content="Use textlens — a zero-dependency TypeScript toolkit — to measure readability, sentiment, SEO, and more. Works as a library and CLI.">
+  <meta name="author" content="ckmtools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ckmtools.dev/blog/readability-seo-typescript.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to Score Your Content for Readability and SEO with TypeScript">
+  <meta property="og:description" content="Use textlens — a zero-dependency TypeScript toolkit — to measure readability, sentiment, SEO, and more. Works as a library and CLI.">
+  <meta property="og:url" content="https://ckmtools.dev/blog/readability-seo-typescript.html">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+  <meta property="article:published_time" content="2026-03-04">
+  <meta property="article:author" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to Score Your Content for Readability and SEO with TypeScript">
+  <meta name="twitter:description" content="Use textlens — a zero-dependency TypeScript toolkit — to measure readability, sentiment, SEO, and more. Works as a library and CLI.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "How to Score Your Content for Readability and SEO with TypeScript",
+    "description": "Use textlens — a zero-dependency TypeScript toolkit — to measure readability, sentiment, SEO, and more. Works as a library and CLI.",
+    "url": "https://ckmtools.dev/blog/readability-seo-typescript.html",
+    "datePublished": "2026-03-04",
+    "dateModified": "2026-03-04",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ckmtools.dev/assets/logos/avatar-512.png"
+      }
+    },
+    "image": "https://ckmtools.dev/assets/logos/avatar-512.png",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ckmtools.dev/blog/readability-seo-typescript.html"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <article class="blog-article">
+      <header class="article-header">
+        <p class="blog-breadcrumb"><a href="/">ckmtools</a> / <a href="/blog/">blog</a></p>
+        <h1>How to Score Your Content for Readability and SEO with TypeScript</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-04">March 4, 2026</time>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>ckmtools</span>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>7 min read</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <p>Ever wonder why some blog posts get 10x more engagement than others? The secret often isn't the topic — it's readability. Content teams at places like the NYT and gov.uk actively measure reading grade levels to make sure their writing actually reaches people.</p>
+
+<p>But most readability tools are online-only paste-boxes. You can't plug them into a CI pipeline, run them against your docs folder, or import them into a content workflow. I built <a href="https://github.com/ckmtools/textlens" rel="noopener">textlens</a> to fix that: a zero-dependency TypeScript toolkit that scores readability, sentiment, SEO, and more — as a library or CLI.</p>
+
+<p>This tutorial shows you how to use it.</p>
+
+<h2>The Problem: Content Quality Is Measurable
+</h2>
+
+<p>"Good writing" sounds subjective, but it's not — at least not entirely. Readability formulas have been studied since the 1940s. The U.S. military commissioned the Flesch Reading Ease formula to make training manuals more accessible. The Gunning Fog Index was created by a newspaper consultant to cut corporate jargon.</p>
+
+<p>These formulas work by measuring concrete things: word length, sentence length, syllable count. They output a grade level — the number of years of education needed to understand the text.</p>
+
+<p>The problem for developers? Most tools that use these formulas are either:</p>
+
+<ul>
+<li>
+<strong>Online-only</strong> — paste your text into a web form, no API</li>
+<li>
+<strong>Heavy on dependencies</strong> — pulling in NLP libraries for a simple word count</li>
+<li>
+<strong>Single-formula</strong> — giving you one score instead of a consensus</li>
+</ul>
+
+<p>What we really need is something we can <code>npm install</code> and run in a script.</p>
+
+<h2>Quick Start
+</h2>
+
+<p>Install textlens:
+</p>
+
+<pre><code>npm install textlens
+</code></pre>
+
+<p>Run a full analysis on any text:
+</p>
+
+<pre><code>import { analyze } from 'textlens';
+
+const text = `Search engine optimization is not just about keywords
+anymore. Modern search engines evaluate content quality, readability,
+and user engagement signals. If your article is difficult to read,
+visitors will bounce quickly.`;
+
+const result = analyze(text);
+
+console.log(`Reading time: ${result.readingTime.minutes} min`);
+console.log(`Grade level: ${result.readability.consensusGrade}`);
+console.log(`Sentiment: ${result.sentiment.label}`);
+console.log(`Top keyword: ${result.keywords[0].word}`);
+</code></pre>
+
+<p>The <code>analyze()</code> function returns everything at once: statistics, readability scores across 8 formulas, reading time, sentiment, keyword extraction, and an extractive summary. Each property is also available as a standalone function if you only need one thing.</p>
+
+<h2>Deep Dive: Readability Formulas
+</h2>
+
+<p>textlens implements 8 readability formulas and computes a consensus grade from 7 of them:</p>
+
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>What It Measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flesch Reading Ease</strong></td>
+<td>Scored 0-100 (higher = easier). Based on sentence length and syllables per word.</td>
+</tr>
+<tr>
+<td><strong>Flesch-Kincaid Grade</strong></td>
+<td>U.S. grade level. The most widely used formula.</td>
+</tr>
+<tr>
+<td><strong>Gunning Fog Index</strong></td>
+<td>Grade level with emphasis on "complex words" (3+ syllables).</td>
+</tr>
+<tr>
+<td><strong>Coleman-Liau Index</strong></td>
+<td>Uses character count instead of syllables — more reliable for short text.</td>
+</tr>
+<tr>
+<td><strong>SMOG Index</strong></td>
+<td>"Simple Measure of Gobbledygook." Estimates years of education needed.</td>
+</tr>
+<tr>
+<td><strong>Automated Readability Index</strong></td>
+<td>Character-based, originally designed for typewriters.</td>
+</tr>
+<tr>
+<td><strong>Dale-Chall</strong></td>
+<td>Compares against a list of 3,000 words familiar to 4th graders.</td>
+</tr>
+<tr>
+<td><strong>Linsear Write</strong></td>
+<td>Weights "easy" vs "hard" words. Developed for the U.S. Air Force.</td>
+</tr>
+</tbody>
+</table>
+
+<p>The <code>consensusGrade</code> averages across grade-level formulas, giving you a single number that's more reliable than any individual formula.
+</p>
+
+<pre><code>import { readability } from 'textlens';
+
+const scores = readability(text);
+
+console.log(`Flesch Ease: ${scores.fleschReadingEase.score} (${scores.fleschReadingEase.interpretation})`);
+console.log(`Flesch-Kincaid: Grade ${scores.fleschKincaidGrade.grade}`);
+console.log(`Gunning Fog: Grade ${scores.gunningFogIndex.grade}`);
+console.log(`Consensus: Grade ${scores.consensusGrade}`);
+</code></pre>
+
+<p><strong>What grade level should you target?</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Target Grade</th>
+<th>Flesch Ease</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>General public</td>
+<td>6-8</td>
+<td>60-70</td>
+</tr>
+<tr>
+<td>High school students</td>
+<td>9-12</td>
+<td>50-60</td>
+</tr>
+<tr>
+<td>Technical documentation</td>
+<td>10-14</td>
+<td>30-50</td>
+</tr>
+<tr>
+<td>Academic papers</td>
+<td>14+</td>
+<td>0-30</td>
+</tr>
+</tbody>
+</table>
+
+<p>Most successful blog posts land between grades 6 and 9. If your consensus grade is above 12, consider shorter sentences and simpler word choices.</p>
+
+<h2>Practical: SEO Content Scoring
+</h2>
+
+<p>textlens includes an <code>seoScore()</code> function that evaluates content on four dimensions:
+</p>
+
+<pre><code>import { seoScore } from 'textlens';
+
+const result = seoScore(text, { targetKeyword: 'readability' });
+
+console.log(`Score: ${result.score}/100 (${result.grade})`);
+console.log('Issues:', result.issues);
+console.log('Suggestions:', result.suggestions);
+console.log('Breakdown:', result.details);
+// =&gt; { readabilityScore, contentLengthScore, keywordScore, sentenceVarietyScore }
+// Each sub-score is out of 25 points
+</code></pre>
+
+<p>The four sub-scores (each out of 25) measure:</p>
+
+<ol>
+<li>
+<strong>Readability</strong> — Is your grade level appropriate for a general audience?</li>
+<li>
+<strong>Content length</strong> — 300-2500 words is the sweet spot.</li>
+<li>
+<strong>Keyword usage</strong> — Is your target keyword present at 1-3% density?</li>
+<li>
+<strong>Sentence variety</strong> — Do you mix short and long sentences?</li>
+</ol>
+
+<p>Each comes with actionable suggestions. "Simplify language to target grade 7" is more useful than a raw number.</p>
+
+<h2>CLI for Quick Checks
+</h2>
+
+<p>Don't want to write code? Use the CLI directly:
+</p>
+
+<pre><code>npx textlens article.md
+</code></pre>
+
+<p>This prints a formatted report with reading time, readability scores, and consensus grade.</p>
+
+<p>For scripting, use the <code>--json</code> flag:
+</p>
+
+<pre><code>npx textlens article.md --json | jq '.readability.consensusGrade'
+</code></pre>
+
+<p>For the full analysis including sentiment, keywords, density, SEO, and summary:
+</p>
+
+<pre><code>npx textlens article.md --all
+</code></pre>
+
+<p>You can also pipe from stdin:
+</p>
+
+<pre><code>cat README.md | npx textlens
+</code></pre>
+
+<h2>Bonus: Add to Your CI Pipeline
+</h2>
+
+<p>Here's a GitHub Actions step that fails if your docs exceed grade 12:
+</p>
+
+<pre><code>- name: Check docs readability
+  run: |
+    GRADE=$(npx textlens docs/guide.md --json | jq '.readability.consensusGrade')
+    if (( $(echo "$GRADE &gt; 12" | bc -l) )); then
+      echo "Readability too low: grade $GRADE (target: &lt;= 12)"
+      exit 1
+    fi
+</code></pre>
+
+<p>This ensures documentation stays accessible as your project grows. You could also check README files, blog post drafts, or API docs.</p>
+
+<h2>Wrapping Up
+</h2>
+
+<p>textlens gives you readability scoring (8 formulas with consensus), sentiment analysis, keyword extraction, SEO scoring, and more — all with zero runtime dependencies. It works as a TypeScript/JavaScript library and as a CLI tool.</p>
+
+<ul>
+<li>
+<strong>npm:</strong> <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a>
+</li>
+<li>
+<strong>GitHub:</strong> <a href="https://github.com/ckmtools/textlens" rel="noopener">ckmtools/textlens</a>
+</li>
+</ul>
+
+<p>Contributions and feedback are welcome. If you find it useful, a star on GitHub helps others discover it.</p>
+
+<p><strong>Disclosure:</strong> I built textlens to solve this exact problem for my own writing workflow.</p>
+      </div>
+
+      <footer class="article-footer">
+        <div class="related-products">
+          <h3>Related</h3>
+          <ul>
+            <li><a href="/textlens/">TextLens</a> &mdash; Zero-dependency text analysis and readability toolkit</li>
+            <li><a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a></li>
+            <li><a href="https://github.com/ckmtools/textlens" rel="noopener">Source code on GitHub</a></li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>

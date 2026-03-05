@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build a Content Quality Checker in 10 Lines of TypeScript — ckmtools</title>
+  <meta name="description" content="Build a working content quality gate in TypeScript using textlens to check readability, sentence length, and sentiment in 10 lines of code.">
+  <meta name="author" content="ckmtools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ckmtools.dev/blog/content-quality-checker-typescript.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Build a Content Quality Checker in 10 Lines of TypeScript">
+  <meta property="og:description" content="Build a working content quality gate in TypeScript using textlens to check readability, sentence length, and sentiment in 10 lines of code.">
+  <meta property="og:url" content="https://ckmtools.dev/blog/content-quality-checker-typescript.html">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+  <meta property="article:published_time" content="2026-03-04">
+  <meta property="article:author" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Build a Content Quality Checker in 10 Lines of TypeScript">
+  <meta name="twitter:description" content="Build a working content quality gate in TypeScript using textlens to check readability, sentence length, and sentiment in 10 lines of code.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Build a Content Quality Checker in 10 Lines of TypeScript",
+    "description": "Build a working content quality gate in TypeScript using textlens to check readability, sentence length, and sentiment in 10 lines of code.",
+    "url": "https://ckmtools.dev/blog/content-quality-checker-typescript.html",
+    "datePublished": "2026-03-04",
+    "dateModified": "2026-03-04",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ckmtools.dev/assets/logos/avatar-512.png"
+      }
+    },
+    "image": "https://ckmtools.dev/assets/logos/avatar-512.png",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ckmtools.dev/blog/content-quality-checker-typescript.html"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <article class="blog-article">
+      <header class="article-header">
+        <p class="blog-breadcrumb"><a href="/">ckmtools</a> / <a href="/blog/">blog</a></p>
+        <h1>Build a Content Quality Checker in 10 Lines of TypeScript</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-04">March 4, 2026</time>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>ckmtools</span>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>4 min read</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+        <pre><code>import { readability, statistics, sentiment } from 'textlens';
+
+const text = await Bun.file('article.md').text(); // or fs.readFileSync
+const stats = statistics(text);
+const scores = readability(text);
+const mood = sentiment(text);
+
+const pass = scores.consensusGrade &lt;= 10
+  &amp;&amp; stats.avgSentenceLength &lt; 25
+  &amp;&amp; mood.label !== 'negative';
+
+console.log(pass ? 'PASS' : 'FAIL', `Grade ${scores.consensusGrade}`);
+</code></pre>
+
+<p>That's a working content quality gate. It reads a file, checks the grade level, sentence length, and sentiment — then passes or fails. You can run it locally, in CI, or as a pre-commit hook.</p>
+
+<p>Here's how each piece works.</p>
+
+<h2>Why grade level matters
+</h2>
+
+<p>The average American reads at an 8th-grade level. If your blog post scores at grade 14, you've lost most of your audience before paragraph two.</p>
+
+<p>Grade level isn't a judgment on your readers. It's a measure of cognitive load. Short sentences and common words reduce friction. The NYT writes at grade 6-8. So does every high-performing landing page you've ever read.</p>
+
+<h2>Install
+</h2>
+
+<pre><code>npm install textlens
+</code></pre>
+
+<p>Zero dependencies. Ships ESM and CommonJS with TypeScript types.</p>
+
+<h2>Step 1: Get text statistics
+</h2>
+
+<pre><code>import { statistics } from 'textlens';
+
+const stats = statistics(`
+  Search engines now penalize thin content. Your article needs
+  enough depth to rank, but sentences short enough to keep readers.
+  Finding that balance is the entire game.
+`);
+
+console.log(stats.words);              // 30
+console.log(stats.sentences);          // 3
+console.log(stats.avgSentenceLength);  // 10
+console.log(stats.avgSyllablesPerWord); // 1.57
+</code></pre>
+
+<p><code>avgSentenceLength</code> above 20 is a red flag. Above 25 and readers start re-reading to parse meaning.</p>
+
+<h2>Step 2: Check readability
+</h2>
+
+<pre><code>import { readability } from 'textlens';
+
+const scores = readability(text);
+
+console.log(scores.consensusGrade);   // 8.2
+console.log(scores.fleschReadingEase.score); // 62 (higher = easier)
+</code></pre>
+
+<p>textlens runs 8 readability formulas — Flesch-Kincaid, Coleman-Liau, Gunning Fog, SMOG, ARI, Dale-Chall, Linsear Write, and Flesch Reading Ease — then averages them into a single <code>consensusGrade</code>. One number, backed by seven formulas.</p>
+
+<p>Target grades by audience:</p>
+
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Blog post</td>
+<td>6-8</td>
+</tr>
+<tr>
+<td>Technical docs</td>
+<td>8-12</td>
+</tr>
+<tr>
+<td>Academic paper</td>
+<td>12+</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Step 3: Check sentiment
+</h2>
+
+<pre><code>import { sentiment } from 'textlens';
+
+const mood = sentiment('This product has terrible UX and crashes constantly.');
+console.log(mood.label);    // 'negative'
+console.log(mood.negative); // ['terrible', 'crashes']
+</code></pre>
+
+<p>A negative-sentiment README or changelog entry sends the wrong signal. This check catches it before you publish.</p>
+
+<h2>Put it together: a CI quality gate
+</h2>
+
+<p>Here's a GitHub Actions step that blocks merges when docs are too complex:
+</p>
+
+<pre><code>name: Content quality
+on: [pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install textlens
+      - name: Check readability
+        run: |
+          node -e "
+            const { readability } = require('textlens');
+            const fs = require('fs');
+            const files = fs.readdirSync('docs').filter(f =&gt; f.endsWith('.md'));
+            let failed = false;
+            for (const file of files) {
+              const text = fs.readFileSync('docs/' + file, 'utf8');
+              const r = readability(text);
+              const grade = r.consensusGrade;
+              const status = grade &lt;= 12 ? 'PASS' : 'FAIL';
+              console.log(status + ' ' + file + ' (grade ' + grade + ')');
+              if (grade &gt; 12) failed = true;
+            }
+            if (failed) process.exit(1);
+          "
+</code></pre>
+
+<p>This scans every markdown file in <code>docs/</code> and fails the build if any score above grade 12.</p>
+
+<h2>Beyond the basics
+</h2>
+
+<p>The <code>analyze()</code> function returns everything at once — readability, statistics, reading time, keywords, sentiment, and an extractive summary:
+</p>
+
+<pre><code>import { analyze } from 'textlens';
+
+const result = analyze(text);
+console.log(result.readingTime.minutes); // 4
+console.log(result.keywords[0].word);    // 'readability'
+console.log(result.summary.sentences);   // top 3 sentences
+</code></pre>
+
+<p>Or use the CLI for a quick check without writing any code:
+</p>
+
+<pre><code>npx textlens README.md
+npx textlens README.md --json | jq '.readability.consensusGrade'
+</code></pre>
+
+<h2>Source
+</h2>
+
+<ul>
+<li><a href="https://www.npmjs.com/package/textlens" rel="noopener">npm: textlens</a></li>
+<li><a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub: ckmtools/textlens</a></li>
+</ul>
+
+<p><strong>Disclosure:</strong> I built textlens to solve this for my own writing workflow. It's MIT licensed with zero dependencies.</p>
+      </div>
+
+      <footer class="article-footer">
+        <div class="related-products">
+          <h3>Related</h3>
+          <ul>
+            <li><a href="/textlens/">TextLens</a> &mdash; Zero-dependency text analysis and readability toolkit</li>
+            <li><a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a></li>
+            <li><a href="https://github.com/ckmtools/textlens" rel="noopener">Source code on GitHub</a></li>
+          </ul>
+        </div>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>

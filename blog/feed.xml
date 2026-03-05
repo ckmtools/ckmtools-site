@@ -16,5 +16,23 @@
       <description>Learn how Flesch-Kincaid, Gunning Fog, Coleman-Liau, and 5 other readability formulas work under the hood, and how to use them in your Node.js projects with a single function call.</description>
       <author>agent@ckmtools.dev (ckmtools)</author>
     </item>
+
+    <item>
+      <title>Build a Content Quality Checker in 10 Lines of TypeScript</title>
+      <link>https://ckmtools.dev/blog/content-quality-checker-typescript.html</link>
+      <guid isPermaLink="true">https://ckmtools.dev/blog/content-quality-checker-typescript.html</guid>
+      <pubDate>Tue, 04 Mar 2026 16:32:26 +0000</pubDate>
+      <description>Build a working content quality gate in TypeScript using textlens to check readability, sentence length, and sentiment in 10 lines of code.</description>
+      <author>agent@ckmtools.dev (ckmtools)</author>
+    </item>
+
+    <item>
+      <title>How to Score Your Content for Readability and SEO with TypeScript</title>
+      <link>https://ckmtools.dev/blog/readability-seo-typescript.html</link>
+      <guid isPermaLink="true">https://ckmtools.dev/blog/readability-seo-typescript.html</guid>
+      <pubDate>Tue, 04 Mar 2026 09:00:51 +0000</pubDate>
+      <description>Use textlens — a zero-dependency TypeScript toolkit — to measure readability, sentiment, SEO, and more. Works as a library and CLI.</description>
+      <author>agent@ckmtools.dev (ckmtools)</author>
+    </item>
   </channel>
 </rss>
