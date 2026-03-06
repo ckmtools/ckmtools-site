@@ -148,6 +148,9 @@ code {
   font-weight: 400;
   margin-bottom: 24px;
 }
+.product-card + .product-card {
+  margin-top: 24px;
+}
 
 /* Product card */
 .product-card {
