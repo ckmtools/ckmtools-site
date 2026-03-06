@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ProseScore — Free Readability &amp; Content Analysis Tool</title>
+  <meta name="description" content="Check your text's readability grade, sentiment, keywords, and SEO score. 8 readability formulas including Flesch-Kincaid, Gunning Fog, and SMOG. All processing runs in your browser — your text stays private.">
+  <meta name="keywords" content="readability checker online, content readability tool, free readability test, reading level checker, flesch kincaid calculator, readability score, reading grade level, text analysis, sentiment analysis, SEO content score">
+  <link rel="canonical" href="https://ckmtools.dev/prosescore/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ProseScore — Free Readability &amp; Content Analysis Tool">
+  <meta property="og:description" content="Check your text's readability grade, sentiment, keywords, and SEO score. 8 readability formulas including Flesch-Kincaid, Gunning Fog, and SMOG. All processing runs in your browser — your text stays private.">
+  <meta property="og:url" content="https://ckmtools.dev/prosescore/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/prosescore/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ProseScore — Free Readability &amp; Content Analysis Tool">
+  <meta name="twitter:description" content="Check your text's readability grade, sentiment, keywords, and SEO score. 8 readability formulas including Flesch-Kincaid, Gunning Fog, and SMOG. All processing runs in your browser — your text stays private.">
+  <meta name="twitter:image" content="https://ckmtools.dev/prosescore/og-image.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ProseScore",
+    "description": "Check your text's readability grade, sentiment, keywords, and SEO score. 8 readability formulas including Flesch-Kincaid, Gunning Fog, and SMOG. All processing runs in your browser — your text stays private.",
+    "url": "https://prosescore.ckmtools.dev",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web",
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free tier with basic readability scoring"
+      },
+      {
+        "@type": "Offer",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "description": "Pro tier with all 8 formulas, sentiment, keywords, SEO scoring"
+      }
+    ],
+    "featureList": [
+      "Flesch-Kincaid grade level",
+      "Gunning Fog Index",
+      "SMOG Index",
+      "Coleman-Liau Index",
+      "Automated Readability Index",
+      "Dale-Chall Readability",
+      "Linsear Write Formula",
+      "Flesch Reading Ease",
+      "AFINN-165 sentiment analysis",
+      "Keyword extraction",
+      "SEO content scoring",
+      "Extractive summarization"
+    ],
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    }
+  }
+  </script>
+
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    /* ProseScore page styles */
+    .ps-hero {
+      padding-bottom: 48px;
+    }
+    .ps-breadcrumb {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .ps-breadcrumb a {
+      color: var(--text-secondary);
+    }
+    .ps-breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      max-width: 640px;
+      margin: 0 auto 28px;
+    }
+    .btn-primary {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+      margin-bottom: 16px;
+    }
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .hero-note {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+    .ps-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .ps-section h2 {
+      margin-bottom: 24px;
+    }
+    .ps-features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .ps-feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+    }
+    .ps-feature-card h3 {
+      margin-bottom: 12px;
+      color: var(--color-primary);
+    }
+    .ps-feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin-bottom: 12px;
+    }
+    .ps-feature-card p:last-child {
+      margin-bottom: 0;
+    }
+    .ps-feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .ps-feature-list li {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      padding: 4px 0;
+      padding-left: 18px;
+      position: relative;
+    }
+    .ps-feature-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+    }
+    /* Comparison table */
+    .ps-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 32px;
+    }
+    .ps-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    .ps-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .ps-table thead th:not(:first-child) {
+      text-align: center;
+    }
+    .ps-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .ps-table tbody td:not(:first-child) {
+      text-align: center;
+    }
+    .ps-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .ps-table .check {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+    .ps-table .dash {
+      color: var(--text-tertiary);
+    }
+    .ps-table .col-pro {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .ps-cta-wrap {
+      text-align: center;
+      margin-top: 32px;
+    }
+    .ps-cta-note {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-top: 12px;
+    }
+    /* How it works */
+    .ps-steps {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      counter-reset: steps;
+    }
+    .ps-step {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .ps-step-num {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      background: var(--color-primary);
+      color: var(--bg);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      font-family: var(--font-mono);
+    }
+    .ps-step-body h3 {
+      margin-bottom: 6px;
+      font-size: 1.0625rem;
+    }
+    .ps-step-body p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+    }
+    /* Advantages */
+    .ps-advantages {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .ps-advantage {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 20px;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+    }
+    .ps-advantage strong {
+      color: var(--text-primary);
+      display: block;
+      margin-bottom: 4px;
+    }
+    /* Built on section */
+    .ps-built-on {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+    }
+    .ps-built-on h2 {
+      margin-bottom: 12px;
+    }
+    .ps-built-on p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+    }
+    /* Responsive */
+    @media (min-width: 640px) {
+      .ps-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .ps-steps {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .ps-advantages {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/ckmtools" rel="noopener" aria-label="ckmtools on GitHub">GitHub</a>
+        <a href="/">ckmtools.dev</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero ps-hero" aria-label="ProseScore overview">
+      <p class="ps-breadcrumb"><a href="/">ckmtools</a> / prosescore</p>
+      <h1>ProseScore</h1>
+      <p class="hero-desc">Analyze your text's readability, sentiment, and SEO quality. 8 readability formulas, all running in your browser. Nothing leaves your machine.</p>
+      <a href="https://prosescore.ckmtools.dev/" class="btn-primary" rel="noopener">Try it free &rarr;</a>
+      <p class="hero-note">Free tier available. Pro unlock: $9.99 one-time.</p>
+    </section>
+
+    <!-- Features -->
+    <section class="ps-section" aria-label="Features">
+      <h2>Everything you need to understand your writing</h2>
+      <div class="ps-features-grid">
+
+        <article class="ps-feature-card">
+          <h3>8 readability formulas</h3>
+          <p>Every major readability index in one place, averaged into a single consensus grade.</p>
+          <ul class="ps-feature-list" aria-label="Readability formulas">
+            <li>Flesch-Kincaid Grade Level</li>
+            <li>Gunning Fog Index</li>
+            <li>SMOG Index</li>
+            <li>Coleman-Liau Index</li>
+            <li>Automated Readability Index</li>
+            <li>Dale-Chall Readability</li>
+            <li>Linsear Write Formula</li>
+            <li>Flesch Reading Ease (0&ndash;100)</li>
+            <li>Consensus grade &mdash; avg of all formulas</li>
+          </ul>
+        </article>
+
+        <article class="ps-feature-card">
+          <h3>Deep content analysis</h3>
+          <p>Go beyond grade level with analysis that helps you improve what you write.</p>
+          <ul class="ps-feature-list" aria-label="Content analysis features">
+            <li>AFINN-165 sentiment (positive / negative / neutral)</li>
+            <li>Keyword extraction with frequency and density</li>
+            <li>SEO content scoring with actionable suggestions</li>
+            <li>Extractive text summarization</li>
+            <li>File upload (.txt, .md)</li>
+            <li>Markdown report export</li>
+            <li>Analysis history</li>
+          </ul>
+        </article>
+
+        <article class="ps-feature-card">
+          <h3>Privacy-first</h3>
+          <p>Your writing never touches a server. All analysis runs locally in your browser.</p>
+          <ul class="ps-feature-list" aria-label="Privacy features">
+            <li>Powered by textlens running client-side</li>
+            <li>No server, no API calls, no data collection</li>
+            <li>Works offline once the page loads</li>
+            <li>Dark mode, optimized for long sessions</li>
+            <li>Instant results &mdash; no waiting for a round-trip</li>
+          </ul>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- Free vs Pro table -->
+    <section class="ps-section" aria-label="Free vs Pro comparison">
+      <h2>Free vs Pro</h2>
+      <div class="ps-table-wrap">
+        <table class="ps-table" aria-label="Feature comparison between free and pro tiers">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col">Free</th>
+              <th scope="col" class="col-pro">Pro &mdash; $9.99</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Flesch-Kincaid grade level</td>
+              <td class="check" aria-label="Included in free">&#10003;</td>
+              <td class="check" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Word count &amp; reading time</td>
+              <td class="check" aria-label="Included in free">&#10003;</td>
+              <td class="check" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Basic statistics</td>
+              <td class="check" aria-label="Included in free">&#10003;</td>
+              <td class="check" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>All 8 readability formulas</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Text summarization</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Markdown export</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Analysis history</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+            <tr>
+              <td>File upload (.txt, .md)</td>
+              <td class="dash" aria-label="Not included in free">&mdash;</td>
+              <td class="check col-pro" aria-label="Included in pro">&#10003;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="ps-cta-wrap">
+        <a href="https://prosescore.ckmtools.dev/" class="btn-primary" rel="noopener">Unlock Pro &mdash; $9.99 one-time</a>
+        <p class="ps-cta-note">One payment. No subscription. Yours forever.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="ps-section" aria-label="How it works">
+      <h2>How it works</h2>
+      <div class="ps-steps">
+        <div class="ps-step">
+          <div class="ps-step-num" aria-hidden="true">1</div>
+          <div class="ps-step-body">
+            <h3>Paste or upload your text</h3>
+            <p>Type directly, paste from anywhere, or upload a .txt or .md file. No account required.</p>
+          </div>
+        </div>
+        <div class="ps-step">
+          <div class="ps-step-num" aria-hidden="true">2</div>
+          <div class="ps-step-body">
+            <h3>Get instant analysis</h3>
+            <p>Readability grade, sentiment score, top keywords, and SEO suggestions appear immediately &mdash; all computed in your browser.</p>
+          </div>
+        </div>
+        <div class="ps-step">
+          <div class="ps-step-num" aria-hidden="true">3</div>
+          <div class="ps-step-body">
+            <h3>Export and compare</h3>
+            <p>Pro: export a full markdown report, save analyses to history, and track how your writing improves over time.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why ProseScore -->
+    <section class="ps-section" aria-label="Why choose ProseScore">
+      <h2>Why writers choose ProseScore</h2>
+      <div class="ps-advantages">
+        <div class="ps-advantage">
+          <strong>8 readability formulas, not just one</strong>
+          Every major algorithm — Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, and Flesch Reading Ease — averaged into one consensus grade.
+        </div>
+        <div class="ps-advantage">
+          <strong>No monthly subscription</strong>
+          One payment of $9.99 unlocks Pro permanently. No recurring charges, no usage limits, no expiry.
+        </div>
+        <div class="ps-advantage">
+          <strong>Zero data collection</strong>
+          Your drafts, articles, and documents stay on your machine. Nothing is transmitted to any server. Ever.
+        </div>
+        <div class="ps-advantage">
+          <strong>Dark mode, built for writers</strong>
+          A clean, distraction-free interface with dark mode default — optimized for long writing and editing sessions.
+        </div>
+      </div>
+    </section>
+
+    <!-- Built on textlens -->
+    <section class="ps-section" aria-label="Built on textlens">
+      <div class="ps-built-on">
+        <h2>Built on <a href="/textlens/">textlens</a></h2>
+        <p>
+          ProseScore is powered by <a href="/textlens/">textlens</a>, a zero-dependency TypeScript text analysis library available on <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>. If you need readability scoring in your own project or CI pipeline, textlens gives you the same 8 formulas as a lightweight, type-safe package.
+        </p>
+        <pre><code><span class="tl-kw">import</span> { analyze } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> result = analyze(text);
+console.log(result.readability.consensusGrade); <span class="tl-cmt">// e.g. 8.4</span>
+console.log(result.sentiment.label);            <span class="tl-cmt">// "positive"</span></code></pre>
+        <div class="link-row">
+          <a href="/textlens/">textlens docs</a>
+          <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+          <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="ps-section tl-cta" aria-label="Get started with ProseScore">
+      <h2>Start analyzing your writing</h2>
+      <p class="tl-desc">Free tier available immediately. No sign-up, no email, no credit card.</p>
+      <a href="https://prosescore.ckmtools.dev/" class="btn-primary" rel="noopener">Open ProseScore &rarr;</a>
+      <p class="hero-note" style="margin-top:16px">Pro unlock: $9.99 one-time &mdash; all 8 formulas, sentiment, SEO scoring, export</p>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a>
+      &mdash;
+      <a href="/">ckmtools.dev</a>
+      &mdash;
+      <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a>
+      &mdash; 2026
+    </p>
+  </footer>
+</body>
+</html>
