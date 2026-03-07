@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TextLens vs natural &mdash; Readability Scoring vs General NLP</title>
+  <meta name="description" content="TextLens is a zero-dependency TypeScript readability and content analysis library. natural is a general-purpose NLP toolkit. Compare features, scope, and use cases side by side.">
+  <meta name="keywords" content="natural npm alternative, textlens vs natural, readability scoring npm, nlp javascript, text analysis npm, flesch kincaid javascript, sentiment analysis npm, naturalnode alternative">
+  <link rel="canonical" href="https://ckmtools.dev/textlens/vs-natural/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens vs natural - Readability Scoring vs General NLP">
+  <meta property="og:description" content="TextLens: zero-dependency readability scoring, sentiment, keywords, SEO. natural: tokenizers, stemmers, classifiers, phonetics. Compare side by side.">
+  <meta property="og:url" content="https://ckmtools.dev/textlens/vs-natural/">
+  <meta property="og:site_name" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TextLens vs natural - Readability Scoring vs General NLP">
+  <meta name="twitter:description" content="TextLens: zero-dependency readability scoring, sentiment, keywords, SEO. natural: tokenizers, stemmers, classifiers, phonetics.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "TextLens vs natural",
+    "description": "Side-by-side comparison of TextLens and natural (NaturalNode). TextLens is purpose-built for readability and content analysis; natural is a general-purpose NLP toolkit.",
+    "url": "https://ckmtools.dev/textlens/vs-natural/",
+    "mainEntity": {
+      "@type": "SoftwareApplication",
+      "name": "TextLens",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "url": "https://ckmtools.dev/textlens/",
+      "downloadUrl": "https://www.npmjs.com/package/textlens",
+      "programmingLanguage": "TypeScript",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ckmtools", "item": "https://ckmtools.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "TextLens", "item": "https://ckmtools.dev/textlens/" },
+        { "@type": "ListItem", "position": 3, "name": "vs natural", "item": "https://ckmtools.dev/textlens/vs-natural/" }
+      ]
+    }
+  }
+  </script>
+
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero tl-hero" aria-label="TextLens vs natural comparison">
+      <p class="tl-breadcrumb"><a href="/">ckmtools</a> / <a href="/textlens/">textlens</a> / vs natural</p>
+      <h1>TextLens vs natural</h1>
+      <p class="hero-desc">TextLens is purpose-built for readability scoring and content analysis. natural is a Swiss army knife for NLP. Different tools for different jobs &mdash; here's how they compare.</p>
+      <pre class="tl-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+    </section>
+
+    <!-- Side-by-side comparison table -->
+    <section class="tl-section" aria-label="Feature comparison">
+      <h2>Side-by-side comparison</h2>
+      <div class="ps-table-wrap">
+        <table class="ps-table vs-table" aria-label="TextLens vs natural feature comparison">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col" class="col-pro">TextLens</th>
+              <th scope="col">natural</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Focus</td>
+              <td class="col-pro">Readability + content analysis</td>
+              <td>General-purpose NLP</td>
+            </tr>
+            <tr>
+              <td>Dependencies</td>
+              <td class="check col-pro" aria-label="Zero">Zero</td>
+              <td>Multiple sub-packages</td>
+            </tr>
+            <tr>
+              <td>TypeScript</td>
+              <td class="check col-pro" aria-label="Native">Native</td>
+              <td class="dash" aria-label="No">&mdash; (JS only, @types available)</td>
+            </tr>
+            <tr>
+              <td>Readability formulas</td>
+              <td class="col-pro"><strong>8 formulas</strong> + consensus grade</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="check" aria-label="Yes">&#10003;</td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td class="check col-pro" aria-label="Yes">&#10003; TF-IDF</td>
+              <td class="check" aria-label="Yes">&#10003; TF-IDF</td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Reading time</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Tokenization</td>
+              <td>Basic (sentences, words)</td>
+              <td class="check" aria-label="Yes">&#10003; Multiple tokenizers</td>
+            </tr>
+            <tr>
+              <td>Stemming</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+              <td class="check" aria-label="Yes">&#10003; Porter, Lancaster</td>
+            </tr>
+            <tr>
+              <td>Classification</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+              <td class="check" aria-label="Yes">&#10003; Naive Bayes, logistic regression</td>
+            </tr>
+            <tr>
+              <td>Phonetics</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+              <td class="check" aria-label="Yes">&#10003; Soundex, Metaphone</td>
+            </tr>
+            <tr>
+              <td>String distance</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+              <td class="check" aria-label="Yes">&#10003; Levenshtein, Jaro-Winkler</td>
+            </tr>
+            <tr>
+              <td>Browser support</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td>Limited</td>
+            </tr>
+            <tr>
+              <td>CLI</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>GitHub stars</td>
+              <td>New</td>
+              <td>10,000+</td>
+            </tr>
+            <tr>
+              <td>License</td>
+              <td class="col-pro">MIT</td>
+              <td>MIT</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- What TextLens does that natural doesn't -->
+    <section class="tl-section" aria-label="TextLens advantages">
+      <h2>What TextLens has that natural doesn't</h2>
+      <p class="vs-intro">TextLens ships with 8 readability formulas, SEO scoring, and reading time estimation. natural has none of these.</p>
+
+      <div class="vs-formulas">
+        <div class="vs-formula">
+          <h3>Flesch-Kincaid Grade Level</h3>
+          <p>Maps text to a U.S. school grade level based on sentence length and syllable count. The most widely used readability formula.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>Gunning Fog Index</h3>
+          <p>Estimates years of formal education needed. Penalizes complex (3+ syllable) words more heavily.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>Coleman-Liau Index</h3>
+          <p>Character-based formula. More reliable for technical text with acronyms and abbreviations.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>SMOG Index</h3>
+          <p>The gold standard for health literacy. Counts polysyllabic words to estimate reading difficulty.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>Automated Readability Index</h3>
+          <p>Character-based formula designed for automated assessment. Fast and effective for large documents.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>Dale-Chall Readability</h3>
+          <p>Compares words against a 3,000-word familiar list. Accurate for lower reading levels.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>Spache Readability</h3>
+          <p>Designed for primary-grade text (grades 1&ndash;3). Uses a familiar word list tuned for early readers.</p>
+        </div>
+        <div class="vs-formula">
+          <h3>Flesch Reading Ease</h3>
+          <p>Scores text 0&ndash;100 (higher = easier). The most intuitive readability metric for non-technical users.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="tl-section" aria-label="Code comparison">
+      <h2>Code comparison</h2>
+      <p class="vs-intro">TextLens gives you readability scores in one call. natural requires separate modules for each NLP task.</p>
+
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>TextLens <span class="vs-lang-tag">TypeScript</span></h3>
+          <pre><code><span class="tl-kw">import</span> { analyze } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> result = analyze(text);
+
+result.readability.fleschKincaidGrade;  <span class="tl-cmt">// 8.2</span>
+result.readability.gunningFogIndex;     <span class="tl-cmt">// 10.1</span>
+result.readability.consensusGrade;      <span class="tl-cmt">// 8.7</span>
+result.sentiment.label;                 <span class="tl-cmt">// 'positive'</span>
+result.keywords;                        <span class="tl-cmt">// ['readability', ...]</span>
+result.seo.score;                       <span class="tl-cmt">// 82</span></code></pre>
+        </div>
+
+        <div class="vs-code-block">
+          <h3>natural <span class="vs-lang-tag">JavaScript</span></h3>
+          <pre><code><span class="tl-kw">const</span> natural = require(<span class="tl-str">'natural'</span>);
+
+<span class="tl-kw">const</span> tokenizer = <span class="tl-kw">new</span> natural.WordTokenizer();
+tokenizer.tokenize(text);              <span class="tl-cmt">// ['word', ...]</span>
+
+<span class="tl-kw">const</span> Analyzer = natural.SentimentAnalyzer;
+<span class="tl-kw">const</span> stemmer = natural.PorterStemmer;
+<span class="tl-kw">const</span> analyzer = <span class="tl-kw">new</span> Analyzer(<span class="tl-str">'English'</span>, stemmer, <span class="tl-str">'afinn'</span>);
+analyzer.getSentiment(tokens);          <span class="tl-cmt">// 0.25</span>
+
+<span class="tl-cmt">// no readability formulas</span>
+<span class="tl-cmt">// no SEO scoring</span>
+<span class="tl-cmt">// no reading time</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- When to use each -->
+    <section class="tl-section" aria-label="When to use each">
+      <h2>When to use each</h2>
+      <div class="ps-advantages">
+        <div class="ps-advantage">
+          <strong>Use TextLens for readability scoring and content analysis</strong>
+          Blog post readability, documentation quality, SEO optimization, content grading. TextLens gives you 8 readability formulas, sentiment, keywords, and SEO scoring in a single <code>analyze()</code> call with zero dependencies.
+        </div>
+        <div class="ps-advantage">
+          <strong>Use TextLens for browser-side analysis</strong>
+          TextLens runs in the browser with no server required. Build client-side writing tools, CMS plugins, or content checkers. natural's large dependency tree makes it impractical for browser use.
+        </div>
+        <div class="ps-advantage">
+          <strong>Use natural for NLP tasks</strong>
+          Tokenization, stemming, classification, phonetics, string distance. natural covers a broad range of NLP operations that TextLens doesn't attempt. If you need a Naive Bayes classifier or Porter stemmer, natural is the right tool.
+        </div>
+        <div class="ps-advantage">
+          <strong>Use both together</strong>
+          The two libraries complement each other. Use TextLens for readability and content scoring, natural for tokenization and classification. Zero dependency overlap means no conflicts.
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="tl-section tl-cta" aria-label="Get started with TextLens">
+      <h2>Get started</h2>
+      <pre class="tl-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+      <div class="link-row tl-links">
+        <a href="/textlens/">TextLens docs</a>
+        <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a>
+      &mdash;
+      <a href="/">ckmtools.dev</a>
+      &mdash;
+      <a href="/textlens/">TextLens</a>
+      &mdash;
+      <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a>
+      &mdash; 2026
+    </p>
+  </footer>
+</body>
+</html>
