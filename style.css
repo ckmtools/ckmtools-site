@@ -864,3 +864,4 @@ pre code {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+.ps-final-note { margin-top: 16px; }
