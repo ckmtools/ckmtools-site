@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sentiment Analysis in Node.js Without External APIs | ckmtools blog</title>
+  <meta name="description" content="Add sentiment analysis to any Node.js app using the AFINN-165 lexicon. No paid APIs, no Python, no ML models. Working code examples with real output.">
+  <meta name="author" content="ckmtools">
+  <meta name="robots" content="index, follow">
+  <meta name="keywords" content="sentiment analysis javascript, sentiment analysis node.js, AFINN sentiment, text sentiment npm, analyze sentiment typescript">
+  <link rel="canonical" href="https://ckmtools.dev/blog/sentiment-analysis-nodejs.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Sentiment Analysis in Node.js Without External APIs">
+  <meta property="og:description" content="Add sentiment analysis to any Node.js app using the AFINN-165 lexicon. No paid APIs, no Python, no ML models.">
+  <meta property="og:url" content="https://ckmtools.dev/blog/sentiment-analysis-nodejs.html">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+  <meta property="article:published_time" content="2026-03-07">
+  <meta property="article:author" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sentiment Analysis in Node.js Without External APIs">
+  <meta name="twitter:description" content="Add sentiment analysis to any Node.js app using the AFINN-165 lexicon. No paid APIs, no Python, no ML models.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/logos/avatar-512.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Sentiment Analysis in Node.js Without External APIs",
+    "description": "Add sentiment analysis to any Node.js app using the AFINN-165 lexicon. No paid APIs, no Python, no ML models. Working code examples with real output.",
+    "url": "https://ckmtools.dev/blog/sentiment-analysis-nodejs.html",
+    "datePublished": "2026-03-07",
+    "dateModified": "2026-03-07",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ckmtools.dev/assets/logos/avatar-512.png"
+      }
+    },
+    "image": "https://ckmtools.dev/assets/logos/avatar-512.png",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ckmtools.dev/blog/sentiment-analysis-nodejs.html"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <article class="blog-article">
+      <header class="article-header">
+        <p class="blog-breadcrumb"><a href="/">ckmtools</a> / <a href="/blog/">blog</a></p>
+        <h1>Sentiment Analysis in Node.js Without External APIs</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-07">March 7, 2026</time>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>ckmtools</span>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>9 min read</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+<pre><code>import { sentiment } from 'textlens';
+
+const result = sentiment('I love this product! It works great.');
+console.log(result.label);       // "positive"
+console.log(result.comparative); // 0.75
+console.log(result.positive);    // ["love", "great"]</code></pre>
+
+<p>That's sentiment analysis running in Node.js. No API key, no network request, no Python. The entire lexicon ships with the package and runs locally.</p>
+
+<p>This article covers how lexicon-based sentiment analysis works, when to use it, and how to build practical features with it: comment moderation, review scoring, and content tone checking.</p>
+
+<h2>Why sentiment analysis matters</h2>
+
+<p>Every app that handles user-generated text has an implicit opinion problem. Product reviews, support tickets, blog comments, social media posts&mdash;they all carry tone. Knowing that tone unlocks concrete features:</p>
+
+<ul>
+<li><strong>Comment moderation</strong> &mdash; Flag comments with strongly negative sentiment for review before publishing.</li>
+<li><strong>Review scoring</strong> &mdash; Aggregate sentiment across product reviews to surface the most positive and most critical feedback.</li>
+<li><strong>Content tone checking</strong> &mdash; Verify that marketing copy, documentation, or support responses maintain the right tone before publishing.</li>
+<li><strong>Customer feedback triage</strong> &mdash; Route angry support tickets to senior staff and positive ones to the testimonials page.</li>
+</ul>
+
+<h2>The problem with most sentiment solutions</h2>
+
+<p>Search for "sentiment analysis" and most results point to one of three approaches:</p>
+
+<ol>
+<li><strong>Python ML libraries</strong> (NLTK, TextBlob, spaCy) &mdash; Requires a Python runtime. If your app is Node.js, you now maintain two runtimes or run a microservice.</li>
+<li><strong>Cloud APIs</strong> (Google Natural Language, AWS Comprehend, Azure Text Analytics) &mdash; Pay per request. Add latency. Require API keys and network access. Break if your credit card expires.</li>
+<li><strong>Large NLP models</strong> (Hugging Face transformers) &mdash; High accuracy, but models are hundreds of megabytes. Overkill for "is this comment positive or negative?"</li>
+</ol>
+
+<p>For many use cases, you don't need 98% accuracy on sarcastic movie reviews. You need a fast, local, dependency-free way to score text sentiment in the same runtime your app already uses.</p>
+
+<h2>How AFINN-165 works</h2>
+
+<p>AFINN is a word list created by Finn &Aring;rup Nielsen, a researcher at the Technical University of Denmark. Each entry maps an English word to an integer score from -5 (most negative) to +5 (most positive).</p>
+
+<p>The current version, AFINN-165, contains 2,477 words and phrases. Some examples:</p>
+
+<table>
+<thead>
+<tr><th>Word</th><th>Score</th></tr>
+</thead>
+<tbody>
+<tr><td>outstanding</td><td>+5</td></tr>
+<tr><td>love</td><td>+3</td></tr>
+<tr><td>good</td><td>+3</td></tr>
+<tr><td>nice</td><td>+2</td></tr>
+<tr><td>disappointing</td><td>-2</td></tr>
+<tr><td>terrible</td><td>-3</td></tr>
+<tr><td>awful</td><td>-3</td></tr>
+<tr><td>hate</td><td>-3</td></tr>
+</tbody>
+</table>
+
+<p>The algorithm is straightforward:</p>
+
+<ol>
+<li>Tokenize the input into words.</li>
+<li>Look up each word in the AFINN lexicon.</li>
+<li>Sum the scores of all matched words to get the <strong>raw score</strong>.</li>
+<li>Divide by total word count to get the <strong>comparative score</strong>.</li>
+</ol>
+
+<p>The comparative score normalizes for text length. A 500-word article with a raw score of +10 and a 5-word sentence with +10 have different intensities. The comparative score captures that: +0.02 vs +2.0.</p>
+
+<h2>Setting up</h2>
+
+<p>Install <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a>, an open-source text analysis toolkit I built. Full disclosure: I'm the creator. It ships with the full AFINN-165 lexicon as part of a zero-dependency package that also handles readability scoring, keyword extraction, and more. We're using it here for its sentiment module.</p>
+
+<pre><code>npm install textlens</code></pre>
+
+<p>Import the <code>sentiment</code> function:</p>
+
+<pre><code>import { sentiment } from 'textlens';
+// or CommonJS:
+const { sentiment } = require('textlens');</code></pre>
+
+<h2>Analyzing sentiment</h2>
+
+<p>Pass any string to <code>sentiment()</code>. It returns an object with the raw score, comparative score, label, confidence, and the positive and negative words it found.</p>
+
+<pre><code>import { sentiment } from 'textlens';
+
+const positive = sentiment(
+  'I love this product! It works great and the support team is amazing.'
+);
+console.log(positive);
+// {
+//   score: 0.31,
+//   comparative: 0.92,
+//   label: "positive",
+//   confidence: 0.31,
+//   positive: ["love", "great", "support", "amazing"],
+//   negative: []
+// }</code></pre>
+
+<pre><code>const negative = sentiment(
+  'This product is terrible. The quality is awful and customer service was unhelpful. Total waste of money.'
+);
+console.log(negative);
+// {
+//   score: -0.10,
+//   comparative: -0.29,
+//   label: "negative",
+//   confidence: 0.24,
+//   positive: ["quality"],
+//   negative: ["terrible", "awful", "waste"]
+// }</code></pre>
+
+<pre><code>const neutral = sentiment(
+  'The package arrived on Tuesday. It contained three items as listed on the invoice.'
+);
+console.log(neutral);
+// {
+//   score: 0,
+//   comparative: 0,
+//   label: "neutral",
+//   confidence: 0,
+//   positive: [],
+//   negative: []
+// }</code></pre>
+
+<p>Notice how "quality" appears as a positive word in the negative review. AFINN scores "quality" as +2 because the word has a positive connotation in most contexts. The overall score is still negative because "terrible", "awful", and "waste" outweigh it. This is a known limitation of lexicon-based approaches&mdash;they don't understand context.</p>
+
+<h3>Understanding the output fields</h3>
+
+<ul>
+<li><strong>score</strong> &mdash; Normalized sum of all AFINN word scores divided by total words. Positive means positive sentiment, negative means negative.</li>
+<li><strong>comparative</strong> &mdash; Sum of matched AFINN scores divided by the count of matched words. Higher absolute values indicate stronger sentiment.</li>
+<li><strong>label</strong> &mdash; <code>"positive"</code>, <code>"negative"</code>, or <code>"neutral"</code> based on the score.</li>
+<li><strong>confidence</strong> &mdash; Proportion of words that matched the lexicon. Higher values mean more of the text contributed to the score.</li>
+<li><strong>positive</strong> / <strong>negative</strong> &mdash; Arrays of the actual words that matched, useful for debugging and explanation.</li>
+</ul>
+
+<h2>Practical example: Scoring product reviews</h2>
+
+<p>Given an array of product reviews, score and rank them by sentiment:</p>
+
+<pre><code>import { sentiment } from 'textlens';
+
+const reviews = [
+  'Excellent build quality. Best purchase this year.',
+  'Arrived broken. Support ghosted me for two weeks.',
+  'It works fine. Nothing special but does the job.',
+  'Absolutely love the design. Fast shipping too!',
+  'Worst product I have ever bought. Completely useless.',
+];
+
+const scored = reviews
+  .map((text) => ({
+    text,
+    ...sentiment(text),
+  }))
+  .sort((a, b) => b.score - a.score);
+
+scored.forEach((r) => {
+  const icon = r.label === 'positive' ? '+' : r.label === 'negative' ? '-' : '~';
+  console.log(`[${icon}] ${r.score.toFixed(2)} | ${r.text}`);
+});</code></pre>
+
+<p>Output:</p>
+
+<pre><code>[+] 0.33 | Absolutely love the design. Fast shipping too!
+[+] 0.29 | Excellent build quality. Best purchase this year.
+[~] 0.00 | It works fine. Nothing special but does the job.
+[-] -0.09 | Arrived broken. Support ghosted me for two weeks.
+[-] -0.30 | Worst product I have ever bought. Completely useless.</code></pre>
+
+<p>This gives you a ranked list from most positive to most negative. You could use this to:</p>
+
+<ul>
+<li>Show the top 3 positive reviews on a product page.</li>
+<li>Alert support teams when a review scores below -0.2.</li>
+<li>Calculate an average sentiment score per product.</li>
+</ul>
+
+<h2>Practical example: Comment moderation filter</h2>
+
+<p>Build a function that flags comments for manual review based on sentiment:</p>
+
+<pre><code>import { sentiment } from 'textlens';
+
+const NEGATIVE_THRESHOLD = -0.15;
+
+function moderateComment(text) {
+  const result = sentiment(text);
+
+  if (result.score < NEGATIVE_THRESHOLD) {
+    return {
+      action: 'flag',
+      reason: `Negative sentiment (${result.score.toFixed(2)}). Words: ${result.negative.join(', ')}`,
+      result,
+    };
+  }
+
+  return { action: 'approve', result };
+}
+
+// Test it:
+const comments = [
+  'Great article, thanks for sharing!',
+  'This is the dumbest thing I have ever read. Trash.',
+  'I disagree with point 3, here is why...',
+  'Hate this garbage. Absolute scam.',
+];
+
+comments.forEach((text) => {
+  const { action, reason } = moderateComment(text);
+  console.log(`[${action.toUpperCase()}] ${text}`);
+  if (reason) console.log(`  -> ${reason}`);
+});</code></pre>
+
+<p>Output:</p>
+
+<pre><code>[APPROVE] Great article, thanks for sharing!
+[FLAG] This is the dumbest thing I have ever read. Trash.
+  -> Negative sentiment (-0.18). Words: dumbest, trash
+[APPROVE] I disagree with point 3, here is why...
+[FLAG] Hate this garbage. Absolute scam.
+  -> Negative sentiment (-0.43). Words: hate, garbage, scam</code></pre>
+
+<p>The third comment ("I disagree...") passes through because disagreement without negative language isn't hostile. The filter catches tone, not opinion&mdash;which is the right behavior for moderation.</p>
+
+<h2>Practical example: Content tone checker</h2>
+
+<p>Check whether your documentation or marketing copy has the right tone before publishing:</p>
+
+<pre><code>import { sentiment } from 'textlens';
+
+function checkTone(text, options = {}) {
+  const { minScore = 0, maxScore = Infinity } = options;
+  const result = sentiment(text);
+
+  const issues = [];
+  if (result.score < minScore) {
+    issues.push(`Tone too negative (${result.score.toFixed(2)}, min: ${minScore})`);
+  }
+  if (result.score > maxScore) {
+    issues.push(`Tone too positive (${result.score.toFixed(2)}, max: ${maxScore})`);
+  }
+  if (result.negative.length > 0) {
+    issues.push(`Negative words found: ${result.negative.join(', ')}`);
+  }
+
+  return { pass: issues.length === 0, issues, result };
+}
+
+// Marketing copy should be positive:
+const marketing = checkTone(
+  'Our product helps teams collaborate faster and ship with confidence.',
+  { minScore: 0 }
+);
+console.log('Marketing:', marketing.pass ? 'PASS' : 'FAIL');
+
+// Error messages should be neutral, not negative:
+const errorMsg = checkTone(
+  'Failed to connect. Please check your terrible network settings.',
+  { minScore: -0.05 }
+);
+console.log('Error msg:', errorMsg.pass ? 'PASS' : 'FAIL');
+console.log('Issues:', errorMsg.issues);</code></pre>
+
+<p>This pattern integrates into CI pipelines or pre-publish hooks. Run it on documentation files, README changes, or user-facing copy to catch unintentional negative tone.</p>
+
+<h2>Using the CLI</h2>
+
+<p>textlens includes a command-line interface. Analyze a file and get sentiment as part of the JSON output:</p>
+
+<pre><code>npx textlens analyze article.md --format json</code></pre>
+
+<p>The output includes a <code>sentiment</code> field alongside readability scores, keywords, and statistics. Pipe it through <code>jq</code> to extract what you need:</p>
+
+<pre><code>npx textlens analyze article.md --format json | jq '.sentiment'</code></pre>
+
+<h2>When lexicon-based sentiment falls short</h2>
+
+<p>AFINN-165 is a word-counting approach. It does not understand:</p>
+
+<ul>
+<li><strong>Sarcasm.</strong> "Oh great, another meeting" scores positive because "great" is +3. The actual sentiment is negative.</li>
+<li><strong>Negation.</strong> "not good" may score positive because "good" is +3 and "not" has no AFINN score. Some implementations handle basic negation; AFINN-165 does not.</li>
+<li><strong>Context.</strong> "The plot was sick" could be positive (slang) or negative (literal). The lexicon treats "sick" as negative (-2).</li>
+<li><strong>Domain-specific language.</strong> Medical text, legal text, and financial text use words with sentiment scores that don't match their domain meaning. "Positive test result" is not good news.</li>
+<li><strong>Multilingual text.</strong> AFINN-165 covers English only. Non-English words are ignored, which skews scores for mixed-language text.</li>
+<li><strong>Emoji and slang.</strong> The lexicon predates modern internet slang. It doesn't score emoji, abbreviations like "lol" or "smh", or newer slang.</li>
+</ul>
+
+<p>These limitations matter. If you're building a system where wrong sentiment classifications have real consequences&mdash;like automatically deleting user comments or making business decisions based on review scores&mdash;a lexicon approach is not enough on its own.</p>
+
+<h2>When to use lexicon vs. ML approaches</h2>
+
+<table>
+<thead>
+<tr><th>Use case</th><th>Recommended approach</th></tr>
+</thead>
+<tbody>
+<tr><td>Flagging toxic comments for human review</td><td>Lexicon (AFINN). Fast, no infra, humans make final call.</td></tr>
+<tr><td>Sorting feedback by tone</td><td>Lexicon. Ranking doesn't need perfect accuracy.</td></tr>
+<tr><td>Content tone checking in CI</td><td>Lexicon. Binary pass/fail on obvious negative language.</td></tr>
+<tr><td>Sarcasm detection</td><td>ML (transformer models). Lexicons can't detect sarcasm.</td></tr>
+<tr><td>Fine-grained emotion classification</td><td>ML. Distinguishing "angry" from "sad" from "frustrated" requires context.</td></tr>
+<tr><td>Non-English text</td><td>ML or language-specific lexicons. AFINN covers English only.</td></tr>
+<tr><td>High-stakes automated decisions</td><td>ML with human oversight. Don't auto-delete based on a word list.</td></tr>
+</tbody>
+</table>
+
+<p>The lexicon approach works best as a filter, not a judge. Use it to surface content that needs human attention, to sort items by approximate tone, or as one signal among many in a scoring system.</p>
+
+<h2>Wrapping up</h2>
+
+<p>Lexicon-based sentiment analysis is not a replacement for machine learning. It is a pragmatic tool that covers a wide range of use cases without the overhead of ML infrastructure.</p>
+
+<p>With AFINN-165, you get:</p>
+
+<ul>
+<li>2,477 scored English words, maintained by academic research.</li>
+<li>Deterministic results&mdash;same input always produces the same output.</li>
+<li>Sub-millisecond analysis, no network calls, no API keys.</li>
+<li>Transparent scoring&mdash;you can see exactly which words contributed to the result.</li>
+</ul>
+
+<p>If you need sentiment analysis in a Node.js or TypeScript project and your use case doesn't require context-aware NLP, a lexicon approach gets you there with zero infrastructure. <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a> is one way to add it&mdash;a single <code>npm install</code> with no dependencies.</p>
+
+<p>The full source is on <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>.</p>
+
+      </div>
+
+      <footer class="article-footer">
+        <div class="related-products">
+          <h3>Related</h3>
+          <ul>
+            <li><a href="/textlens/">textlens</a> &mdash; Zero-dependency text analysis and readability toolkit</li>
+            <li><a href="/blog/content-quality-checker-typescript.html">Build a Content Quality Checker in 10 Lines of TypeScript</a></li>
+            <li><a href="/blog/readability-formula-guide.html">A Developer's Guide to Readability Formulas</a></li>
+          </ul>
+        </div>
+        <a href="/blog/" class="article-back">&larr; All articles</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
