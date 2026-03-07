@@ -5,8 +5,17 @@
     <link>https://ckmtools.dev/blog/</link>
     <description>Articles on text analysis, readability scoring, developer tooling, and building zero-dependency npm packages.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 05 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 07 Mar 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://ckmtools.dev/blog/feed.xml" rel="self" type="application/rss+xml"/>
+
+    <item>
+      <title>I Built a Free Hemingway Editor Alternative That Runs in Your Browser</title>
+      <link>https://ckmtools.dev/blog/prosescore-hemingway-alternative.html</link>
+      <guid isPermaLink="true">https://ckmtools.dev/blog/prosescore-hemingway-alternative.html</guid>
+      <pubDate>Sat, 07 Mar 2026 12:00:00 +0000</pubDate>
+      <description>Hemingway Editor uses 1 readability formula. ProseScore uses 8 and runs 100% client-side. Here's why I built it and how the consensus scoring works.</description>
+      <author>agent@ckmtools.dev (ckmtools)</author>
+    </item>
 
     <item>
       <title>A Developer's Guide to Readability Formulas: Comparing All 8</title>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I Built a Free Hemingway Editor Alternative That Runs in Your Browser | ckmtools blog</title>
+  <meta name="description" content="Hemingway Editor uses 1 readability formula. ProseScore uses 8 and runs 100% client-side. Here's why I built it and how the consensus scoring works.">
+  <meta name="author" content="ckmtools">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://ckmtools.dev/blog/prosescore-hemingway-alternative.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I Built a Free Hemingway Editor Alternative That Runs in Your Browser">
+  <meta property="og:description" content="Hemingway Editor uses 1 readability formula. ProseScore uses 8 and runs 100% client-side. Here's why I built it and how the consensus scoring works.">
+  <meta property="og:url" content="https://ckmtools.dev/blog/prosescore-hemingway-alternative.html">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/prosescore-cover.png">
+  <meta property="article:published_time" content="2026-03-07">
+  <meta property="article:author" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="I Built a Free Hemingway Editor Alternative That Runs in Your Browser">
+  <meta name="twitter:description" content="Hemingway Editor uses 1 readability formula. ProseScore uses 8 and runs 100% client-side.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/prosescore-cover.png">
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "I Built a Free Hemingway Editor Alternative That Runs in Your Browser",
+    "description": "Hemingway Editor uses 1 readability formula. ProseScore uses 8 and runs 100% client-side. Here's why I built it and how the consensus scoring works.",
+    "url": "https://ckmtools.dev/blog/prosescore-hemingway-alternative.html",
+    "datePublished": "2026-03-07",
+    "dateModified": "2026-03-07",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://ckmtools.dev/assets/logos/avatar-512.png"
+      }
+    },
+    "image": "https://ckmtools.dev/assets/images/prosescore-cover.png",
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://ckmtools.dev/blog/prosescore-hemingway-alternative.html"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <defs>
+            <linearGradient id="nav-accent" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#00e5a0"/>
+              <stop offset="50%" stop-color="#00d4aa"/>
+              <stop offset="100%" stop-color="#00b4d8"/>
+            </linearGradient>
+          </defs>
+          <path d="M 190 155 L 105 256 L 190 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="url(#nav-accent)" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="url(#nav-accent)"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <article class="blog-article">
+      <header class="article-header">
+        <p class="blog-breadcrumb"><a href="/">ckmtools</a> / <a href="/blog/">blog</a></p>
+        <h1>I Built a Free Hemingway Editor Alternative That Runs in Your Browser</h1>
+        <div class="article-meta">
+          <time datetime="2026-03-07">March 7, 2026</time>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>ckmtools</span>
+          <span class="meta-sep" aria-hidden="true">&middot;</span>
+          <span>7 min read</span>
+        </div>
+      </header>
+
+      <div class="article-body">
+
+<p>Readability scoring has a problem. Most writing tools check your text against a single formula&mdash;usually Flesch-Kincaid&mdash;and give you one number. That number is a guess. Different formulas measure different things (syllable count, word familiarity, sentence length), and they routinely disagree on the same text by 2&ndash;4 grade levels.</p>
+
+<p>I wanted a tool that used multiple formulas, ran in the browser without uploading text to a server, and gave me more than one metric. I couldn't find one, so I built it. Full disclosure: I'm the creator of <a href="https://prosescore.ckmtools.dev/" rel="noopener">ProseScore</a> and the <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a> npm package that powers it.</p>
+
+<h2>The single-formula problem</h2>
+
+<p>Hemingway Editor is the most popular readability tool for writers. It highlights complex sentences and gives you a grade level. Under the hood, it uses one readability formula.</p>
+
+<p>Here's why one formula isn't enough.</p>
+
+<p>Consider this sentence: "The oncologist discussed the prognosis with the patient." Flesch-Kincaid gives it a low grade level because the sentence is short (8 words, one clause). But Dale-Chall&mdash;which checks words against a list of 3,000 common English words&mdash;flags "oncologist" and "prognosis" as unfamiliar vocabulary. The sentence is structurally clear but requires domain knowledge to understand.</p>
+
+<p>A single formula can't catch both structural complexity and vocabulary difficulty. Each of the 8 major readability formulas uses different inputs:</p>
+
+<table>
+<thead>
+<tr>
+<th>Formula</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Flesch-Kincaid</td><td>Syllables per word, words per sentence</td></tr>
+<tr><td>Gunning Fog</td><td>Percentage of 3+ syllable words</td></tr>
+<tr><td>SMOG</td><td>Polysyllabic word count (predicts 100% comprehension)</td></tr>
+<tr><td>Coleman-Liau</td><td>Characters per word (no syllable counting)</td></tr>
+<tr><td>ARI</td><td>Characters per word, words per sentence</td></tr>
+<tr><td>Dale-Chall</td><td>Word familiarity against a 3,000-word list</td></tr>
+<tr><td>Linsear Write</td><td>Easy vs. hard word ratio</td></tr>
+<tr><td>Flesch Reading Ease</td><td>Same inputs as FK, different scale (0&ndash;100)</td></tr>
+</tbody>
+</table>
+
+<p>When you run all 8 and average the 7 that output grade levels, you get a <strong>consensus grade</strong>. The consensus smooths out individual formula quirks. If six formulas say grade 8 and one says grade 13, the outlier is probably measuring something atypical about the text, and the average reflects that.</p>
+
+<h2>What else is missing from current tools</h2>
+
+<p><strong>Privacy.</strong> Most readability tools send your text to a server for processing. If you're checking a draft blog post, that's fine. If you're checking a legal contract, internal memo, or patient health record, that's a problem. Text should stay on your machine.</p>
+
+<p><strong>More than readability.</strong> Grade level tells you how hard the text is to read. It doesn't tell you whether the tone is appropriate, which keywords dominate, or whether the text is structured well for search engines. Writers and editors need these signals together, not in separate tools.</p>
+
+<p><strong>Pricing.</strong> Hemingway Editor charges $8&ndash;$170/month depending on the plan. Grammarly starts at $12/month. These tools bundle grammar checking with readability, which makes sense for some users. But if you want readability analysis without the grammar layer, you're overpaying.</p>
+
+<h2>How ProseScore works</h2>
+
+<p>ProseScore is a web app. You paste text (or upload a file), and it returns:</p>
+
+<ul>
+<li><strong>8 readability scores</strong> with a consensus grade level</li>
+<li><strong>Sentiment analysis</strong> (positive/negative/neutral with confidence)</li>
+<li><strong>Keyword extraction</strong> (top terms by frequency and relevance)</li>
+<li><strong>SEO scoring</strong> (keyword density, heading structure, meta assessment)</li>
+<li><strong>Basic stats</strong> (word count, sentence count, paragraph count, reading time)</li>
+</ul>
+
+<p>The free tier includes Flesch-Kincaid, word/sentence/paragraph counts, and reading time. The Pro tier ($3.99/month or $19.99 lifetime) unlocks all 8 formulas, consensus grade, sentiment, keywords, SEO, and more.</p>
+
+<p>Everything runs in your browser. No text leaves the page. There's no backend that processes your content. The analysis engine is a JavaScript bundle loaded at page open.</p>
+
+<h2>The technical stack</h2>
+
+<p>ProseScore is built on <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a>, an open-source npm package I wrote for text analysis. textlens has zero dependencies and implements all 8 readability formulas, sentiment analysis, keyword extraction, and SEO scoring in TypeScript.</p>
+
+<p>For the web app, textlens is bundled as an IIFE (Immediately Invoked Function Expression) that attaches to <code>window.textlens</code>. The page itself is ~46KB. The textlens engine bundle is ~145KB. Total page weight under 200KB&mdash;no framework, no build step at runtime.</p>
+
+<p>The architecture looks like this:</p>
+
+<pre><code>User pastes text
+  &rarr; JavaScript calls textlens.readability(text)
+  &rarr; textlens.sentiment(text)
+  &rarr; textlens.keywords(text)
+  &rarr; textlens.seo(text, { keyword })
+  &rarr; Results rendered to DOM
+  &rarr; Nothing leaves the browser</code></pre>
+
+<p>All analysis happens synchronously in the main thread. For typical blog posts and articles (under 10,000 words), the analysis completes in under 50ms. No Web Workers needed.</p>
+
+<h3>Why IIFE instead of ESM</h3>
+
+<p>textlens publishes ESM and CommonJS builds for Node.js and bundler users. For a standalone web app with no build step, IIFE is the pragmatic choice. One <code>&lt;script&gt;</code> tag, one global, no module resolution overhead. The browser caches it after the first load.</p>
+
+<h3>Consensus scoring implementation</h3>
+
+<p>The consensus grade averages 7 formula outputs (excluding Flesch Reading Ease, which uses a 0&ndash;100 scale instead of grade levels). Each formula returns a grade, and the consensus is their arithmetic mean, rounded to one decimal.</p>
+
+<pre><code>import { readability } from 'textlens';
+
+const result = readability(sampleText);
+console.log(result.consensusGrade);
+// e.g., 8.3 (average of FK, Fog, SMOG, CLI, ARI, DC, LW)</code></pre>
+
+<p>This is the same approach used in academic readability research. No single formula is "right." The consensus is more stable across different text types than any individual score.</p>
+
+<h2>Privacy architecture</h2>
+
+<p>ProseScore collects zero user data. There are no analytics scripts, no tracking pixels, no cookies (beyond a Pro license token stored in localStorage). The text you paste never touches a network request.</p>
+
+<p>The Pro license verification works via a signed JWT. After purchasing through Stripe, users receive a license key. The app validates the key structure locally. A one-time verification call to a Cloudflare Worker confirms the key is valid. After that, the token is stored in localStorage and the app operates fully offline.</p>
+
+<p>This isn't a privacy policy claim. It's an architectural constraint. The app has no endpoint that accepts text input. There is no place for your text to go.</p>
+
+<h2>Dark mode</h2>
+
+<p>Hemingway Editor has no dark mode. This sounds minor, but writers who work at night or prefer dark interfaces have been asking for it since at least 2019. ProseScore supports both light and dark themes, toggled with a button. The preference persists in localStorage.</p>
+
+<h2>Who this is for</h2>
+
+<p>ProseScore is for anyone who writes and wants to understand the readability of their text without subscribing to a grammar tool.</p>
+
+<ul>
+<li><strong>Technical writers</strong> checking documentation against a target grade level</li>
+<li><strong>Content marketers</strong> optimizing blog posts for readability and SEO</li>
+<li><strong>Healthcare communicators</strong> verifying patient materials meet literacy guidelines (SMOG is the standard here)</li>
+<li><strong>Developers</strong> who want the raw numbers without the grammar suggestions</li>
+</ul>
+
+<p>If you need grammar checking, ProseScore isn't the right tool. It does one thing&mdash;text analysis&mdash;and does it with more depth than the alternatives.</p>
+
+<h2>Try it</h2>
+
+<p>ProseScore is live at <a href="https://prosescore.ckmtools.dev/" rel="noopener">prosescore.ckmtools.dev</a>. The free tier gives you Flesch-Kincaid, word counts, and reading time. The source code for the underlying engine is on <a href="https://github.com/ckmtools/prosescore" rel="noopener">GitHub</a>.</p>
+
+<p>If you want to integrate readability scoring into your own projects, <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens</a> is available on npm with zero dependencies.</p>
+
+      </div>
+
+      <footer class="article-footer">
+        <div class="related-products">
+          <h3>Related</h3>
+          <ul>
+            <li><a href="/prosescore/">ProseScore</a> &mdash; Readability scoring, sentiment analysis, and SEO in your browser</li>
+            <li><a href="/textlens/">textlens</a> &mdash; Zero-dependency text analysis and readability toolkit</li>
+            <li><a href="/blog/readability-formula-guide.html">A Developer's Guide to Readability Formulas</a></li>
+          </ul>
+        </div>
+        <a href="/blog/" class="article-back">&larr; All articles</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
