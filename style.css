@@ -865,3 +865,43 @@ pre code {
   }
 }
 .ps-final-note { margin-top: 16px; }
+
+/* ── ProseScore vs Comparison Page ── */
+.vs-intro {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  max-width: var(--max-width-prose);
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+.vs-table td:first-child {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.vs-formulas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+.vs-formula {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+}
+.vs-formula h3 {
+  font-size: 1rem;
+  margin-bottom: 6px;
+  color: var(--color-primary);
+}
+.vs-formula p {
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  margin: 0;
+  line-height: 1.6;
+}
+@media (min-width: 640px) {
+  .vs-formulas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
