@@ -955,6 +955,9 @@ pre code {
   .ps-compare-grid {
     grid-template-columns: repeat(3, 1fr);
   }
+  .tl-compare-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 @media (min-width: 640px) {
   .vs-formulas {
