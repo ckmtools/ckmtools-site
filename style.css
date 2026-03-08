@@ -342,6 +342,22 @@ pre code {
 .tl-card pre {
   margin-bottom: 0;
 }
+.tl-support-btn {
+  display: inline-block;
+  background: var(--color-primary);
+  color: var(--bg);
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  margin: 20px auto 0;
+  transition: background 0.15s;
+}
+.tl-support-btn:hover {
+  background: var(--color-primary-hover);
+  color: var(--bg);
+}
 .tl-cta {
   text-align: center;
   padding-bottom: 64px;
