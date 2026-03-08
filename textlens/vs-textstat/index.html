@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TextLens vs textstat &mdash; TypeScript Text Analysis vs Python Readability</title>
+  <meta name="description" content="TextLens is a zero-dependency TypeScript text analysis library. textstat is a Python readability library. Compare features, language support, and capabilities side by side.">
+  <meta name="keywords" content="textstat alternative, textstat npm, readability npm, text analysis javascript, textstat javascript, readability typescript, flesch kincaid javascript">
+  <link rel="canonical" href="https://ckmtools.dev/textlens/vs-textstat/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens vs textstat - TypeScript Text Analysis vs Python Readability">
+  <meta property="og:description" content="TextLens: zero-dependency TypeScript readability, sentiment, keywords, SEO. textstat: Python readability formulas. Compare side by side.">
+  <meta property="og:url" content="https://ckmtools.dev/textlens/vs-textstat/">
+  <meta property="og:site_name" content="ckmtools">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="TextLens vs textstat - TypeScript Text Analysis vs Python Readability">
+  <meta name="twitter:description" content="TextLens: zero-dependency TypeScript readability, sentiment, keywords, SEO. textstat: Python readability formulas.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "TextLens vs textstat",
+    "description": "Side-by-side comparison of TextLens and textstat. TextLens is a zero-dependency TypeScript text analysis library; textstat is a Python readability library.",
+    "url": "https://ckmtools.dev/textlens/vs-textstat/",
+    "mainEntity": {
+      "@type": "SoftwareApplication",
+      "name": "TextLens",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "url": "https://ckmtools.dev/textlens/",
+      "downloadUrl": "https://www.npmjs.com/package/textlens",
+      "programmingLanguage": "TypeScript",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "ckmtools", "item": "https://ckmtools.dev/" },
+        { "@type": "ListItem", "position": 2, "name": "TextLens", "item": "https://ckmtools.dev/textlens/" },
+        { "@type": "ListItem", "position": 3, "name": "vs textstat", "item": "https://ckmtools.dev/textlens/vs-textstat/" }
+      ]
+    }
+  }
+  </script>
+
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+
+    <!-- Hero -->
+    <section class="hero tl-hero" aria-label="TextLens vs textstat comparison">
+      <p class="tl-breadcrumb"><a href="/">ckmtools</a> / <a href="/textlens/">textlens</a> / vs textstat</p>
+      <h1>TextLens vs textstat</h1>
+      <p class="hero-desc">textstat is a popular Python readability library. TextLens brings the same capabilities to the JavaScript/TypeScript ecosystem with zero dependencies &mdash; plus sentiment analysis, keyword extraction, and SEO scoring.</p>
+      <pre class="tl-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+    </section>
+
+    <!-- Side-by-side comparison table -->
+    <section class="tl-section" aria-label="Feature comparison">
+      <h2>Side-by-side comparison</h2>
+      <div class="ps-table-wrap">
+        <table class="ps-table vs-table" aria-label="TextLens vs textstat feature comparison">
+          <thead>
+            <tr>
+              <th scope="col">Feature</th>
+              <th scope="col" class="col-pro">TextLens</th>
+              <th scope="col">textstat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Language</td>
+              <td class="col-pro">TypeScript / JavaScript</td>
+              <td>Python</td>
+            </tr>
+            <tr>
+              <td>Dependencies</td>
+              <td class="check col-pro" aria-label="Zero">Zero</td>
+              <td>Multiple (pyphen, etc.)</td>
+            </tr>
+            <tr>
+              <td>Readability formulas</td>
+              <td class="col-pro"><strong>8 formulas</strong> + consensus grade</td>
+              <td>~10 formulas</td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td class="check col-pro" aria-label="Yes">&#10003; TF-IDF</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Reading time</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="check" aria-label="Yes">&#10003;</td>
+            </tr>
+            <tr>
+              <td>CLI</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>Browser support</td>
+              <td class="check col-pro" aria-label="Yes">&#10003;</td>
+              <td class="dash" aria-label="No">&mdash;</td>
+            </tr>
+            <tr>
+              <td>License</td>
+              <td class="col-pro">MIT</td>
+              <td>BSD-3</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- What TextLens adds beyond textstat -->
+    <section class="tl-section" aria-label="TextLens advantages">
+      <h2>What TextLens adds beyond textstat</h2>
+      <p class="vs-intro">textstat focuses on readability formulas. TextLens covers readability and goes further with sentiment, keywords, SEO, and a CLI.</p>
+
+      <div class="ps-advantages">
+        <div class="ps-advantage">
+          <strong>Sentiment analysis</strong>
+          Detect whether text reads as positive, negative, or neutral. textstat has no sentiment capability.
+        </div>
+        <div class="ps-advantage">
+          <strong>Keyword extraction (TF-IDF)</strong>
+          Extract the most relevant terms from any text. Useful for SEO, content tagging, and summarization.
+        </div>
+        <div class="ps-advantage">
+          <strong>SEO scoring</strong>
+          Get an actionable SEO score based on readability, keyword density, and content structure.
+        </div>
+        <div class="ps-advantage">
+          <strong>Consensus grade</strong>
+          TextLens averages all 8 readability formulas into a single consensus grade for a more reliable score.
+        </div>
+        <div class="ps-advantage">
+          <strong>CLI and browser support</strong>
+          Analyze files from the terminal or run TextLens in the browser with zero server dependencies. textstat is Python-only.
+        </div>
+      </div>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="tl-section" aria-label="Code comparison">
+      <h2>Code comparison</h2>
+      <p class="vs-intro">TextLens returns readability, sentiment, keywords, and SEO in one call. textstat requires a separate function for each metric.</p>
+
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>TextLens <span class="vs-lang-tag">TypeScript</span></h3>
+          <pre><code><span class="tl-kw">import</span> { analyze } <span class="tl-kw">from</span> <span class="tl-str">'textlens'</span>;
+
+<span class="tl-kw">const</span> result = analyze(text);
+
+result.readability.fleschKincaidGrade;  <span class="tl-cmt">// 8.2</span>
+result.readability.gunningFogIndex;     <span class="tl-cmt">// 10.1</span>
+result.readability.consensusGrade;      <span class="tl-cmt">// 8.7</span>
+result.sentiment.label;                 <span class="tl-cmt">// 'positive'</span>
+result.keywords;                        <span class="tl-cmt">// ['readability', ...]</span>
+result.seo.score;                       <span class="tl-cmt">// 82</span></code></pre>
+        </div>
+
+        <div class="vs-code-block">
+          <h3>textstat <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> textstat
+
+textstat.flesch_kincaid_grade(text)    <span class="tl-cmt"># 8.2</span>
+textstat.gunning_fog(text)             <span class="tl-cmt"># 10.1</span>
+textstat.text_standard(text)           <span class="tl-cmt"># '8th and 9th grade'</span>
+
+<span class="tl-cmt"># no sentiment analysis</span>
+<span class="tl-cmt"># no keyword extraction</span>
+<span class="tl-cmt"># no SEO scoring</span>
+<span class="tl-cmt"># no CLI</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- When to use each -->
+    <section class="tl-section" aria-label="When to use each">
+      <h2>When to use each</h2>
+      <div class="ps-advantages">
+        <div class="ps-advantage">
+          <strong>Use TextLens for JavaScript and TypeScript projects</strong>
+          If your stack is Node.js, Deno, or browser-based, TextLens is the native choice. Zero dependencies, full TypeScript types, works everywhere JS runs.
+        </div>
+        <div class="ps-advantage">
+          <strong>Use textstat for Python projects</strong>
+          If your stack is Python and you only need readability scores, textstat is a solid choice with a well-tested formula set.
+        </div>
+        <div class="ps-advantage">
+          <strong>Use TextLens when you need more than readability</strong>
+          Sentiment, keywords, SEO scoring, and a CLI come built in. textstat only covers readability formulas.
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="tl-section tl-cta" aria-label="Get started with TextLens">
+      <h2>Get started</h2>
+      <pre class="tl-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install textlens</span></code></pre>
+      <div class="link-row tl-links">
+        <a href="/textlens/">TextLens docs</a>
+        <a href="https://www.npmjs.com/package/textlens" rel="noopener">npm</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a>
+      &mdash;
+      <a href="/">ckmtools.dev</a>
+      &mdash;
+      <a href="/textlens/">TextLens</a>
+      &mdash;
+      <a href="https://www.npmjs.com/package/textlens" rel="noopener">textlens on npm</a>
+      &mdash; 2026
+    </p>
+  </footer>
+</body>
+</html>
