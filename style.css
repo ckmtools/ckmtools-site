@@ -235,6 +235,69 @@ pre code {
   font-weight: 500;
 }
 
+/* Badge row */
+.badge-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.badge-row img {
+  height: 20px;
+}
+
+/* Articles section */
+.articles {
+  max-width: var(--max-width-page);
+  margin: 0 auto;
+  padding: 0 24px 64px;
+}
+.articles > h2 {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.article-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.article-card {
+  display: block;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.article-card:hover {
+  border-color: var(--color-primary);
+  color: inherit;
+}
+.article-card h3 {
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  margin: 0 0 8px;
+}
+.article-card p {
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.5;
+}
+.section-more {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9375rem;
+}
+.section-more a {
+  color: var(--text-secondary);
+}
+.section-more a:hover {
+  color: var(--color-primary);
+}
+
 /* Footer */
 .site-footer {
   border-top: 1px solid var(--border);
@@ -601,6 +664,9 @@ pre code {
     padding-bottom: 56px;
   }
   .tl-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .article-grid {
     grid-template-columns: 1fr 1fr;
   }
   .blog-card {
