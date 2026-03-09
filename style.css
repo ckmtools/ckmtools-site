@@ -350,7 +350,7 @@ pre code {
 }
 .tl-install {
   max-width: 360px;
-  margin: 0 auto 24px;
+  margin: 0 auto 12px;
   text-align: left;
 }
 .tl-highlights {
@@ -414,7 +414,7 @@ pre code {
   padding: 12px 28px;
   border-radius: 8px;
   text-decoration: none;
-  margin: 20px auto 0;
+  margin: 8px auto 16px;
   transition: background 0.15s;
 }
 .tl-support-btn:hover {
@@ -423,10 +423,11 @@ pre code {
 }
 .tl-cta {
   text-align: center;
-  padding-bottom: 64px;
+  padding-bottom: 48px;
 }
 .tl-links {
   justify-content: center;
+  margin-top: 12px;
 }
 
 /* Syntax highlighting (CSS-only, no JS) */
@@ -1043,6 +1044,38 @@ pre code {
 }
 @media (min-width: 640px) {
   .vs-formulas {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── vs Code Comparison ── */
+.vs-code-compare {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.vs-code-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 20px 24px;
+}
+.vs-code-block h3 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+.vs-lang-tag {
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+.vs-code-block pre {
+  margin: 0;
+}
+@media (min-width: 640px) {
+  .vs-code-compare {
     grid-template-columns: repeat(2, 1fr);
   }
 }
