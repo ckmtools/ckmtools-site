@@ -724,6 +724,9 @@ pre code {
 .ps-hero {
   padding-bottom: 48px;
 }
+.ps-hero .badge-row {
+  justify-content: center;
+}
 .ps-breadcrumb {
   font-size: 0.875rem;
   color: var(--text-secondary);
