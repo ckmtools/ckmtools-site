@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>envscan — Auto-discover and validate Node.js environment variables</title>
+  <meta name="description" content="CLI tool that scans your Node.js source code to find every process.env reference, generates a .env.example, and validates all vars are set before deploy. Zero manual configuration.">
+  <meta name="keywords" content="env vars nodejs, process.env scanner, dotenv validation, env example generator, environment variables cli, envscan, node env checker">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envscan — Auto-discover and validate Node.js environment variables">
+  <meta property="og:description" content="CLI tool that scans your Node.js source code to find every process.env reference, generates a .env.example, and validates all vars are set before deploy. Zero manual configuration.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-og.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envscan — Auto-discover and validate Node.js environment variables">
+  <meta name="twitter:description" content="Reads your source code to find every process.env reference. Generates .env.example automatically. Validates before deploy.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-og.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code to auto-discover every process.env reference, generates a .env.example, and validates all vars are present before deploy.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/",
+    "downloadUrl": "https://www.npmjs.com/package/envscan",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "codeRepository": "https://github.com/ckmtools/envscan",
+    "programmingLanguage": "JavaScript",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="alternate" type="application/rss+xml" title="ckmtools Blog" href="https://ckmtools.dev/blog/feed.xml">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* envscan page-specific styles */
+    .es-hero {
+      padding-bottom: 48px;
+    }
+    .es-breadcrumb {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .es-breadcrumb a {
+      color: var(--text-secondary);
+    }
+    .es-breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+    .es-install {
+      max-width: 400px;
+      margin: 0 auto 12px;
+      text-align: left;
+    }
+    .es-quickstart {
+      max-width: 480px;
+      margin: 0 auto 20px;
+      text-align: left;
+    }
+    .es-badge-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 0;
+    }
+    .es-badge-row img {
+      height: 20px;
+    }
+    .es-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .es-section h2 {
+      margin-bottom: 12px;
+    }
+    .es-desc {
+      color: var(--text-secondary);
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+    }
+
+    /* Features grid (3-col) */
+    .es-features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .es-feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .es-feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      font-size: 1.0625rem;
+    }
+    .es-feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Pricing */
+    .es-pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 0;
+    }
+    .es-price-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .es-price-card.popular {
+      border-color: var(--color-primary);
+    }
+    .es-popular-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: var(--bg);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 12px;
+      border-radius: 0 0 4px 4px;
+      white-space: nowrap;
+    }
+    .es-price-card h3 {
+      font-size: 1.125rem;
+      margin-bottom: 8px;
+    }
+    .es-price-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      font-family: var(--font-mono);
+    }
+    .es-price-amount span {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .es-price-details {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 24px;
+      flex: 1;
+    }
+    .es-price-details li {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .es-price-details li:last-child { border-bottom: none; }
+    .es-price-cta {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .es-price-cta-primary {
+      background: var(--color-primary);
+      color: var(--bg);
+    }
+    .es-price-cta-primary:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .es-price-cta-outline {
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+    .es-price-cta-outline:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    /* Difference callout */
+    .es-callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--color-primary);
+      border-radius: 8px;
+      padding: 24px 28px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.7;
+      max-width: var(--max-width-prose);
+    }
+
+    /* GH Action section */
+    .es-action-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: -12px;
+      margin-bottom: 0;
+    }
+
+    /* CTA */
+    .es-cta {
+      text-align: center;
+      padding-bottom: 48px;
+    }
+    .es-links {
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .es-hero {
+        padding-bottom: 56px;
+      }
+      .es-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .es-pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools/envscan" rel="noopener">GitHub</a>
+        <a href="https://npmjs.com/package/envscan" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <section class="hero es-hero">
+      <p class="es-breadcrumb"><a href="/">ckmtools</a> / envscan</p>
+      <h1>envscan</h1>
+      <p class="tagline">Reads your code. Knows which env vars you need.</p>
+
+      <pre class="es-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install -g envscan</span></code></pre>
+
+      <pre class="es-quickstart"><code><span class="tl-cmt"># discover all process.env references</span>
+<span class="prompt">$</span> envscan scan
+
+<span class="tl-cmt"># fail if any discovered vars are missing</span>
+<span class="prompt">$</span> envscan validate</code></pre>
+
+      <div class="es-badge-row" aria-label="Package badges">
+        <img src="https://img.shields.io/npm/v/envscan?color=00E5A0&style=flat" alt="npm version" width="88" height="20">
+        <img src="https://img.shields.io/npm/l/envscan&style=flat" alt="MIT license" width="78" height="20">
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="es-section" aria-label="Features">
+      <h2>What it does</h2>
+      <div class="es-features-grid">
+        <div class="es-feature-card">
+          <h3>Auto-discovery</h3>
+          <p>Scans every .js and .ts file in your project. Finds every <code>process.env.VARIABLE</code> reference without configuration.</p>
+        </div>
+        <div class="es-feature-card">
+          <h3>Generate .env.example</h3>
+          <p>Outputs a documented .env.example stub from discovered vars. Keep it in sync automatically, not manually.</p>
+        </div>
+        <div class="es-feature-card">
+          <h3>Validate before deploy</h3>
+          <p>Run <code>envscan validate</code> in CI. Fails loudly when required vars are missing, with the file and line number.</p>
+        </div>
+        <div class="es-feature-card">
+          <h3>Type inference</h3>
+          <p>Detects likely type from var name: <code>_PORT</code> → number, <code>_URL</code> → URL, <code>_SECRET</code> → redacted, <code>_ENABLED</code> → boolean.</p>
+        </div>
+        <div class="es-feature-card">
+          <h3>Zero config</h3>
+          <p>No schema files to maintain. Point it at your project and it figures out the rest.</p>
+        </div>
+        <div class="es-feature-card">
+          <h3>CI integration</h3>
+          <p>GitHub Action posts inline PR comments when vars are added to code but missing from .env.example.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Usage -->
+    <section class="es-section" aria-label="Usage">
+      <h2>Usage</h2>
+      <p class="es-desc">Four commands. No configuration file required.</p>
+      <pre><code><span class="tl-cmt"># Scan source code for env vars</span>
+envscan scan
+
+<span class="tl-cmt"># Generate .env.example from scan results</span>
+envscan generate
+
+<span class="tl-cmt"># Validate current .env against discovered schema</span>
+envscan validate
+
+<span class="tl-cmt"># Full output (all discovered vars with types and locations)</span>
+envscan scan --verbose</code></pre>
+
+      <p class="es-desc">Sample output from <code>envscan scan --verbose</code>:</p>
+      <pre><code>Found 8 environment variables:
+
+  DATABASE_URL       type: url      src/db.ts:12
+  PORT               type: number   src/server.ts:5
+  JWT_SECRET         type: secret   src/auth.ts:8, src/auth.ts:23
+  REDIS_URL          type: url      src/cache.ts:3
+  SENDGRID_API_KEY   type: secret   src/email.ts:7
+  APP_ENV            type: string   src/config.ts:2
+  LOG_LEVEL          type: string   src/config.ts:3
+  DEBUG              type: boolean  src/config.ts:4
+
+<span style="color: var(--color-error)">Validation: 7/8 vars set. Missing: SENDGRID_API_KEY</span></code></pre>
+    </section>
+
+    <!-- How it's different -->
+    <section class="es-section" aria-label="How envscan is different">
+      <h2>How it's different</h2>
+      <div class="es-callout">
+        Every other env var tool — dotenv-safe, envalid, env-var, dotenvx — requires you to manually declare which vars your code uses. You maintain the list. You forget to update it. envscan reads your source code instead. The schema is your codebase.
+      </div>
+    </section>
+
+    <!-- Waitlist -->
+    <section style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
+      <p style="color:#8B949E;margin:0 0 24px;">envscan is in development. Join the waitlist to get notified at launch — no charge, cancel any time.</p>
+      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Notify Me at Launch</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+    </section>
+
+    <!-- Pricing -->
+    <section class="es-section" aria-label="Pricing">
+      <h2>Pricing</h2>
+      <div class="es-pricing-grid">
+        <div class="es-price-card">
+          <h3>Free</h3>
+          <div class="es-price-amount">$0 <span>/mo</span></div>
+          <ul class="es-price-details">
+            <li>CLI scan + generate + validate</li>
+            <li>Unlimited local use</li>
+            <li>All 4 commands</li>
+          </ul>
+          <a href="https://npmjs.com/package/envscan" class="es-price-cta es-price-cta-outline" rel="noopener">Install CLI</a>
+        </div>
+        <div class="es-price-card popular">
+          <div class="es-popular-badge">Most Popular</div>
+          <h3>CI</h3>
+          <div class="es-price-amount">$6 <span>/mo</span></div>
+          <ul class="es-price-details">
+            <li>Everything in Free</li>
+            <li>GitHub Action on every PR</li>
+            <li>Inline comments for missing vars</li>
+            <li>README badge</li>
+          </ul>
+          <a href="#" class="es-price-cta es-price-cta-primary" aria-disabled="true">Coming soon</a>
+        </div>
+        <div class="es-price-card">
+          <h3>Team</h3>
+          <div class="es-price-amount">$12 <span>/mo</span></div>
+          <ul class="es-price-details">
+            <li>Everything in CI</li>
+            <li>Shared .env schema</li>
+            <li>Version history</li>
+            <li>Audit log</li>
+            <li>Team management</li>
+          </ul>
+          <a href="#" class="es-price-cta es-price-cta-outline" aria-disabled="true">Coming soon</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- GitHub Action -->
+    <section class="es-section" aria-label="GitHub Action">
+      <h2>GitHub Action (CI tier)</h2>
+      <p class="es-desc">Add env var checking to every pull request in two lines of YAML.</p>
+      <pre><code><span class="tl-cmt"># .github/workflows/env-check.yml</span>
+<span class="tl-str">name</span>: Env Check
+<span class="tl-str">on</span>: [pull_request]
+<span class="tl-str">jobs</span>:
+  <span class="tl-str">validate</span>:
+    <span class="tl-str">runs-on</span>: ubuntu-latest
+    <span class="tl-str">steps</span>:
+      - <span class="tl-str">uses</span>: actions/checkout@v4
+      - <span class="tl-str">uses</span>: ckmtools/envscan-action@v1
+        <span class="tl-str">with</span>:
+          <span class="tl-str">token</span>: ${{ secrets.GITHUB_TOKEN }}</code></pre>
+      <p class="es-action-caption">envscan-action posts inline PR comments when a new <code>process.env</code> reference appears in the diff without a corresponding .env.example entry.</p>
+    </section>
+
+    <!-- CTA -->
+    <section class="es-section es-cta" aria-label="Get started">
+      <h2>Get started</h2>
+      <pre class="es-install"><code><span class="install-cmd"><span class="prompt">$</span> npm install -g envscan</span></code></pre>
+      <div class="link-row es-links">
+        <a href="https://npmjs.com/package/envscan" rel="noopener">npm</a>
+        <a href="https://github.com/ckmtools/envscan" rel="noopener">GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
