@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Your envscan CI subscription is active.">
+  <title>You're in — envscan CI</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .success-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .success-header {
+      margin-bottom: 32px;
+    }
+    .success-header h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+    .success-header p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .key-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+    .key-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+    }
+    .key-value {
+      font-family: var(--font-mono);
+      font-size: 0.9375rem;
+      color: var(--color-primary);
+      line-height: 1.5;
+    }
+    .key-note {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      margin: 12px 0 0;
+    }
+
+    .setup-section {
+      margin-bottom: 32px;
+    }
+    .setup-section h2 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+
+    .code-note {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin: 12px 0 0;
+    }
+
+    .next-steps {
+      margin-bottom: 40px;
+    }
+    .next-steps h2 {
+      font-size: 1.25rem;
+      margin-bottom: 12px;
+    }
+    .next-steps ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .next-steps li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+    }
+    .next-steps li:last-child {
+      border-bottom: none;
+    }
+
+    .footer-cta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-cta a {
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+
+    @media (max-width: 639px) {
+      .success-wrap { padding: 40px 16px 64px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/envscan/">Docs</a>
+        <a href="https://github.com/ckmtools/envscan" rel="noopener">GitHub</a>
+        <a href="https://npmjs.com/package/envscan" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <div class="success-wrap">
+
+      <div class="success-header">
+        <h1>You're in.</h1>
+        <p>Your envscan CI subscription is active.</p>
+      </div>
+
+      <div class="key-card">
+        <div class="key-label">Your license key</div>
+        <div class="key-value">The email address you used at checkout</div>
+        <p class="key-note">Add it as the <code>license-key</code> input in your GitHub Action.</p>
+      </div>
+
+      <div class="setup-section">
+        <h2>Set up the GitHub Action</h2>
+        <pre><code><span class="tl-cmt"># .github/workflows/env-check.yml</span>
+<span class="tl-str">name</span>: Env Check
+<span class="tl-str">on</span>: [pull_request]
+<span class="tl-str">jobs</span>:
+  <span class="tl-str">validate</span>:
+    <span class="tl-str">runs-on</span>: ubuntu-latest
+    <span class="tl-str">steps</span>:
+      - <span class="tl-str">uses</span>: actions/checkout@v4
+      - <span class="tl-str">uses</span>: ckmtools/envscan-action@v1
+        <span class="tl-str">with</span>:
+          <span class="tl-str">token</span>: ${{ secrets.GITHUB_TOKEN }}
+          <span class="tl-str">license-key</span>: your-email@example.com  <span class="tl-cmt"># ← replace with your Stripe email</span></code></pre>
+        <p class="code-note">Replace <code>your-email@example.com</code> with the email from your Stripe confirmation. The Action validates this to enable PR comment posting.</p>
+      </div>
+
+      <div class="next-steps">
+        <h2>What happens next</h2>
+        <ul>
+          <li>The Action runs on every pull request</li>
+          <li>When new <code>process.env</code> references appear in a diff without a matching <code>.env.example</code> entry, the Action posts an inline PR comment</li>
+          <li>You'll get a Stripe receipt by email — keep it as proof of subscription</li>
+        </ul>
+      </div>
+
+      <div class="footer-cta">
+        <a href="/envscan/">envscan docs</a>
+        <a href="https://github.com/ckmtools/envscan" rel="noopener">GitHub repo</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
