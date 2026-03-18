@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Comparing TextLens API against Python text analysis libraries: textstat, VADER, TextBlob, spaCy, and NLTK. Each comparison covers readability scoring, sentiment, keywords, and cross-language support.">
+  <title>TextLens API Alternatives — Python Text Analysis REST APIs Compared</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens API Alternatives — Python Text Analysis REST APIs Compared">
+  <meta property="og:description" content="Comparing TextLens API against Python text analysis libraries: textstat, VADER, TextBlob, spaCy, and NLTK. Each comparison covers readability scoring, sentiment, keywords, and cross-language support.">
+  <meta property="og:url" content="https://ckmtools.dev/api/alternatives/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TextLens API Alternatives — Python Text Analysis REST APIs Compared">
+  <meta name="twitter:description" content="Comparing TextLens API against Python text analysis libraries: textstat, VADER, TextBlob, spaCy, and NLTK.">
+  <link rel="canonical" href="https://ckmtools.dev/api/alternatives/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .alt-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .alt-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .alt-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: #0D1117;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover { background: var(--color-primary-hover); }
+
+    .alt-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .alt-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison cards */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .compare-card {
+      display: block;
+      background: #161B22;
+      border: 1px solid #30363D;
+      border-radius: 8px;
+      padding: 24px;
+      text-decoration: none;
+      transition: border-color 0.15s;
+    }
+    .compare-card:hover {
+      border-color: #00E5A0;
+    }
+    .compare-label {
+      font-size: 0.75rem;
+      color: #8B949E;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .compare-card h3 {
+      color: #00E5A0;
+      margin: 4px 0 12px;
+      font-size: 1.25rem;
+    }
+    .compare-card p {
+      color: #8B949E;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 0 0 16px;
+    }
+    .compare-cta {
+      color: #00E5A0;
+      font-size: 0.875rem;
+    }
+
+    /* Quick answer table */
+    .qa-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 32px;
+    }
+    .qa-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 480px;
+    }
+    .qa-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .qa-table thead th:first-child {
+      color: var(--color-primary);
+    }
+    .qa-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      vertical-align: top;
+    }
+    .qa-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .qa-table tbody td:first-child {
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    @media (min-width: 640px) {
+      .alt-hero { padding: 96px 24px 64px; }
+      .alt-hero h1 { font-size: 2.5rem; }
+    }
+    @media (max-width: 639px) {
+      .alt-hero { padding: 48px 20px 40px; }
+      .alt-hero h1 { font-size: 1.75rem; }
+      .alt-section { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="alt-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          alternatives
+        </p>
+      </nav>
+      <h1>TextLens API vs Python Text Analysis Libraries</h1>
+      <p class="tagline">TextLens API provides readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring from a REST endpoint. Here's how it compares to the most popular Python libraries.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Get Early Access</a>
+    </section>
+
+    <!-- Comparison cards -->
+    <section class="alt-section" aria-label="Comparison pages">
+      <h2>Pick your comparison</h2>
+      <div class="compare-grid">
+        <a href="/api/vs-textstat/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>textstat</h3>
+          </div>
+          <p>textstat calculates readability scores locally in Python. TextLens API adds sentiment, keywords, and SEO scoring from a REST endpoint — works in any language.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/api/vs-textblob/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>TextBlob</h3>
+          </div>
+          <p>TextBlob provides Python NLP with basic sentiment and POS tagging. TextLens API adds readability scoring, keyword extraction, and a cross-language REST interface.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/api/vs-vader/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>VADER</h3>
+          </div>
+          <p>VADER is tuned for social media sentiment. TextLens API targets long-form content — adding readability scoring and keyword extraction alongside sentiment analysis.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/api/vs-spacy/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>spaCy</h3>
+          </div>
+          <p>spaCy is a full NLP pipeline with NER and dependency parsing. TextLens API focuses on content quality metrics — readability, sentiment, keywords — via a hosted REST endpoint.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/api/vs-nltk/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>NLTK</h3>
+          </div>
+          <p>NLTK is the foundational Python NLP toolkit requiring corpus downloads and setup. TextLens API provides content metrics from a REST endpoint with no local dependencies.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Quick answer -->
+    <section class="alt-section" aria-label="Quick answer">
+      <h2>Quick answer</h2>
+      <div class="qa-table-wrap">
+        <table class="qa-table">
+          <thead>
+            <tr>
+              <th>Library</th>
+              <th>Use it if&hellip;</th>
+              <th>TextLens API if&hellip;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>textstat</td>
+              <td>You only need readability, Python-only project</td>
+              <td>You need sentiment + keywords too, or non-Python stack</td>
+            </tr>
+            <tr>
+              <td>TextBlob</td>
+              <td>You need sentiment + POS tagging in Python</td>
+              <td>You need readability scoring + cross-language support</td>
+            </tr>
+            <tr>
+              <td>VADER</td>
+              <td>You're analyzing short social media text</td>
+              <td>You're analyzing long-form content quality</td>
+            </tr>
+            <tr>
+              <td>spaCy</td>
+              <td>You need NER, dependency parsing, custom pipelines</td>
+              <td>You need content quality metrics without NLP infrastructure</td>
+            </tr>
+            <tr>
+              <td>NLTK</td>
+              <td>You're doing NLP research with corpus access</td>
+              <td>You need a hosted API without corpus setup or dependencies</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96/week npm downloads.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>

@@ -137,4 +137,16 @@
     <lastmod>2026-03-18</lastmod>
     <priority>0.7</priority>
   </url>
+  <url>
+    <loc>https://ckmtools.dev/api/alternatives/</loc>
+    <lastmod>2026-03-18</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://ckmtools.dev/envscan/alternatives/</loc>
+    <lastmod>2026-03-18</lastmod>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
 </urlset>

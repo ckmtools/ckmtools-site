@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Comparing envscan against dotenv, dotenv-safe, and envalid for Node.js env var management. envscan auto-discovers vars from source code — no manual schema to maintain.">
+  <title>envscan Alternatives — Node.js Environment Variable Tools Compared</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envscan Alternatives — Node.js Environment Variable Tools Compared">
+  <meta property="og:description" content="Comparing envscan against dotenv, dotenv-safe, and envalid for Node.js env var management. envscan auto-discovers vars from source code — no manual schema to maintain.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/alternatives/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envscan Alternatives — Node.js Environment Variable Tools Compared">
+  <meta name="twitter:description" content="Comparing envscan against dotenv, dotenv-safe, and envalid for Node.js env var management.">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/alternatives/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .alt-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .alt-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .alt-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: #0D1117;
+      font-weight: 600;
+      padding: 14px 32px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 1rem;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover { background: var(--color-primary-hover); }
+
+    .alt-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .alt-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison cards */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+    }
+    .compare-card {
+      display: block;
+      background: #161B22;
+      border: 1px solid #30363D;
+      border-radius: 8px;
+      padding: 24px;
+      text-decoration: none;
+      transition: border-color 0.15s;
+    }
+    .compare-card:hover {
+      border-color: #00E5A0;
+    }
+    .compare-label {
+      font-size: 0.75rem;
+      color: #8B949E;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .compare-card h3 {
+      color: #00E5A0;
+      margin: 4px 0 12px;
+      font-size: 1.25rem;
+    }
+    .compare-card p {
+      color: #8B949E;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      margin: 0 0 16px;
+    }
+    .compare-cta {
+      color: #00E5A0;
+      font-size: 0.875rem;
+    }
+
+    /* Key difference callout */
+    .key-diff {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--color-primary);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .key-diff p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.75;
+      margin: 0;
+    }
+    .key-diff code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      color: var(--color-primary);
+    }
+
+    /* Quick answer table */
+    .qa-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 32px;
+    }
+    .qa-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 480px;
+    }
+    .qa-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .qa-table thead th:first-child {
+      color: var(--color-primary);
+    }
+    .qa-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      vertical-align: top;
+    }
+    .qa-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .qa-table tbody td:first-child {
+      font-weight: 600;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    @media (min-width: 640px) {
+      .alt-hero { padding: 96px 24px 64px; }
+      .alt-hero h1 { font-size: 2.5rem; }
+    }
+    @media (max-width: 639px) {
+      .alt-hero { padding: 48px 20px 40px; }
+      .alt-hero h1 { font-size: 1.75rem; }
+      .alt-section { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="alt-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/envscan/">envscan</a> /
+          alternatives
+        </p>
+      </nav>
+      <h1>envscan vs Node.js .env Tools</h1>
+      <p class="tagline">envscan scans your source code to auto-discover environment variables &mdash; then generates .env.example and validates before deploy. Here's how it differs from the tools you're already using.</p>
+      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" class="btn-cta">Get Early Access</a>
+    </section>
+
+    <!-- Comparison cards -->
+    <section class="alt-section" aria-label="Comparison pages">
+      <h2>Pick your comparison</h2>
+      <div class="compare-grid">
+        <a href="/envscan/vs-dotenv/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">envscan vs</span>
+            <h3>dotenv</h3>
+          </div>
+          <p>dotenv loads .env at runtime. envscan auto-generates the .env.example that keeps your team in sync — they work well together.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/envscan/vs-dotenv-safe/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">envscan vs</span>
+            <h3>dotenv-safe</h3>
+          </div>
+          <p>dotenv-safe validates against a manually-maintained .env.example. envscan generates that file from your source code, so it can't go out of sync.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/envscan/vs-envalid/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">envscan vs</span>
+            <h3>envalid</h3>
+          </div>
+          <p>envalid uses a TypeScript schema you write to validate env vars. envscan reads your source code to discover them — no schema to declare or maintain.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- The key difference -->
+    <section class="alt-section" aria-label="The key difference">
+      <h2>The key difference</h2>
+      <div class="key-diff">
+        <p>Most env var tools (dotenv, dotenv-safe, envalid) require you to tell them which variables your app needs. envscan reads your source code to discover them automatically. The <code>.env.example</code> is generated from what it finds &mdash; not from a list you maintain.</p>
+      </div>
+    </section>
+
+    <!-- Quick answer -->
+    <section class="alt-section" aria-label="Quick answer">
+      <h2>Quick answer</h2>
+      <div class="qa-table-wrap">
+        <table class="qa-table">
+          <thead>
+            <tr>
+              <th>Tool</th>
+              <th>Use it if&hellip;</th>
+              <th>Add envscan if&hellip;</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>dotenv</td>
+              <td>Loading .env at runtime (use it regardless)</td>
+              <td>You want .env.example generated automatically</td>
+            </tr>
+            <tr>
+              <td>dotenv-safe</td>
+              <td>You validate against a maintained .env.example</td>
+              <td>You want that .env.example auto-generated</td>
+            </tr>
+            <tr>
+              <td>envalid</td>
+              <td>You want TypeScript types + coercion for env vars</td>
+              <td>You want zero-config source-code discovery</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">envscan is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96/week npm downloads.</p>
+      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
