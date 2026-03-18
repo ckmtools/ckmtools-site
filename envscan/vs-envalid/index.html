@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>envalid vs envscan — Schema-First vs Source-Code-First .env Validation</title>
+  <meta name="description" content="envalid validates env vars against a TypeScript schema you define. envscan scans your Node.js source code to discover which vars you need automatically — no schema to write or maintain.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envalid vs envscan — Schema-First vs Source-Code-First .env Validation">
+  <meta property="og:description" content="envalid validates env vars against a TypeScript schema you define. envscan scans your Node.js source code to discover which vars you need automatically — no schema to write or maintain.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/vs-envalid/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-vs-envalid-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envalid vs envscan — Schema-First vs Source-Code-First .env Validation">
+  <meta name="twitter:description" content="envalid validates env vars against a TypeScript schema you define. envscan scans your Node.js source code to discover which vars you need automatically — no schema to write or maintain.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-vs-envalid-og.png">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/vs-envalid/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code to auto-discover every process.env reference, generates a .env.example, and validates all vars are present before deploy.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "codeRepository": "https://github.com/ckmtools",
+    "programmingLanguage": "JavaScript",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+    .vs-jump {
+      font-size: 0.875rem;
+      color: var(--color-primary);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 480px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: #3FB950;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: #484F58;
+      font-size: 1rem;
+    }
+
+    /* Code comparison */
+    .vs-code-compare {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .vs-code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 24px;
+    }
+    .vs-code-block h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    .vs-code-block pre {
+      margin: 0 0 12px;
+    }
+    .vs-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Problem section */
+    .vs-problem-text {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: var(--max-width-prose);
+    }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+      .vs-code-compare { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/envscan/">envscan</a> /
+          vs envalid
+        </p>
+      </nav>
+      <h1>envalid vs envscan</h1>
+      <p class="tagline">envalid validates env vars against a TypeScript schema you write. envscan reads your source code to know which vars you need — then generates and validates automatically.</p>
+      <a href="#waitlist" class="vs-jump">Jump to waitlist &darr;</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Side-by-side comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>envalid</th>
+              <th>envscan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>TypeScript-first API</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Validates at app startup</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Auto-discovers vars from source</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Generates .env.example automatically</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>File + line location of each var</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Type inference from var naming (_PORT, _SECRET, _URL)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>No schema file to maintain</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Works as CI gate (exit code 1)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>GitHub Action with PR comments</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (CI tier)</td>
+            </tr>
+            <tr>
+              <td>Custom validators / transforms</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Coercion (string to number, bool)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (validates existence only)</td>
+            </tr>
+            <tr>
+              <td>Zero config — no schema needed</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Workflow comparison">
+      <h2>The workflow</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>envalid (TypeScript)</h3>
+          <pre><code><span class="tl-cmt">// Install: npm install envalid</span>
+<span class="tl-kw">import</span> { cleanEnv, str, port, bool } <span class="tl-kw">from</span> <span class="tl-str">'envalid'</span>
+
+<span class="tl-cmt">// You maintain this schema manually</span>
+<span class="tl-kw">const</span> env = cleanEnv(process.env, {
+  DATABASE_URL: str(),
+  PORT: port({ default: 3000 }),
+  JWT_SECRET: str(),
+  REDIS_URL: str({ default: undefined }),
+  DEBUG: bool({ default: false }),
+})
+<span class="tl-cmt">// Throws on missing required vars at startup</span></code></pre>
+          <p class="vs-code-caption">You write the schema. Add a new <code>process.env</code> reference anywhere in your codebase — if you forget to add it to <code>cleanEnv</code>, envalid won't validate it.</p>
+        </div>
+        <div class="vs-code-block">
+          <h3>envscan</h3>
+          <pre><code><span class="tl-cmt"># Scan source code for env vars</span>
+$ envscan scan
+Found 8 environment variables:
+  DATABASE_URL    type: url     src/db.ts:12
+  PORT            type: number  src/server.ts:5
+  JWT_SECRET      type: secret  src/auth.ts:8
+
+<span class="tl-cmt"># Generate .env.example from what it finds</span>
+$ envscan generate
+<span class="tl-cmt"># Wrote .env.example (8 vars)</span>
+
+<span class="tl-cmt"># Validate before deploy</span>
+$ envscan validate
+Validation: 7/8 vars set. Missing: JWT_SECRET
+Exit code: 1</code></pre>
+          <p class="vs-code-caption">No schema to write. envscan reads your .ts and .js files — what's in your code is what gets validated.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Schema drift problem -->
+    <section class="vs-section" aria-label="The schema drift problem">
+      <h2>The schema drift problem</h2>
+      <p class="vs-problem-text">envalid's schema-first approach gives you TypeScript types and smart coercion (string-to-number, string-to-bool). Those are genuine advantages for runtime type safety. The trade-off: the schema is another file to maintain. Add <code>process.env.NEW_STRIPE_KEY</code> to your payment module on Monday; forget to add it to <code>cleanEnv</code>; envalid has no way to know. Your new env var ships undocumented.</p>
+      <p class="vs-problem-text">envscan inverts this: the schema comes from your source code. Run <code>envscan scan</code> and it tells you every env var referenced in every file, with exact file and line locations. Run <code>envscan generate</code> and it writes .env.example for you.</p>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use envalid">
+      <h2>When to use envalid</h2>
+      <div class="vs-use-grid" style="margin-bottom:40px;">
+        <div class="vs-use-card">
+          <ul>
+            <li>You want TypeScript types for env vars (<code>env.PORT</code> is a number, not a string)</li>
+            <li>You need coercion (string-to-number, comma-delimited arrays, booleans)</li>
+            <li>You want custom validators with meaningful error messages</li>
+            <li>You have a well-maintained schema and want runtime type safety</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>When to use envscan</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <ul>
+            <li>You want .env.example generated, not written manually</li>
+            <li>You want CI to fail when anyone adds env vars without documenting them</li>
+            <li>You want file and line context for every var in your project</li>
+            <li>You want zero config — no schema file to set up</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:48px auto;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">envscan is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96/week npm downloads.</p>
+      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
