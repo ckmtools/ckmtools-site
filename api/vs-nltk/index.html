@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NLTK is a comprehensive Python NLP toolkit for linguistic research. TextLens API adds readability scoring (8 formulas), sentiment analysis, keyword extraction, and SEO scoring from a REST endpoint — no corpus download, works in Python, Ruby, Go, or any language.">
+  <title>NLTK vs TextLens API — Python Text Analysis Compared</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="NLTK vs TextLens API — Python Text Analysis Compared">
+  <meta property="og:description" content="NLTK is a comprehensive Python NLP toolkit for linguistic research. TextLens API adds readability scoring (8 formulas), sentiment analysis, keyword extraction, and SEO scoring from a REST endpoint — no corpus download, works in Python, Ruby, Go, or any language.">
+  <meta property="og:url" content="https://ckmtools.dev/api/vs-nltk/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-nltk-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-nltk-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NLTK vs TextLens API — Python Text Analysis Compared">
+  <meta name="twitter:description" content="NLTK is a comprehensive Python NLP toolkit for linguistic research. TextLens API adds readability scoring (8 formulas), sentiment analysis, keyword extraction, and SEO scoring from a REST endpoint — no corpus download.">
+  <link rel="canonical" href="https://ckmtools.dev/api/vs-nltk/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+    .vs-jump {
+      font-size: 0.875rem;
+      color: var(--color-primary);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 480px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: var(--color-success);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+    }
+    .vs-table-note {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: 0 0 32px;
+      padding: 0 4px;
+      line-height: 1.5;
+    }
+
+    /* Context section */
+    .vs-context {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+    }
+    .vs-context p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .vs-context p:last-child {
+      margin: 0;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TextLens API",
+    "description": "Readability scoring, sentiment analysis, keyword extraction, and SEO scoring via a single REST endpoint. Works in Python, Ruby, Go, or any HTTP client.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/api/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Free tier: 1,000 requests/month"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          vs NLTK
+        </p>
+      </nav>
+      <h1>NLTK vs TextLens API</h1>
+      <p class="tagline">NLTK is Python's foundational NLP research toolkit — tokenization, stemming, tagging, parsing, semantic reasoning. TextLens API focuses on content quality metrics: readability grades, sentiment scoring, keyword extraction, and SEO analysis from a REST endpoint that works in any language.</p>
+      <a href="#waitlist" class="vs-jump">Join the waitlist &darr;</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Side-by-side comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>NLTK</th>
+              <th>TextLens API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Tokenization</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Part-of-speech tagging</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Stemming and lemmatization</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Chunking and parsing</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Named entity recognition</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Corpus access (WordNet, etc.)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Readability scoring (8 formulas)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Consensus readability grade</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis (built-in)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (VADER add-on)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>TF-IDF keyword extraction</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Reading time estimate</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Works in Ruby, Go, PHP</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>No corpus download required</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>No setup / config needed</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Free tier</td>
+              <td>Free (Apache 2.0)</td>
+              <td>1,000 req/mo</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vs-table-note">Note: NLTK provides sentiment analysis only through add-on libraries (VADER, SentiWordNet). The core NLTK toolkit does not include sentiment scoring.</p>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Code comparison">
+      <h2>The code</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>NLTK <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-cmt"># pip install nltk</span>
+<span class="tl-kw">import</span> nltk
+
+<span class="tl-cmt"># Corpus downloads required before use</span>
+nltk.download(<span class="tl-str">'punkt'</span>)
+nltk.download(<span class="tl-str">'averaged_perceptron_tagger'</span>)
+nltk.download(<span class="tl-str">'wordnet'</span>)
+
+text = <span class="tl-str">"Your text here..."</span>
+tokens = nltk.word_tokenize(text)
+tagged = nltk.pos_tag(tokens)
+
+<span class="tl-cmt"># No readability formulas</span>
+<span class="tl-cmt"># No grade level scoring</span>
+<span class="tl-cmt"># No SEO analysis</span></code></pre>
+          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;line-height:1.5;">NLTK requires multiple corpus downloads before use. Powerful for linguistic research. No readability formulas.</p>
+        </div>
+        <div class="vs-code-block">
+          <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+
+result = requests.post(
+    <span class="tl-str">"https://api.ckmtools.dev/v1/analyze"</span>,
+    headers={<span class="tl-str">"X-API-Key"</span>: <span class="tl-str">"your_key"</span>},
+    json={<span class="tl-str">"text"</span>: <span class="tl-str">"Your text here..."</span>}
+).json()
+
+<span class="tl-cmt"># All content quality metrics in one response</span>
+grade     = result[<span class="tl-str">"readability"</span>][<span class="tl-str">"consensusGrade"</span>]
+sentiment = result[<span class="tl-str">"sentiment"</span>][<span class="tl-str">"label"</span>]
+keywords  = result[<span class="tl-str">"keywords"</span>][<span class="tl-str">"top_5"</span>]
+seo       = result[<span class="tl-str">"seo"</span>][<span class="tl-str">"score"</span>]</code></pre>
+          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;line-height:1.5;">All content quality metrics in one HTTP call. No corpus download, no setup. Works in Python, Ruby, Go.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Context section -->
+    <section class="vs-section" aria-label="Context">
+      <h2>Different tools, different jobs</h2>
+      <div class="vs-context">
+        <p>NLTK is the research layer of Python NLP. Tokenization, morphological analysis, parse trees, semantic disambiguation, corpus access — NLTK has been the training ground for NLP researchers and students for 20+ years. Its breadth is its strength, and its learning curve is proportionally steep. Corpus downloads for full functionality add up to several hundred megabytes.</p>
+        <p>TextLens API focuses narrowly on content quality metrics. Not linguistic structure — content grades. Flesch-Kincaid reading ease, consensus grade level, AFINN sentiment, TF-IDF keyword relevance, SEO quality. No corpus needed. One REST call, any language.</p>
+      </div>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use each tool">
+      <h2>When to use each</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <h3>When to use NLTK</h3>
+          <ul>
+            <li>Linguistic research and NLP prototyping</li>
+            <li>Tokenization, stemming, POS tagging</li>
+            <li>Access to WordNet, corpus collections</li>
+            <li>Teaching or learning NLP fundamentals</li>
+            <li>Python-only pipelines where corpus download is acceptable</li>
+            <li>Building custom classifiers from scratch</li>
+          </ul>
+        </div>
+        <div class="vs-use-card">
+          <h3>When to use TextLens API</h3>
+          <ul>
+            <li>Readability scoring for content — NLTK has none natively</li>
+            <li>Blog posts, documentation, marketing copy quality analysis</li>
+            <li>Multi-language tech stack (Python + Ruby, Go, etc.)</li>
+            <li>Serverless environments where 100MB+ corpus files are impractical</li>
+            <li>You want sentiment + readability + keywords in a single call without combining NLTK + VADER + custom code</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads this week.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 16px;">
+      Also comparing: <a href="/api/vs-spacy/" style="color:#00E5A0;">spaCy vs TextLens API &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
