@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dotenv vs envscan — Manual vs Auto-Generated .env.example</title>
+  <meta name="description" content="dotenv loads environment variables from .env files. envscan scans your Node.js source code to discover which vars you need automatically — then generates .env.example for you. No manual list to maintain.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="dotenv vs envscan — Manual vs Auto-Generated .env.example">
+  <meta property="og:description" content="dotenv loads environment variables from .env files. envscan scans your Node.js source code to discover which vars you need automatically — then generates .env.example for you. No manual list to maintain.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/vs-dotenv/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-vs-dotenv-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="dotenv vs envscan — Manual vs Auto-Generated .env.example">
+  <meta name="twitter:description" content="dotenv loads environment variables from .env files. envscan scans your Node.js source code to discover which vars you need automatically — then generates .env.example for you. No manual list to maintain.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-vs-dotenv-og.png">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/vs-dotenv/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code to auto-discover every process.env reference, generates a .env.example, and validates all vars are present before deploy.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "codeRepository": "https://github.com/ckmtools",
+    "programmingLanguage": "JavaScript",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+    .vs-jump {
+      font-size: 0.875rem;
+      color: var(--color-primary);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 480px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: #3FB950;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: #484F58;
+      font-size: 1rem;
+    }
+    .vs-table-note {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: 0 0 32px;
+      line-height: 1.6;
+    }
+
+    /* Code comparison */
+    .vs-code-compare {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .vs-code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 24px;
+    }
+    .vs-code-block h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    .vs-code-block pre {
+      margin: 0 0 12px;
+    }
+    .vs-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Prose sections */
+    .vs-prose {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+      .vs-code-compare { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/envscan/">envscan</a> /
+          vs dotenv
+        </p>
+      </nav>
+      <h1>dotenv vs envscan</h1>
+      <p class="tagline">dotenv loads .env files into process.env. envscan scans your source code to know which vars you need — then generates and validates .env.example automatically. They work together, not against each other.</p>
+      <a href="#waitlist" class="vs-jump">Jump to waitlist &darr;</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Side-by-side comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>dotenv</th>
+              <th>envscan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Loads .env into process.env</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No — use dotenv for this">&#10007; (use dotenv for this)</span></td>
+            </tr>
+            <tr>
+              <td>Auto-discovers vars from source code</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Generates .env.example automatically</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Shows file + line for each var</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Type inference (_PORT, _SECRET, _URL)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Validates all vars are set before run</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Fails CI with exit code 1 on missing vars</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>GitHub Action PR comments on new vars</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (CI tier)</td>
+            </tr>
+            <tr>
+              <td>Zero config — no schema file</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Works at runtime (app startup)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No — runs pre-deploy">&#10007; (runs pre-deploy)</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vs-table-note">dotenv and envscan are complementary. Use dotenv to load vars at runtime. Use envscan to document and validate them before deploy.</p>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Workflow comparison">
+      <h2>The workflow</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>dotenv only</h3>
+          <pre><code><span class="tl-cmt"># Install: npm install dotenv</span>
+<span class="tl-cmt"># Your .env.example needs manual upkeep:</span>
+
+<span class="tl-cmt"># DATABASE_URL=</span>
+<span class="tl-cmt"># PORT=</span>
+<span class="tl-cmt"># JWT_SECRET=</span>
+<span class="tl-cmt"># REDIS_URL=</span>
+
+<span class="tl-cmt"># In your app:</span>
+<span class="tl-kw">require</span>(<span class="tl-str">'dotenv'</span>).config()
+<span class="tl-cmt">// process.env.DATABASE_URL is now set</span>
+
+<span class="tl-cmt"># But .env.example can go stale:</span>
+<span class="tl-cmt"># You add process.env.NEW_KEY in code</span>
+<span class="tl-cmt"># You forget to add it to .env.example</span>
+<span class="tl-cmt"># Newcomers miss it. Deploy fails.</span></code></pre>
+          <p class="vs-code-caption">dotenv loads vars. You still maintain .env.example by hand — and it can drift from reality.</p>
+        </div>
+        <div class="vs-code-block">
+          <h3>dotenv + envscan together</h3>
+          <pre><code><span class="tl-cmt"># Scan source code for all process.env refs</span>
+$ envscan scan
+Found 8 environment variables:
+  DATABASE_URL    type: url     src/db.ts:12
+  PORT            type: number  src/server.ts:5
+  JWT_SECRET      type: secret  src/auth.ts:8
+  NEW_KEY         type: string  src/api.ts:3
+
+<span class="tl-cmt"># Generate .env.example from what it finds</span>
+$ envscan generate
+<span class="tl-cmt"># Wrote .env.example (8 vars)</span>
+
+<span class="tl-cmt"># Validate before deploy</span>
+$ envscan validate
+Validation: 7/8 set. Missing: NEW_KEY
+Exit code: 1</code></pre>
+          <p class="vs-code-caption">envscan reads your source files to discover vars. .env.example is generated, not maintained.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- They work together -->
+    <section class="vs-section" aria-label="dotenv and envscan work together">
+      <h2>dotenv and envscan work together</h2>
+      <p class="vs-prose">These are not competing tools. dotenv loads your .env into process.env at runtime — that part is solved. The unsolved problem is keeping .env.example accurate as your codebase grows.</p>
+      <p class="vs-prose">Every time a developer adds a new <code>process.env.VARIABLE</code> reference, someone needs to update .env.example. envscan automates that. Run <code>envscan generate</code> to regenerate from source. Add <code>envscan validate</code> to your CI pipeline to catch missing vars before deploy.</p>
+
+      <h2 style="margin-top:8px;">When to use dotenv (always — it's the standard)</h2>
+      <p class="vs-prose">dotenv is not optional for most Node.js apps — it loads your .env file at startup. Every Node.js project that uses environment variables should use dotenv (or a compatible loader like dotenv-flow, dotenv-defaults).</p>
+      <p class="vs-prose">envscan does not replace dotenv. It complements it.</p>
+
+      <h2 style="margin-top:8px;">When to add envscan</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <ul>
+            <li>You want .env.example auto-generated from source (not maintained by hand)</li>
+            <li>Your .env.example has gone stale before and caused onboarding friction</li>
+            <li>You want CI to catch missing env vars before a deploy fails in production</li>
+            <li>You want file and line context for every env var in the project</li>
+            <li>You want type hints on every var (<code>_PORT</code> → number, <code>_SECRET</code> → redacted, <code>_URL</code> → url)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:48px auto;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">envscan is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96/week npm downloads.</p>
+      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
