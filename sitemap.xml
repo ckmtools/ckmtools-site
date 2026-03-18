@@ -122,6 +122,12 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://ckmtools.dev/envscan/vs-dotenv/</loc>
+    <lastmod>2026-03-18</lastmod>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://ckmtools.dev/blog/prosescore-hemingway-alternative.html</loc>
     <lastmod>2026-03-18</lastmod>
     <priority>0.7</priority>
