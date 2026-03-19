@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your PHP app. One POST request — no NLP extensions to install.">
+  <title>TextLens API for PHP — Readability Scoring, Sentiment, Keywords via HTTP</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens API for PHP — Readability Scoring, Sentiment, Keywords via HTTP">
+  <meta property="og:description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your PHP app. One POST request — no NLP extensions to install.">
+  <meta property="og:url" content="https://ckmtools.dev/api/for-php/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-for-php-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-for-php-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TextLens API for PHP — Readability Scoring, Sentiment, Keywords via HTTP">
+  <meta name="twitter:description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your PHP app. One POST request — no NLP extensions to install.">
+  <link rel="canonical" href="https://ckmtools.dev/api/for-php/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .api-hero {
+      text-align: center;
+      padding: 80px 24px 64px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .api-hero h1 { font-size: 2rem; margin-bottom: 12px; }
+    .api-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 32px;
+    }
+    .api-hero pre {
+      max-width: 580px;
+      margin: 0 auto 24px;
+      text-align: left;
+    }
+    .hero-social-proof {
+      color: #8B949E;
+      font-size: 0.875rem;
+      margin: 0 0 24px;
+      text-align: center;
+    }
+    .breadcrumb {
+      font-size: 0.8125rem;
+      color: #8B949E;
+      margin-bottom: 16px;
+    }
+    .breadcrumb a { color: #8B949E; text-decoration: none; }
+    .breadcrumb a:hover { color: #00E5A0; }
+    .breadcrumb span { margin: 0 6px; }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .api-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    .api-section h2 { margin-bottom: 24px; }
+    .section-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      font-size: 1.0625rem;
+    }
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+    }
+    .example-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .example-block-header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+    }
+    .example-label {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+    .example-badge {
+      margin-left: auto;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #1f6feb33;
+      color: #58a6ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .example-block pre {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+    }
+    .example-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      padding: 12px 20px;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .price-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .price-card.popular {
+      border-color: var(--color-primary);
+      position: relative;
+    }
+    .popular-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: var(--bg);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 12px;
+      border-radius: 0 0 4px 4px;
+    }
+    .price-card h3 { font-size: 1.125rem; margin-bottom: 8px; }
+    .price-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .price-amount span {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .price-details {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 24px;
+      flex: 1;
+    }
+    .price-details li {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-details li:last-child { border-bottom: none; }
+    .price-cta {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .price-cta-primary { background: var(--color-primary); color: var(--bg); }
+    .price-cta-primary:hover { background: var(--color-primary-hover); color: var(--bg); }
+    .price-cta-outline { border: 1px solid var(--border); color: var(--text-primary); }
+    .price-cta-outline:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .why-not-composer {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--color-primary);
+      border-radius: 0 8px 8px 0;
+      padding: 24px;
+    }
+    .why-not-composer p { color: var(--text-secondary); margin: 0; font-size: 0.9375rem; line-height: 1.7; }
+    @media (min-width: 640px) {
+      .api-hero { padding: 120px 24px 80px; }
+      .api-hero h1 { font-size: 2.5rem; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .feature-grid { grid-template-columns: repeat(3, 1fr); }
+      .pricing-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .api-hero { padding: 48px 20px 40px; }
+      .api-hero h1 { font-size: 1.75rem; }
+      .api-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TextLens API",
+    "description": "Readability scoring, sentiment analysis, keyword extraction, and SEO scoring via a single REST endpoint. PHP-compatible, no PECL extensions required.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/api/for-php/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/">TextLens API</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="api-hero">
+      <div class="breadcrumb">
+        <a href="/">ckmtools</a>
+        <span>&rsaquo;</span>
+        <a href="/api/">TextLens API</a>
+        <span>&rsaquo;</span>
+        for PHP
+      </div>
+      <h1>TextLens API for PHP</h1>
+      <p class="tagline">Add text analysis to your PHP app in 5 lines. Readability grades (8 formulas), sentiment scoring, keyword extraction, and SEO analysis &mdash; no PHP extensions to configure, no PECL packages to install.</p>
+      <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads/week</p>
+      <pre><code>&lt;?php
+$ch = curl_init("https://api.ckmtools.dev/v1/analyze");
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER =&gt; true,
+    CURLOPT_POST =&gt; true,
+    CURLOPT_HTTPHEADER =&gt; [
+        "Content-Type: application/json",
+        "X-API-Key: " . $_ENV["TEXTLENS_KEY"],
+    ],
+    CURLOPT_POSTFIELDS =&gt; json_encode(["text" =&gt; $text]),
+]);
+$result = json_decode(curl_exec($ch), true);
+curl_close($ch);
+
+echo $result["readability"]["consensus_grade"];  // Grade 8
+echo $result["sentiment"]["label"];              // positive</code></pre>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the Waitlist</a>
+    </section>
+
+    <!-- Features -->
+    <section class="api-section" aria-label="Features">
+      <h2>What you get</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>8 Readability Formulas</h3>
+          <p>Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade. No single PHP Composer package covers all eight.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Sentiment + Keywords</h3>
+          <p>AFINN sentiment calibrated for long-form content. TF-IDF keyword extraction with relevance scores. SEO quality scoring.</p>
+        </div>
+        <div class="feature-card">
+          <h3>No PHP Extensions</h3>
+          <p>No PECL packages, no FFI bindings to Python. Works in PHP 7.4+ including shared hosting, Laravel Forge, Docker.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Response example -->
+    <section class="api-section">
+      <h2>The response</h2>
+      <p class="section-subtitle">One endpoint returns everything you need:</p>
+      <pre><code>{
+  "readability": {
+    "fleschKincaidGrade": 8.2,
+    "gunningFog": 10.1,
+    "smog": 9.4,
+    "colemanLiau": 11.3,
+    "ari": 9.7,
+    "daleChall": 7.8,
+    "linsearWrite": 8.5,
+    "consensusGrade": "Grade 9",
+    "fleschReadingEase": { "score": 62.3, "interpretation": "Standard" }
+  },
+  "sentiment": {
+    "label": "positive",
+    "score": 4.2,
+    "confidence": 0.71
+  },
+  "keywords": [
+    { "word": "content", "score": 5.1, "count": 4, "density": 1.87 },
+    { "word": "readability", "score": 4.8, "count": 3, "density": 1.40 }
+  ],
+  "seo": { "score": 74, "grade": "B" },
+  "statistics": { "words": 342, "sentences": 18, "paragraphs": 5 },
+  "meta": { "processing_time_ms": 14 }
+}</code></pre>
+    </section>
+
+    <!-- PHP code examples -->
+    <section class="api-section" id="examples">
+      <h2>The code</h2>
+
+      <!-- curl stdlib -->
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">curl &mdash; stdlib, zero dependencies</span>
+          <span class="example-badge">recommended</span>
+        </div>
+        <pre><code>&lt;?php
+$ch = curl_init("https://api.ckmtools.dev/v1/analyze");
+curl_setopt_array($ch, [
+    CURLOPT_RETURNTRANSFER =&gt; true,
+    CURLOPT_POST =&gt; true,
+    CURLOPT_HTTPHEADER =&gt; [
+        "Content-Type: application/json",
+        "X-API-Key: " . $_ENV["TEXTLENS_KEY"],
+    ],
+    CURLOPT_POSTFIELDS =&gt; json_encode(["text" =&gt; $text]),
+]);
+$result = json_decode(curl_exec($ch), true);
+curl_close($ch);
+
+echo $result["readability"]["consensus_grade"];  // Grade 8
+echo $result["sentiment"]["label"];              // positive</code></pre>
+      </div>
+
+      <!-- Guzzle -->
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">Guzzle HTTP</span>
+        </div>
+        <pre><code>&lt;?php
+use GuzzleHttp\Client;
+
+$client = new Client(["base_uri" =&gt; "https://api.ckmtools.dev"]);
+$response = $client-&gt;post("/v1/analyze", [
+    "json" =&gt; ["text" =&gt; $content],
+    "headers" =&gt; ["X-API-Key" =&gt; env("TEXTLENS_KEY")],
+]);
+$result = json_decode($response-&gt;getBody(), true);</code></pre>
+      </div>
+
+      <!-- Laravel HTTP facade -->
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">Laravel HTTP facade</span>
+        </div>
+        <pre><code>&lt;?php
+use Illuminate\Support\Facades\Http;
+
+$result = Http::withHeaders(["X-API-Key" =&gt; config("services.textlens.key")])
+    -&gt;post("https://api.ckmtools.dev/v1/analyze", ["text" =&gt; $content])
+    -&gt;json();
+
+$grade = $result["readability"]["consensus_grade"];</code></pre>
+        <p class="example-caption">Works naturally in Laravel service classes or jobs. Add <code>textlens.key</code> to <code>config/services.php</code> for environment-based key management.</p>
+      </div>
+    </section>
+
+    <!-- Why not a Composer package? -->
+    <section class="api-section">
+      <h2>No PHP NLP library covers this</h2>
+      <div class="why-not-composer">
+        <p>PHP's text processing ecosystem is sparse. No widely-used Composer package covers all 8 readability formulas plus AFINN sentiment plus TF-IDF keyword extraction. TextLens API covers all in one HTTP call &mdash; works with curl, Guzzle, Symfony HttpClient, or Laravel's HTTP facade.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;font-size:0.875rem;">Backed by the textlens npm package &mdash; 96 downloads/week.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+
+    <!-- Pricing -->
+    <section class="api-section" id="pricing">
+      <h2>Pricing</h2>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Free</h3>
+          <div class="price-amount">$0 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>1,000 requests/mo</li>
+            <li>10 req/min rate limit</li>
+            <li>5,000 char max per request</li>
+          </ul>
+          <a href="mailto:agent@ckmtools.dev?subject=Free%20API%20Key" class="price-cta price-cta-outline">Get Started</a>
+        </div>
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="price-amount">$9 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>10,000 requests/mo</li>
+            <li>60 req/min rate limit</li>
+            <li>25,000 char max per request</li>
+          </ul>
+          <a href="https://buy.stripe.com/fZu28rbM6gzv4HZcOcf7i05" class="price-cta price-cta-outline">Subscribe</a>
+        </div>
+        <div class="price-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price-amount">$29 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>100,000 requests/mo</li>
+            <li>120 req/min rate limit</li>
+            <li>100,000 char max per request</li>
+          </ul>
+          <a href="https://buy.stripe.com/14A8wP17sgzv1vNbK8f7i06" class="price-cta price-cta-primary">Subscribe</a>
+        </div>
+        <div class="price-card">
+          <h3>Team</h3>
+          <div class="price-amount">$79 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>500,000 requests/mo</li>
+            <li>300 req/min rate limit</li>
+            <li>500,000 char max per request</li>
+          </ul>
+          <a href="https://buy.stripe.com/8x228rg2m0Ax3DVeWkf7i07" class="price-cta price-cta-outline">Subscribe</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cross-links -->
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:0 0 8px;">
+      Using Ruby instead? <a href="/api/for-ruby/" style="color:#00E5A0;">See Ruby-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all library comparisons &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
