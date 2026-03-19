@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No IAM, no AWS account.">
-  <title>AWS Comprehend vs TextLens API — Text Analysis Comparison</title>
+  <meta name="description" content="Google Cloud Natural Language API has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No GCP account required.">
+  <title>Google Cloud Natural Language API vs TextLens API — Text Analysis Comparison</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="AWS Comprehend vs TextLens API — Text Analysis Comparison">
-  <meta property="og:description" content="AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No IAM, no AWS account.">
-  <meta property="og:url" content="https://ckmtools.dev/api/vs-aws-comprehend/">
+  <meta property="og:title" content="Google Cloud Natural Language API vs TextLens API — Text Analysis Comparison">
+  <meta property="og:description" content="Google Cloud Natural Language API has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No GCP account required.">
+  <meta property="og:url" content="https://ckmtools.dev/api/vs-google-nlp/">
   <meta property="og:site_name" content="ckmtools">
-  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-aws-comprehend-og.png">
-  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-aws-comprehend-og.png">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-google-nlp-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-google-nlp-og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AWS Comprehend vs TextLens API — Text Analysis Comparison">
-  <meta name="twitter:description" content="AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords. No IAM, no AWS account.">
-  <link rel="canonical" href="https://ckmtools.dev/api/vs-aws-comprehend/">
+  <meta name="twitter:title" content="Google Cloud Natural Language API vs TextLens API — Text Analysis Comparison">
+  <meta name="twitter:description" content="Google Cloud Natural Language API has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords. No GCP account required.">
+  <link rel="canonical" href="https://ckmtools.dev/api/vs-google-nlp/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
   <style>
@@ -207,9 +207,9 @@
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "AWS Comprehend vs TextLens API — Text Analysis Comparison",
-    "description": "AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No IAM, no AWS account.",
-    "url": "https://ckmtools.dev/api/vs-aws-comprehend/",
+    "name": "Google Cloud Natural Language API vs TextLens API — Text Analysis Comparison",
+    "description": "Google Cloud Natural Language API has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No GCP account required.",
+    "url": "https://ckmtools.dev/api/vs-google-nlp/",
     "datePublished": "2026-03-19",
     "author": {
       "@type": "Organization",
@@ -247,11 +247,11 @@
         <p class="tl-breadcrumb">
           <a href="/">ckmtools</a> /
           <a href="/api/">TextLens API</a> /
-          vs AWS Comprehend
+          vs Google Cloud Natural Language API
         </p>
       </nav>
-      <h1>AWS Comprehend vs TextLens API</h1>
-      <p class="tagline">AWS Comprehend is a powerful NLP service — but it has no readability scoring. If you need Flesch-Kincaid grades, SMOG, or consensus readability scores alongside sentiment analysis, TextLens API fills that gap without IAM roles, VPCs, or per-character pricing.</p>
+      <h1>Google Cloud Natural Language API vs TextLens API</h1>
+      <p class="tagline">Google Cloud Natural Language API is a powerful NLP service — but it has no readability scoring. If you need Flesch-Kincaid grades, SMOG, or consensus readability scores alongside sentiment analysis, TextLens API fills that gap without a GCP account, service account keys, or per-character billing.</p>
       <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the waitlist</a>
     </section>
 
@@ -263,7 +263,7 @@
           <thead>
             <tr>
               <th>Feature</th>
-              <th>AWS Comprehend</th>
+              <th>Google Cloud NL API</th>
               <th>TextLens API</th>
             </tr>
           </thead>
@@ -275,12 +275,27 @@
             </tr>
             <tr>
               <td>Sentiment analysis</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (mixed/positive/negative/neutral)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (score + magnitude)</td>
               <td><span class="vs-check" aria-label="Yes">&#10003;</span> (AFINN score + label)</td>
             </tr>
             <tr>
               <td>Entity recognition</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (people, places, orgs, etc.)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (people, places, orgs, events, works, consumer goods)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Entity sentiment</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Syntax analysis</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (dependency parse, morphology)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Content classification</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (700+ categories)</td>
               <td><span class="vs-no" aria-label="No">&#10007;</span></td>
             </tr>
             <tr>
@@ -295,38 +310,33 @@
             </tr>
             <tr>
               <td>Pricing model</td>
-              <td>Per character ($0.0001/unit after free tier)</td>
+              <td>Per 1,000 characters (per-feature billing)</td>
               <td><span class="vs-advantage">Per request (flat monthly tiers)</span></td>
             </tr>
             <tr>
               <td>Free tier</td>
-              <td>50K units/mo for 12 months</td>
+              <td>5,000 units/month per feature type</td>
               <td><span class="vs-advantage">1,000 req/mo (no expiry)</span></td>
             </tr>
             <tr>
               <td>Setup required</td>
-              <td>AWS account, IAM role, region selection</td>
+              <td>GCP account, project, billing, service account key</td>
               <td><span class="vs-advantage">API key (email signup)</span></td>
             </tr>
             <tr>
               <td>Authentication</td>
-              <td>AWS Signature V4 (sigv4)</td>
+              <td>Google service account JSON / OAuth 2.0</td>
               <td><span class="vs-advantage">X-API-Key header</span></td>
             </tr>
             <tr>
               <td>SDK dependency</td>
-              <td>boto3 (Python) or AWS SDK</td>
+              <td>google-cloud-language (Python) or client library</td>
               <td><span class="vs-advantage">HTTP only (curl, fetch, any language)</span></td>
             </tr>
             <tr>
-              <td>Minimum request size</td>
-              <td>1 character</td>
-              <td>No minimum</td>
-            </tr>
-            <tr>
-              <td>Languages supported</td>
-              <td>100+</td>
-              <td>Any (text is text)</td>
+              <td>Multiple analyses per request</td>
+              <td>&#10007; (each feature billed separately)</td>
+              <td><span class="vs-advantage">&#10003; (readability + sentiment + keywords in one call)</span></td>
             </tr>
           </tbody>
         </table>
@@ -338,26 +348,27 @@
       <h2>The code</h2>
       <div class="vs-code-compare">
         <div class="vs-code-block">
-          <h3>AWS Comprehend <span class="vs-lang-tag">Python</span></h3>
-          <pre><code><span class="tl-kw">import</span> boto3
+          <h3>Google Cloud NL API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">from</span> google.cloud <span class="tl-kw">import</span> language_v1
 
-client = boto3.client(
-    <span class="tl-str">'comprehend'</span>,
-    region_name=<span class="tl-str">'us-east-1'</span>,
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_KEY
+<span class="tl-cmt"># Requires: GOOGLE_APPLICATION_CREDENTIALS env var</span>
+<span class="tl-cmt"># pointing to a service account JSON key file</span>
+client = language_v1.LanguageServiceClient()
+
+document = language_v1.Document(
+    content=text,
+    type_=language_v1.Document.Type.PLAIN_TEXT
 )
 
-response = client.detect_sentiment(
-    Text=text,
-    LanguageCode=<span class="tl-str">'en'</span>
-)
-<span class="tl-cmt"># sentiment: POSITIVE | NEGATIVE | NEUTRAL | MIXED</span>
-<span class="tl-kw">print</span>(response[<span class="tl-str">'Sentiment'</span>])
+<span class="tl-cmt"># Each feature is a separate API call</span>
+sentiment = client.analyze_sentiment(
+    request={<span class="tl-str">'document'</span>: document}
+).document_sentiment
+<span class="tl-kw">print</span>(sentiment.score)  <span class="tl-cmt"># -1.0 to 1.0</span>
 
-<span class="tl-cmt"># AWS Comprehend has no readability scoring.</span>
-<span class="tl-cmt"># You would need a separate library (textstat, etc.)</span>
-<span class="tl-cmt"># and a separate API call for each analysis type.</span></code></pre>
+<span class="tl-cmt"># No readability scoring available.</span>
+<span class="tl-cmt"># You need a separate library (textstat, etc.)</span>
+<span class="tl-cmt"># and a separate invocation for each formula.</span></code></pre>
         </div>
         <div class="vs-code-block">
           <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
@@ -370,13 +381,13 @@ response = requests.post(
 )
 result = response.json()
 
-<span class="tl-cmt"># Readability + sentiment in one call</span>
+<span class="tl-cmt"># Readability + sentiment + keywords in one call</span>
 <span class="tl-kw">print</span>(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'consensus_grade'</span>])  <span class="tl-cmt"># Grade 8</span>
 <span class="tl-kw">print</span>(result[<span class="tl-str">'sentiment'</span>][<span class="tl-str">'label'</span>])              <span class="tl-cmt"># positive</span>
 <span class="tl-kw">print</span>(result[<span class="tl-str">'keywords'</span>][0][<span class="tl-str">'term'</span>])             <span class="tl-cmt"># 'content analysis'</span></code></pre>
         </div>
       </div>
-      <p style="color:var(--text-secondary);font-size:0.875rem;margin:16px 0 0;line-height:1.6;">AWS Comprehend requires IAM credentials, a regional endpoint, and a separate library for readability scoring. TextLens API returns readability, sentiment, and keywords from one POST request with an API key.</p>
+      <p style="color:var(--text-secondary);font-size:0.875rem;margin:16px 0 0;line-height:1.6;">Google Cloud NL API requires a service account key file, GCP billing enabled, and a separate API call per feature — sentiment, entities, syntax each billed independently. TextLens API returns readability, sentiment, and keywords from one POST request with a single API key header.</p>
     </section>
 
     <!-- When to use each -->
@@ -384,22 +395,23 @@ result = response.json()
       <h2>Which one to use</h2>
       <div class="vs-use-grid">
         <div class="vs-use-card">
-          <h3>Use AWS Comprehend when:</h3>
+          <h3>Use Google Cloud Natural Language when:</h3>
           <ul>
-            <li>You need named entity recognition (people, organizations, places)</li>
-            <li>You're processing medical text (Comprehend Medical)</li>
-            <li>You need 100+ language support for sentiment</li>
-            <li>You're already deep in the AWS ecosystem</li>
+            <li>You need named entity recognition (people, organizations, events, works)</li>
+            <li>You need entity-level sentiment (how does the text feel about a specific entity)</li>
+            <li>You need full syntax analysis (dependency parse, morphological tags)</li>
+            <li>You need content classification across 700+ category taxonomy</li>
+            <li>You're already using GCP and want consolidated billing</li>
           </ul>
         </div>
         <div class="vs-use-card">
           <h3>Use TextLens API when:</h3>
           <ul>
-            <li>You need readability grades (Flesch-Kincaid, SMOG, etc.)</li>
-            <li>You want keyword extraction (TF-IDF)</li>
-            <li>You need simple flat pricing without per-character math</li>
-            <li>You don't want to manage IAM roles for a text analysis endpoint</li>
-            <li>You're building in a language without a mature AWS SDK</li>
+            <li>You need readability grades (Flesch-Kincaid, SMOG, Gunning Fog, etc.)</li>
+            <li>You want keyword extraction (TF-IDF with relevance scores)</li>
+            <li>You need flat-rate pricing without per-feature, per-character billing</li>
+            <li>You don't want to manage GCP projects, service accounts, or billing alerts</li>
+            <li>You're building in an environment where installing the Google client library is impractical</li>
           </ul>
         </div>
       </div>
@@ -409,9 +421,9 @@ result = response.json()
     <section class="vs-section" aria-label="Pricing comparison">
       <h2>Pricing</h2>
       <div class="vs-pricing-note">
-        <p>AWS Comprehend charges $0.0001 per unit (100 characters) after a 12-month free tier of 50K units/month. For a 1,000-word article (~5,500 characters), that's approximately $0.0055 per API call. TextLens API charges a flat monthly rate: Free (1,000 req/mo), Starter $9/mo (25,000 req), Pro $29/mo (100,000 req), Enterprise $99/mo (500,000 req).</p>
-        <p>For content teams running readability checks on 100 articles/week (~4,400 req/mo), TextLens API Starter tier ($9/mo) compares to approximately $24/mo on AWS Comprehend for sentiment alone — and Comprehend still has no readability scoring.</p>
-        <p class="disclaimer">Pricing estimates are approximate and subject to change. Check <a href="https://aws.amazon.com/comprehend/pricing/" rel="noopener" style="color:var(--color-secondary);">aws.amazon.com/comprehend/pricing</a> for current AWS rates.</p>
+        <p>Google Cloud Natural Language API charges per 1,000 characters, with each analysis feature (sentiment, entity recognition, syntax, classification) billed as a separate call. The free tier covers 5,000 units per month per feature type. TextLens API charges a flat monthly rate: Free (1,000 req/mo), Starter $9/mo (25,000 req), Pro $29/mo (100,000 req), Enterprise $99/mo (500,000 req).</p>
+        <p>For content teams running three analysis types on each piece — say readability, sentiment, and keyword checks — Google Cloud NL API bills each feature call independently. TextLens API bundles all three into one request at one flat rate, making cost predictability straightforward.</p>
+        <p class="disclaimer">Pricing estimates are approximate and subject to change. Check <a href="https://cloud.google.com/natural-language/pricing" rel="noopener" style="color:var(--color-secondary);">cloud.google.com/natural-language/pricing</a> for current Google Cloud rates.</p>
       </div>
     </section>
 
@@ -419,13 +431,13 @@ result = response.json()
     <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
       <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
-      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads this week.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 1,073 npm downloads last month.</p>
       <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the Waitlist</a>
       <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
     </section>
 
     <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 8px;">
-      Also comparing: <a href="/api/vs-nltk/" style="color:#00E5A0;">NLTK vs TextLens API &rarr;</a> &nbsp;&middot;&nbsp; <a href="/api/vs-google-nlp/" style="color:#00E5A0;">Google Cloud NL API vs TextLens API &rarr;</a>
+      Also comparing: <a href="/api/vs-aws-comprehend/" style="color:#00E5A0;">AWS Comprehend vs TextLens API &rarr;</a>
     </p>
     <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 16px;">
       <a href="/api/alternatives/" style="color:#00E5A0;">See all comparisons &rarr;</a>
