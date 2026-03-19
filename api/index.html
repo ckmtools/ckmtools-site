@@ -427,16 +427,17 @@
   -d '{"text": "The quick brown fox jumps over the lazy dog."}'</code></pre>
         </div>
         <div class="tab-panel" role="tabpanel" id="panel-python" aria-labelledby="tab-python">
-          <pre><code>import requests
+          <pre><code>import pandas as pd, requests
 
-response = requests.post(
-    'https://api.ckmtools.dev/v1/analyze',
-    headers={'X-API-Key': 'your_api_key'},
-    json={'text': 'Your text here...'}
-)
-result = response.json()
-print(f"Readability grade: {result['readability']['consensusGrade']}")
-print(f"Sentiment: {result['sentiment']['label']}")</code></pre>
+df = pd.read_csv('reviews.csv')
+
+def analyze(text):
+    r = requests.post('https://api.ckmtools.dev/v1/analyze',
+        headers={'X-API-Key': 'your_api_key'},
+        json={'text': text, 'options': {'modules': ['sentiment', 'keywords']}})
+    return r.json()
+
+df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['label'])</code></pre>
         </div>
         <div class="tab-panel" role="tabpanel" id="panel-js" aria-labelledby="tab-js">
           <pre><code>const response = await fetch('https://api.ckmtools.dev/v1/analyze', {
@@ -537,10 +538,35 @@ puts JSON.parse(res.body)</code></pre>
       Using PHP? <a href="/api/for-php/" style="color:#00E5A0;">See PHP-specific examples &rarr;</a>
     </p>
 
+    <!-- For Data Engineers -->
+    <section class="api-section" id="data-pipelines">
+      <h2>Built for data pipelines</h2>
+      <p class="section-subtitle">Process text columns at scale. No model to deploy. No GPU to manage. Drop TextLens into your pipeline in 5 minutes.</p>
+      <div class="code-tabs">
+        <div class="tab-bar">
+          <button class="tab-btn active" style="cursor:default;">pandas</button>
+        </div>
+        <div class="tab-panel active">
+          <pre><code>import pandas as pd, requests
+
+df = pd.read_csv('reviews.csv')
+
+def analyze(text):
+    r = requests.post('https://api.ckmtools.dev/v1/analyze',
+        headers={'X-API-Key': 'your_api_key'},
+        json={'text': text, 'options': {'modules': ['sentiment', 'keywords']}})
+    return r.json()
+
+df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['label'])</code></pre>
+        </div>
+      </div>
+      <p style="color:#8B949E;font-size:0.9375rem;margin:16px 0 0;">No GPU required. Pure algorithmic — sub-50ms per call. Same input always returns same output.</p>
+    </section>
+
     <!-- Waitlist -->
     <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
-      <p style="color:#8B949E;margin:0 0 24px;">TextLens API is in development. Join the waitlist to get notified at launch — no charge, cancel any time.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">No model to deploy. No GPU to manage. Drop TextLens into your data pipeline in 5 minutes — 1,000 free requests, no credit card.</p>
       <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
       <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
     </section>
@@ -548,6 +574,7 @@ puts JSON.parse(res.body)</code></pre>
     <!-- Pricing -->
     <section class="api-section" id="pricing">
       <h2>Pricing</h2>
+      <p style="color:#8B949E;font-size:0.9375rem;margin:-8px 0 24px;">AWS Comprehend charges ~$0.50 per 1,000 requests. TextLens Pro is $29/mo for 100,000 requests — 17× cheaper for typical NLP workloads.</p>
       <div class="pricing-grid">
         <div class="price-card">
           <h3>Free</h3>
