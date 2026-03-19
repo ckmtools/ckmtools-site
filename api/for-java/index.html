@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your Java app. One POST request — no NLP libraries to configure.">
+  <title>TextLens API for Java — Readability Scoring, Sentiment, Keywords via HTTP</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens API for Java — Readability Scoring, Sentiment, Keywords via HTTP">
+  <meta property="og:description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your Java app. One POST request — no NLP libraries to configure.">
+  <meta property="og:url" content="https://ckmtools.dev/api/for-java/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-for-java-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-for-java-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TextLens API for Java — Readability Scoring, Sentiment, Keywords via HTTP">
+  <meta name="twitter:description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your Java app. One POST request — no NLP libraries to configure.">
+  <link rel="canonical" href="https://ckmtools.dev/api/for-java/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .api-hero {
+      text-align: center;
+      padding: 80px 24px 64px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .api-hero h1 { font-size: 2rem; margin-bottom: 12px; }
+    .api-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 32px;
+    }
+    .api-hero pre {
+      max-width: 620px;
+      margin: 0 auto 24px;
+      text-align: left;
+    }
+    .hero-social-proof {
+      color: #8B949E;
+      font-size: 0.875rem;
+      margin: 0 0 24px;
+      text-align: center;
+    }
+    .breadcrumb {
+      font-size: 0.8125rem;
+      color: #8B949E;
+      margin-bottom: 16px;
+    }
+    .breadcrumb a { color: #8B949E; text-decoration: none; }
+    .breadcrumb a:hover { color: #00E5A0; }
+    .breadcrumb span { margin: 0 6px; }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .api-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    .api-section h2 { margin-bottom: 24px; }
+    .section-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      font-size: 1.0625rem;
+    }
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+    }
+    .example-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .example-block-header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+    }
+    .example-label {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+    .example-badge {
+      margin-left: auto;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: #1f6feb33;
+      color: #58a6ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .example-block pre {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .price-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+    }
+    .price-card.popular {
+      border-color: var(--color-primary);
+      position: relative;
+    }
+    .popular-badge {
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: var(--bg);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 12px;
+      border-radius: 0 0 4px 4px;
+    }
+    .price-card h3 { font-size: 1.125rem; margin-bottom: 8px; }
+    .price-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .price-amount span {
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .price-details {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 24px;
+      flex: 1;
+    }
+    .price-details li {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .price-details li:last-child { border-bottom: none; }
+    .price-cta {
+      display: block;
+      text-align: center;
+      padding: 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .price-cta-primary { background: var(--color-primary); color: var(--bg); }
+    .price-cta-primary:hover { background: var(--color-primary-hover); color: var(--bg); }
+    .price-cta-outline { border: 1px solid var(--border); color: var(--text-primary); }
+    .price-cta-outline:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .why-not-nlp {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--color-primary);
+      border-radius: 0 8px 8px 0;
+      padding: 24px;
+    }
+    .why-not-nlp p { color: var(--text-secondary); margin: 0; font-size: 0.9375rem; line-height: 1.7; }
+    @media (min-width: 640px) {
+      .api-hero { padding: 120px 24px 80px; }
+      .api-hero h1 { font-size: 2.5rem; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .feature-grid { grid-template-columns: repeat(3, 1fr); }
+      .pricing-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .api-hero { padding: 48px 20px 40px; }
+      .api-hero h1 { font-size: 1.75rem; }
+      .api-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TextLens API",
+    "description": "Readability scoring, sentiment analysis, keyword extraction, and SEO scoring via a single REST endpoint. Java-compatible, no NLP libraries required.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/api/for-java/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/">TextLens API</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="api-hero">
+      <div class="breadcrumb">
+        <a href="/">ckmtools</a>
+        <span>&rsaquo;</span>
+        <a href="/api/">TextLens API</a>
+        <span>&rsaquo;</span>
+        for Java
+      </div>
+      <h1>TextLens API for Java</h1>
+      <p class="tagline">Add text analysis to your Java app with a single HTTP call. Readability grades (8 formulas), sentiment scoring, keyword extraction, and SEO analysis — no NLP libraries to configure, no model files to download.</p>
+      <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads/week</p>
+      <pre><code>import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.ckmtools.dev/v1/analyze"))
+    .header("Content-Type", "application/json")
+    .header("X-API-Key", System.getenv("TEXTLENS_KEY"))
+    .POST(HttpRequest.BodyPublishers.ofString(
+        "{\"text\": \"" + text + "\"}")
+    )
+    .build();
+
+HttpResponse&lt;String&gt; response = client.send(request,
+    HttpResponse.BodyHandlers.ofString());
+// parse response.body() with your JSON library
+// result.readability.consensus_grade &rarr; "Grade 8"
+// result.sentiment.label &rarr; "positive"</code></pre>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the Waitlist</a>
+    </section>
+
+    <!-- Features -->
+    <section class="api-section" aria-label="Features">
+      <h2>What you get</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>8 Readability Formulas</h3>
+          <p>Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade. No single Java library covers all eight.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Sentiment + Keywords</h3>
+          <p>AFINN sentiment for long-form content. TF-IDF keyword extraction with relevance scores. SEO quality scoring.</p>
+        </div>
+        <div class="feature-card">
+          <h3>No Library Dependencies</h3>
+          <p>No Stanford CoreNLP (150MB+ model files), no OpenNLP training data. Works in Spring Boot, Quarkus, Micronaut, or any Java HTTP client.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Response example -->
+    <section class="api-section">
+      <h2>What you get back</h2>
+      <p class="section-subtitle">One endpoint returns everything you need:</p>
+      <pre><code>{
+  "readability": {
+    "flesch_kincaid_grade": 8.2,
+    "gunning_fog": 10.1,
+    "smog": 9.4,
+    "coleman_liau": 11.2,
+    "ari": 8.9,
+    "dale_chall": 7.1,
+    "linsear_write": 8.0,
+    "consensus_grade": "Grade 8"
+  },
+  "sentiment": {
+    "score": 3,
+    "label": "positive",
+    "comparative": 0.23
+  },
+  "keywords": [
+    { "word": "readability", "score": 0.87 },
+    { "word": "analysis", "score": 0.72 }
+  ],
+  "seo": {
+    "score": 78,
+    "word_count": 342
+  }
+}</code></pre>
+    </section>
+
+    <!-- Java code examples -->
+    <section class="api-section" id="examples">
+      <h2>The code</h2>
+
+      <!-- Java 11+ HttpClient -->
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">Java 11+ HttpClient &mdash; stdlib, zero extra dependencies</span>
+          <span class="example-badge">recommended</span>
+        </div>
+        <pre><code>import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
+HttpClient client = HttpClient.newHttpClient();
+HttpRequest request = HttpRequest.newBuilder()
+    .uri(URI.create("https://api.ckmtools.dev/v1/analyze"))
+    .header("Content-Type", "application/json")
+    .header("X-API-Key", System.getenv("TEXTLENS_KEY"))
+    .POST(HttpRequest.BodyPublishers.ofString(
+        "{\"text\": \"" + text + "\"}")
+    )
+    .build();
+
+HttpResponse&lt;String&gt; response = client.send(request,
+    HttpResponse.BodyHandlers.ofString());
+// parse response.body() with your JSON library
+// result.readability.consensus_grade &rarr; "Grade 8"
+// result.sentiment.label &rarr; "positive"</code></pre>
+      </div>
+
+      <!-- OkHttp -->
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">OkHttp</span>
+        </div>
+        <pre><code>OkHttpClient client = new OkHttpClient();
+RequestBody body = RequestBody.create(
+    "{\"text\":\"" + text + "\"}",
+    MediaType.get("application/json")
+);
+Request request = new Request.Builder()
+    .url("https://api.ckmtools.dev/v1/analyze")
+    .addHeader("X-API-Key", System.getenv("TEXTLENS_KEY"))
+    .post(body)
+    .build();
+try (Response response = client.newCall(request).execute()) {
+    String json = response.body().string();
+}</code></pre>
+      </div>
+
+      <!-- Spring Boot -->
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">Spring RestTemplate / WebClient (Spring Boot)</span>
+        </div>
+        <pre><code>@Service
+public class TextAnalysisService {
+    @Value("${textlens.api-key}")
+    private String apiKey;
+
+    public Map&lt;String, Object&gt; analyze(String text) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-API-Key", apiKey);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return restTemplate
+            .exchange(
+                "https://api.ckmtools.dev/v1/analyze",
+                HttpMethod.POST,
+                new HttpEntity&lt;&gt;(Map.of("text", text), headers),
+                new ParameterizedTypeReference&lt;Map&lt;String, Object&gt;&gt;() {}
+            ).getBody();
+    }
+}</code></pre>
+      </div>
+    </section>
+
+    <!-- Why not a Java NLP library? -->
+    <section class="api-section">
+      <h2>No Java NLP library covers this</h2>
+      <div class="why-not-nlp">
+        <p>Stanford CoreNLP requires model downloads ranging from 150MB to 4GB depending on the analysis pipeline. OpenNLP requires training data files for each task. Apache Lucene covers tokenization and search indexing but not readability grades or AFINN sentiment scoring. TextLens API covers all of it in one HTTP call — works with Java 11+ HttpClient (stdlib, zero extra deps), OkHttp, or Spring RestTemplate. Runs in Spring Boot, Quarkus, Micronaut, or any framework that can make an HTTP request.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;font-size:0.875rem;">Backed by the textlens npm package &mdash; 96 downloads/week.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+
+    <!-- Pricing -->
+    <section class="api-section" id="pricing">
+      <h2>Pricing</h2>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Free</h3>
+          <div class="price-amount">$0 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>1,000 requests/mo</li>
+            <li>10 req/min rate limit</li>
+            <li>5,000 char max per request</li>
+          </ul>
+          <a href="mailto:agent@ckmtools.dev?subject=Free%20API%20Key" class="price-cta price-cta-outline">Get Started</a>
+        </div>
+        <div class="price-card">
+          <h3>Starter</h3>
+          <div class="price-amount">$9 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>10,000 requests/mo</li>
+            <li>60 req/min rate limit</li>
+            <li>25,000 char max per request</li>
+          </ul>
+          <a href="https://buy.stripe.com/fZu28rbM6gzv4HZcOcf7i05" class="price-cta price-cta-outline">Subscribe</a>
+        </div>
+        <div class="price-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price-amount">$29 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>100,000 requests/mo</li>
+            <li>120 req/min rate limit</li>
+            <li>100,000 char max per request</li>
+          </ul>
+          <a href="https://buy.stripe.com/14A8wP17sgzv1vNbK8f7i06" class="price-cta price-cta-primary">Subscribe</a>
+        </div>
+        <div class="price-card">
+          <h3>Team</h3>
+          <div class="price-amount">$79 <span>/mo</span></div>
+          <ul class="price-details">
+            <li>500,000 requests/mo</li>
+            <li>300 req/min rate limit</li>
+            <li>500,000 char max per request</li>
+          </ul>
+          <a href="https://buy.stripe.com/8x228rg2m0Ax3DVeWkf7i07" class="price-cta price-cta-outline">Subscribe</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cross-links -->
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:0 0 8px;">
+      Using Ruby? <a href="/api/for-ruby/" style="color:#00E5A0;">See Ruby-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 8px;">
+      Using Go? <a href="/api/for-go/" style="color:#00E5A0;">See Go-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all library comparisons &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
