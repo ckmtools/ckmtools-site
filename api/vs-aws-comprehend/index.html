@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No IAM, no AWS account.">
+  <title>AWS Comprehend vs TextLens API — Text Analysis Comparison</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AWS Comprehend vs TextLens API — Text Analysis Comparison">
+  <meta property="og:description" content="AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No IAM, no AWS account.">
+  <meta property="og:url" content="https://ckmtools.dev/api/vs-aws-comprehend/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-aws-comprehend-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-aws-comprehend-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AWS Comprehend vs TextLens API — Text Analysis Comparison">
+  <meta name="twitter:description" content="AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords. No IAM, no AWS account.">
+  <link rel="canonical" href="https://ckmtools.dev/api/vs-aws-comprehend/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 520px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:nth-child(odd) td {
+      background: #0f1419;
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: var(--color-success);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+    }
+    .vs-advantage {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+    .vs-table-note {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: 0 0 32px;
+      padding: 0 4px;
+      line-height: 1.5;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Pricing note */
+    .vs-pricing-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .vs-pricing-note p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .vs-pricing-note p:last-child {
+      margin: 0;
+    }
+    .vs-pricing-note .disclaimer {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "AWS Comprehend vs TextLens API — Text Analysis Comparison",
+    "description": "AWS Comprehend has no readability scoring. TextLens API adds 8 readability formulas plus AFINN sentiment and TF-IDF keywords via a single REST endpoint. No IAM, no AWS account.",
+    "url": "https://ckmtools.dev/api/vs-aws-comprehend/",
+    "datePublished": "2026-03-19",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          vs AWS Comprehend
+        </p>
+      </nav>
+      <h1>AWS Comprehend vs TextLens API</h1>
+      <p class="tagline">AWS Comprehend is a powerful NLP service — but it has no readability scoring. If you need Flesch-Kincaid grades, SMOG, or consensus readability scores alongside sentiment analysis, TextLens API fills that gap without IAM roles, VPCs, or per-character pricing.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the waitlist</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Feature comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>AWS Comprehend</th>
+              <th>TextLens API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Readability formulas</td>
+              <td><span class="vs-no" aria-label="None">None</span></td>
+              <td><span class="vs-advantage">8 (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus)</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (mixed/positive/negative/neutral)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (AFINN score + label)</td>
+            </tr>
+            <tr>
+              <td>Entity recognition</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (people, places, orgs, etc.)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-advantage">&#10003; TF-IDF with relevance scores</span></td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-advantage">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Pricing model</td>
+              <td>Per character ($0.0001/unit after free tier)</td>
+              <td><span class="vs-advantage">Per request (flat monthly tiers)</span></td>
+            </tr>
+            <tr>
+              <td>Free tier</td>
+              <td>50K units/mo for 12 months</td>
+              <td><span class="vs-advantage">1,000 req/mo (no expiry)</span></td>
+            </tr>
+            <tr>
+              <td>Setup required</td>
+              <td>AWS account, IAM role, region selection</td>
+              <td><span class="vs-advantage">API key (email signup)</span></td>
+            </tr>
+            <tr>
+              <td>Authentication</td>
+              <td>AWS Signature V4 (sigv4)</td>
+              <td><span class="vs-advantage">X-API-Key header</span></td>
+            </tr>
+            <tr>
+              <td>SDK dependency</td>
+              <td>boto3 (Python) or AWS SDK</td>
+              <td><span class="vs-advantage">HTTP only (curl, fetch, any language)</span></td>
+            </tr>
+            <tr>
+              <td>Minimum request size</td>
+              <td>1 character</td>
+              <td>No minimum</td>
+            </tr>
+            <tr>
+              <td>Languages supported</td>
+              <td>100+</td>
+              <td>Any (text is text)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Code comparison">
+      <h2>The code</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>AWS Comprehend <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> boto3
+
+client = boto3.client(
+    <span class="tl-str">'comprehend'</span>,
+    region_name=<span class="tl-str">'us-east-1'</span>,
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_KEY
+)
+
+response = client.detect_sentiment(
+    Text=text,
+    LanguageCode=<span class="tl-str">'en'</span>
+)
+<span class="tl-cmt"># sentiment: POSITIVE | NEGATIVE | NEUTRAL | MIXED</span>
+<span class="tl-kw">print</span>(response[<span class="tl-str">'Sentiment'</span>])
+
+<span class="tl-cmt"># AWS Comprehend has no readability scoring.</span>
+<span class="tl-cmt"># You would need a separate library (textstat, etc.)</span>
+<span class="tl-cmt"># and a separate API call for each analysis type.</span></code></pre>
+        </div>
+        <div class="vs-code-block">
+          <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+
+response = requests.post(
+    <span class="tl-str">'https://api.ckmtools.dev/v1/analyze'</span>,
+    headers={<span class="tl-str">'X-API-Key'</span>: TEXTLENS_KEY},
+    json={<span class="tl-str">'text'</span>: text}
+)
+result = response.json()
+
+<span class="tl-cmt"># Readability + sentiment in one call</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'consensus_grade'</span>])  <span class="tl-cmt"># Grade 8</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'sentiment'</span>][<span class="tl-str">'label'</span>])              <span class="tl-cmt"># positive</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'keywords'</span>][0][<span class="tl-str">'term'</span>])             <span class="tl-cmt"># 'content analysis'</span></code></pre>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.875rem;margin:16px 0 0;line-height:1.6;">AWS Comprehend requires IAM credentials, a regional endpoint, and a separate library for readability scoring. TextLens API returns readability, sentiment, and keywords from one POST request with an API key.</p>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use each tool">
+      <h2>Which one to use</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <h3>Use AWS Comprehend when:</h3>
+          <ul>
+            <li>You need named entity recognition (people, organizations, places)</li>
+            <li>You're processing medical text (Comprehend Medical)</li>
+            <li>You need 100+ language support for sentiment</li>
+            <li>You're already deep in the AWS ecosystem</li>
+          </ul>
+        </div>
+        <div class="vs-use-card">
+          <h3>Use TextLens API when:</h3>
+          <ul>
+            <li>You need readability grades (Flesch-Kincaid, SMOG, etc.)</li>
+            <li>You want keyword extraction (TF-IDF)</li>
+            <li>You need simple flat pricing without per-character math</li>
+            <li>You don't want to manage IAM roles for a text analysis endpoint</li>
+            <li>You're building in a language without a mature AWS SDK</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="vs-section" aria-label="Pricing comparison">
+      <h2>Pricing</h2>
+      <div class="vs-pricing-note">
+        <p>AWS Comprehend charges $0.0001 per unit (100 characters) after a 12-month free tier of 50K units/month. For a 1,000-word article (~5,500 characters), that's approximately $0.0055 per API call. TextLens API charges a flat monthly rate: Free (1,000 req/mo), Starter $9/mo (25,000 req), Pro $29/mo (100,000 req), Enterprise $99/mo (500,000 req).</p>
+        <p>For content teams running readability checks on 100 articles/week (~4,400 req/mo), TextLens API Starter tier ($9/mo) compares to approximately $24/mo on AWS Comprehend for sentiment alone — and Comprehend still has no readability scoring.</p>
+        <p class="disclaimer">Pricing estimates are approximate and subject to change. Check <a href="https://aws.amazon.com/comprehend/pricing/" rel="noopener" style="color:var(--color-secondary);">aws.amazon.com/comprehend/pricing</a> for current AWS rates.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads this week.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the Waitlist</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 8px;">
+      Also comparing: <a href="/api/vs-nltk/" style="color:#00E5A0;">NLTK vs TextLens API &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 16px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all comparisons &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
