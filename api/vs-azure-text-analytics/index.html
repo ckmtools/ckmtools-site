@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Azure Text Analytics has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus TF-IDF keyword extraction via REST. No Azure subscription required.">
+  <title>Azure Text Analytics vs TextLens API -- Text Analysis Compared</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Azure Text Analytics vs TextLens API -- Text Analysis Compared">
+  <meta property="og:description" content="Azure Text Analytics has no readability scoring. TextLens API adds 8 readability formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus grade) plus TF-IDF keyword extraction via REST. No Azure subscription required.">
+  <meta property="og:url" content="https://ckmtools.dev/api/vs-azure-text-analytics/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-azure-text-analytics-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-azure-text-analytics-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Azure Text Analytics vs TextLens API -- Text Analysis Compared">
+  <meta name="twitter:description" content="Azure Text Analytics has no readability scoring. TextLens API adds 8 readability formulas plus TF-IDF keyword extraction. No Azure subscription required.">
+  <link rel="canonical" href="https://ckmtools.dev/api/vs-azure-text-analytics/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 520px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:nth-child(odd) td {
+      background: #0f1419;
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: var(--color-success);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+    }
+    .vs-advantage {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Pricing note */
+    .vs-pricing-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .vs-pricing-note p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .vs-pricing-note p:last-child {
+      margin: 0;
+    }
+    .vs-pricing-note .disclaimer {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Azure Text Analytics vs TextLens API -- Text Analysis Compared",
+    "description": "Azure Text Analytics has no readability scoring. TextLens API adds 8 readability formulas plus TF-IDF keyword extraction via REST. No Azure subscription required.",
+    "url": "https://ckmtools.dev/api/vs-azure-text-analytics/",
+    "datePublished": "2026-03-19",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          vs Azure Text Analytics
+        </p>
+      </nav>
+      <h1>Azure Text Analytics vs TextLens API</h1>
+      <p class="tagline">Azure Text Analytics (now Azure AI Language) excels at named entity recognition, key phrase extraction, and opinion mining -- but has no readability scoring. TextLens API fills that gap: Flesch-Kincaid grades, SMOG, Gunning Fog, consensus grade -- without an Azure subscription, resource endpoints, or per-character pricing.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the waitlist</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Feature comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Azure Text Analytics</th>
+              <th>TextLens API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Readability formulas</td>
+              <td><span class="vs-no" aria-label="None">None</span></td>
+              <td><span class="vs-advantage">8 (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus)</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (positive/negative/neutral + confidence)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (AFINN score + label)</td>
+            </tr>
+            <tr>
+              <td>Named entity recognition</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (people, locations, orgs, dates, quantities)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Key phrase extraction</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (TF-IDF keywords instead)</td>
+            </tr>
+            <tr>
+              <td>Opinion mining</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (aspect-level sentiment)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Language detection</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (120+ languages)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Readability scoring</td>
+              <td><span class="vs-no" aria-label="None">None</span></td>
+              <td><span class="vs-advantage">&#10003; 8 formulas, consensus grade</span></td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-advantage">&#10003; TF-IDF with relevance scores</span></td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-advantage">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Pricing model</td>
+              <td>Per 1K text records (tiered)</td>
+              <td><span class="vs-advantage">Per request (flat monthly tiers)</span></td>
+            </tr>
+            <tr>
+              <td>Free tier</td>
+              <td>5,000 text records/mo (F0 tier)</td>
+              <td><span class="vs-advantage">1,000 req/mo</span></td>
+            </tr>
+            <tr>
+              <td>Setup required</td>
+              <td>Azure subscription, Cognitive Services resource, endpoint URL, key</td>
+              <td><span class="vs-advantage">API key only</span></td>
+            </tr>
+            <tr>
+              <td>Authentication</td>
+              <td>Ocp-Apim-Subscription-Key header + endpoint URL</td>
+              <td><span class="vs-advantage">X-API-Key header</span></td>
+            </tr>
+            <tr>
+              <td>SDK dependency</td>
+              <td>azure-ai-textanalytics (Python)</td>
+              <td><span class="vs-advantage">HTTP only &mdash; any language</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Code comparison">
+      <h2>The code</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>Azure Text Analytics <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">from</span> azure.ai.textanalytics <span class="tl-kw">import</span> TextAnalyticsClient
+<span class="tl-kw">from</span> azure.core.credentials <span class="tl-kw">import</span> AzureKeyCredential
+client = TextAnalyticsClient(
+    endpoint=AZURE_ENDPOINT,
+    credential=AzureKeyCredential(AZURE_KEY)
+)
+result = client.analyze_sentiment([text])[0]
+<span class="tl-kw">print</span>(<span class="tl-str">f"Sentiment: {result.sentiment}"</span>)
+<span class="tl-kw">print</span>(<span class="tl-str">f"Confidence: {result.confidence_scores.positive:.2f}"</span>)
+<span class="tl-cmt"># No readability scoring in Azure Text Analytics.</span></code></pre>
+          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;line-height:1.6;">Requires Azure subscription, a Cognitive Services resource, and a separate Python SDK. The resource endpoint URL is region-specific.</p>
+        </div>
+        <div class="vs-code-block">
+          <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+result = requests.post(
+    <span class="tl-str">"https://api.ckmtools.dev/v1/analyze"</span>,
+    headers={<span class="tl-str">"X-API-Key"</span>: TEXTLENS_KEY},
+    json={<span class="tl-str">"text"</span>: text}
+).json()
+<span class="tl-kw">print</span>(result[<span class="tl-str">"readability"</span>][<span class="tl-str">"consensus_grade"</span>])  <span class="tl-cmt"># Grade 8</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">"sentiment"</span>][<span class="tl-str">"label"</span>])              <span class="tl-cmt"># positive</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">"keywords"</span>][<span class="tl-str">"top_5"</span>])               <span class="tl-cmt"># ["content", ...]</span></code></pre>
+          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;line-height:1.6;">Readability + sentiment + keywords in one HTTP call. No Azure account. Works in Python, Go, Ruby, PHP, Node.js.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use each tool">
+      <h2>Which one to use</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <h3>Use Azure Text Analytics when:</h3>
+          <ul>
+            <li>You need named entity recognition (people, locations, organizations)</li>
+            <li>You need opinion mining (aspect-level sentiment analysis)</li>
+            <li>You need multi-language detection across 120+ languages</li>
+            <li>You're already on Azure and want tight integration with other Cognitive Services</li>
+          </ul>
+        </div>
+        <div class="vs-use-card">
+          <h3>Use TextLens API when:</h3>
+          <ul>
+            <li>You need readability grades (Flesch-Kincaid, SMOG, Gunning Fog)</li>
+            <li>You want TF-IDF keyword extraction with relevance scores</li>
+            <li>You need SEO scoring alongside text analysis</li>
+            <li>You want flat pricing per request (not per text record)</li>
+            <li>You want to avoid Azure subscription setup for a text utility</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="vs-section" aria-label="Pricing comparison">
+      <h2>Pricing</h2>
+      <div class="vs-pricing-note">
+        <p>Azure Text Analytics charges per 1,000 text records (one record = up to 5,120 characters). S-tier pricing starts around $2/1K records for sentiment; entity recognition is priced separately. There's a free F0 tier with 5,000 text records/month with limited throughput. TextLens API: Free (1K req/mo), Starter $9/mo (25K), Pro $29/mo (100K), Team $79/mo (500K).</p>
+        <p class="disclaimer">Azure pricing varies by region and tier &mdash; see <a href="https://azure.microsoft.com/pricing/details/cognitive-services/language-service/" rel="noopener" style="color:var(--color-secondary);">azure.microsoft.com/pricing/details/cognitive-services/language-service/</a> for current rates.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads this week.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the Waitlist</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 8px;">
+      Also comparing: <a href="/api/vs-aws-comprehend/" style="color:#00E5A0;">AWS Comprehend vs TextLens API &rarr;</a> &nbsp;&middot;&nbsp; <a href="/api/vs-google-nlp/" style="color:#00E5A0;">Google Cloud NL API vs TextLens API &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 16px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all comparisons &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
