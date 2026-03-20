@@ -88,8 +88,9 @@
   </url>
   <url>
     <loc>https://ckmtools.dev/api/vs-textblob/</loc>
-    <lastmod>2026-03-18</lastmod>
-    <priority>0.75</priority>
+    <lastmod>2026-03-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://ckmtools.dev/api/vs-vader/</loc>

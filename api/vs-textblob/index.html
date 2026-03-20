@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="TextBlob handles sentiment and basic NLP in Python. TextLens API adds readability scoring (8 formulas), TF-IDF keywords, and SEO scoring from a REST endpoint that works in Python, Ruby, Go, or any language.">
-  <title>TextBlob vs TextLens API — Python NLP Compared</title>
+  <meta name="description" content="TextBlob is a Python library that requires pip install and NLTK corpus downloads. TextLens API delivers the same text analysis via a single HTTPS call — no install, any language, cloud-scaled.">
+  <title>TextLens API vs TextBlob — Zero Install Text Analysis</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="TextBlob vs TextLens API — Python NLP Compared">
-  <meta property="og:description" content="TextBlob handles sentiment and basic NLP in Python. TextLens API adds readability scoring (8 formulas), TF-IDF keywords, and SEO scoring from a REST endpoint that works in Python, Ruby, Go, or any language.">
+  <meta property="og:title" content="TextLens API vs TextBlob — Zero Install Text Analysis">
+  <meta property="og:description" content="TextBlob requires pip install and NLTK corpus downloads. TextLens API works with a single HTTPS call from any language — no install, no hosting, cloud-scaled.">
   <meta property="og:url" content="https://ckmtools.dev/api/vs-textblob/">
   <meta property="og:site_name" content="ckmtools">
   <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-textblob-og.png">
   <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-textblob-og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TextBlob vs TextLens API — Python NLP Compared">
-  <meta name="twitter:description" content="TextBlob handles sentiment and basic NLP in Python. TextLens API adds readability scoring (8 formulas), TF-IDF keywords, and SEO scoring over HTTP.">
+  <meta name="twitter:title" content="TextLens API vs TextBlob — Zero Install Text Analysis">
+  <meta name="twitter:description" content="TextBlob requires pip install and NLTK corpus downloads. TextLens API works with a single HTTPS call from any language — no install, cloud-scaled.">
   <link rel="canonical" href="https://ckmtools.dev/api/vs-textblob/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
@@ -33,12 +33,23 @@
       color: var(--text-secondary);
       font-size: 1.0625rem;
       max-width: var(--max-width-prose);
-      margin: 0 auto 20px;
+      margin: 0 auto 28px;
       line-height: 1.6;
     }
-    .vs-jump {
-      font-size: 0.875rem;
-      color: var(--color-primary);
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
     }
     .vs-section {
       max-width: var(--max-width-page);
@@ -53,7 +64,7 @@
     .vs-table-wrap {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      margin-bottom: 32px;
+      margin-bottom: 16px;
       border: 1px solid var(--border);
       border-radius: 8px;
     }
@@ -61,7 +72,7 @@
       width: 100%;
       border-collapse: collapse;
       font-size: 0.9375rem;
-      min-width: 480px;
+      min-width: 520px;
     }
     .vs-table thead th {
       text-align: left;
@@ -85,6 +96,9 @@
       border-bottom: 1px solid var(--border);
       background: var(--bg);
     }
+    .vs-table tbody tr:nth-child(odd) td {
+      background: #0f1419;
+    }
     .vs-table tbody tr:last-child td {
       border-bottom: none;
     }
@@ -105,32 +119,16 @@
       color: var(--text-tertiary);
       font-size: 1rem;
     }
-
-    /* Context section */
-    .vs-context-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-bottom: 32px;
+    .vs-advantage {
+      color: var(--color-primary);
+      font-weight: 500;
     }
-    .vs-context-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px 28px;
-    }
-    .vs-context-card h3 {
-      font-size: 1.0625rem;
-      margin-bottom: 12px;
-    }
-    .vs-context-card p {
+    .vs-table-note {
       color: var(--text-secondary);
-      font-size: 0.9375rem;
-      margin: 0 0 12px;
-      line-height: 1.6;
-    }
-    .vs-context-card p:last-child {
-      margin-bottom: 0;
+      font-size: 0.875rem;
+      margin: 0 0 32px;
+      padding: 0 4px;
+      line-height: 1.5;
     }
 
     /* When-to-use sections */
@@ -171,11 +169,33 @@
       top: 7px;
     }
 
+    /* Pricing note */
+    .vs-pricing-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .vs-pricing-note p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .vs-pricing-note p:last-child {
+      margin: 0;
+    }
+    .vs-pricing-note .disclaimer {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
     @media (min-width: 640px) {
       .vs-hero { padding: 96px 24px 64px; }
       .vs-hero h1 { font-size: 2.5rem; }
       .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
-      .vs-context-grid { grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 639px) {
       .vs-hero { padding: 48px 20px 40px; }
@@ -186,22 +206,15 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "TextLens API",
-    "description": "Readability scoring, sentiment analysis, keyword extraction, and SEO scoring via a single REST endpoint. Works in Python, Ruby, Go, or any HTTP client.",
-    "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Any",
-    "url": "https://ckmtools.dev/api/",
+    "@type": "WebPage",
+    "name": "TextLens API vs TextBlob — Zero Install Text Analysis",
+    "description": "TextBlob requires pip install and NLTK corpus downloads. TextLens API delivers the same text analysis via a single HTTPS call — no install, any language, cloud-scaled.",
+    "url": "https://ckmtools.dev/api/vs-textblob/",
+    "datePublished": "2026-03-20",
     "author": {
       "@type": "Organization",
       "name": "ckmtools",
       "url": "https://ckmtools.dev"
-    },
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-      "description": "Free tier: 1,000 requests/month"
     }
   }
   </script>
@@ -237,14 +250,14 @@
           vs TextBlob
         </p>
       </nav>
-      <h1>TextBlob vs TextLens API</h1>
-      <p class="tagline">TextBlob handles sentiment analysis and basic NLP in Python. TextLens API covers the same ground plus readability scoring (8 formulas), keyword extraction, and SEO scoring — from a REST endpoint that works in any language.</p>
-      <a href="#waitlist" class="vs-jump">Join the waitlist &darr;</a>
+      <h1>TextLens API <span style="color:var(--text-secondary);font-size:0.6em;vertical-align:middle;margin:0 8px;padding:4px 12px;border:1px solid var(--border);border-radius:20px;font-weight:400;">vs</span> TextBlob</h1>
+      <p class="tagline">TextBlob is a great Python library — but it only works in Python, requires <code>pip install textblob</code> plus NLTK corpus downloads, and runs single-process on your own infra. TextLens API replaces that with a single HTTPS call that works from any language, scales automatically, and needs zero install.</p>
+      <a href="https://buy.stripe.com/plink_1TBlI6DpqJfa4oQbbuRqwXzJ" class="btn-cta">Try TextLens API free — no pip install needed</a>
     </section>
 
     <!-- Comparison table -->
     <section class="vs-section" aria-label="Feature comparison">
-      <h2>Side-by-side comparison</h2>
+      <h2>Feature comparison</h2>
       <div class="vs-table-wrap">
         <table class="vs-table">
           <thead>
@@ -256,74 +269,29 @@
           </thead>
           <tbody>
             <tr>
-              <td>Sentiment analysis</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td>Setup</td>
+              <td>pip install textblob + download corpora</td>
+              <td><span class="vs-advantage">curl or fetch, zero install</span></td>
             </tr>
             <tr>
-              <td>Subjectivity scoring</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td>Language support</td>
+              <td>Python only</td>
+              <td><span class="vs-advantage">Any language with HTTP</span></td>
             </tr>
             <tr>
-              <td>Noun phrase extraction</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td>Hosting required</td>
+              <td>Yes (your infra)</td>
+              <td><span class="vs-advantage">No (SaaS)</span></td>
             </tr>
             <tr>
-              <td>Part-of-speech tagging</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td>Pricing</td>
+              <td>Free (self-hosted)</td>
+              <td><span class="vs-advantage">Free tier + paid</span></td>
             </tr>
             <tr>
-              <td>Readability scoring (8 formulas)</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Consensus readability grade</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>TF-IDF keyword extraction</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>SEO scoring</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Reading time estimate</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Works in Ruby, Go, PHP</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>No Python environment needed</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>No NLTK corpus download required</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Free tier</td>
-              <td>Free (open source)</td>
-              <td>1,000 req/mo</td>
-            </tr>
-            <tr>
-              <td>Single endpoint, all content metrics</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td>Concurrency</td>
+              <td>Single-process</td>
+              <td><span class="vs-advantage">Cloud-scaled</span></td>
             </tr>
           </tbody>
         </table>
@@ -337,71 +305,58 @@
         <div class="vs-code-block">
           <h3>TextBlob <span class="vs-lang-tag">Python</span></h3>
           <pre><code><span class="tl-kw">from</span> textblob <span class="tl-kw">import</span> TextBlob
-blob = TextBlob(<span class="tl-str">"Your text..."</span>)
-<span class="tl-cmt"># Sentiment only — two values</span>
-<span class="tl-kw">print</span>(blob.sentiment.polarity)     <span class="tl-cmt"># -1.0 to 1.0</span>
-<span class="tl-kw">print</span>(blob.sentiment.subjectivity) <span class="tl-cmt"># 0 to 1</span>
-<span class="tl-cmt"># No readability scores</span>
-<span class="tl-cmt"># No keyword extraction</span>
-<span class="tl-cmt"># No SEO scoring</span></code></pre>
-          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;">TextBlob excels at sentiment and linguistic analysis. No readability formulas. Requires NLTK corpus download.</p>
+blob = TextBlob(<span class="tl-str">"The new product is absolutely amazing!"</span>)
+<span class="tl-kw">print</span>(blob.sentiment)    <span class="tl-cmt"># Sentiment(polarity=0.525, subjectivity=0.6)</span>
+<span class="tl-kw">print</span>(blob.noun_phrases) <span class="tl-cmt"># WordList(['new product'])</span></code></pre>
         </div>
         <div class="vs-code-block">
           <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
           <pre><code><span class="tl-kw">import</span> requests
-result = requests.post(
+resp = requests.post(
     <span class="tl-str">"https://api.ckmtools.dev/v1/analyze"</span>,
-    headers={<span class="tl-str">"X-API-Key"</span>: <span class="tl-str">"your_key"</span>},
-    json={<span class="tl-str">"text"</span>: <span class="tl-str">"Your text..."</span>}
-).json()
-grade     = result[<span class="tl-str">"readability"</span>][<span class="tl-str">"consensus_grade"</span>]
-sentiment = result[<span class="tl-str">"sentiment"</span>][<span class="tl-str">"label"</span>]
-keywords  = result[<span class="tl-str">"keywords"</span>][<span class="tl-str">"top_5"</span>]
-seo       = result[<span class="tl-str">"seo"</span>][<span class="tl-str">"score"</span>]</code></pre>
-          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;">All content metrics in one HTTP call. Works in Python, Ruby, Go — any language.</p>
+    headers={<span class="tl-str">"X-API-Key"</span>: <span class="tl-str">"YOUR_KEY"</span>},
+    json={<span class="tl-str">"text"</span>: <span class="tl-str">"The new product is absolutely amazing!"</span>}
+)
+data = resp.json()
+<span class="tl-kw">print</span>(data[<span class="tl-str">"sentiment"</span>])  <span class="tl-cmt"># {"score": 0.82, "label": "positive"}</span>
+<span class="tl-kw">print</span>(data[<span class="tl-str">"keywords"</span>])   <span class="tl-cmt"># [{"word": "product", "score": 0.91}]</span></code></pre>
         </div>
       </div>
-    </section>
-
-    <!-- Different tools section -->
-    <section class="vs-section" aria-label="Different tools for different jobs">
-      <h2>Different tools for different jobs</h2>
-      <div class="vs-context-grid">
-        <div class="vs-context-card">
-          <h3>TextBlob</h3>
-          <p>Mature library built on NLTK. Real strength is linguistic analysis — POS tagging, noun phrases, inflection, translation. Requires NLTK corpus downloads (150MB+) but one-time.</p>
-          <p>No readability scoring. No keyword relevance. Python-only.</p>
-        </div>
-        <div class="vs-context-card">
-          <h3>TextLens API</h3>
-          <p>Focused on content quality metrics. Readability scoring (8 formulas), keyword relevance, SEO quality. Does not do POS tagging or noun phrase extraction.</p>
-          <p>Works across languages via HTTP. No dependencies to install.</p>
-        </div>
-      </div>
+      <p style="color:var(--text-secondary);font-size:0.875rem;margin:16px 0 0;line-height:1.6;">TextBlob requires a Python environment, <code>pip install textblob</code>, and an NLTK corpus download before it runs. TextLens API is one POST request — any language, no install, no environment to manage.</p>
     </section>
 
     <!-- When to use each -->
     <section class="vs-section" aria-label="When to use each tool">
-      <h2>When to use each</h2>
+      <h2>Which one to use</h2>
       <div class="vs-use-grid">
         <div class="vs-use-card">
-          <h3>When to use TextBlob</h3>
+          <h3>Use TextBlob when:</h3>
           <ul>
-            <li>POS tagging, noun phrase extraction, word inflection</li>
-            <li>Translation and language detection</li>
-            <li>Subjectivity scoring alongside sentiment</li>
-            <li>Python-only projects where HTTP adds overhead</li>
+            <li>You need POS tagging, noun phrase extraction, or word inflection</li>
+            <li>You need subjectivity scoring alongside sentiment polarity</li>
+            <li>Your entire stack is Python with no HTTP overhead concern</li>
+            <li>You want a mature open-source library with no API key</li>
           </ul>
         </div>
         <div class="vs-use-card">
-          <h3>When to use TextLens API</h3>
+          <h3>Use TextLens API when:</h3>
           <ul>
-            <li>Readability scoring (TextBlob has none)</li>
-            <li>Keyword extraction with relevance scores</li>
-            <li>SEO quality indicators for content</li>
-            <li>Multi-language stack — avoid NLTK dependency</li>
+            <li>You need text analysis from Ruby, Go, PHP, JavaScript, or any non-Python language</li>
+            <li>You want zero install — no pip, no NLTK corpus, no venv to maintain</li>
+            <li>Your workload needs concurrent requests without managing Python processes</li>
+            <li>You need readability scoring, keyword extraction, or SEO metrics TextBlob doesn't provide</li>
           </ul>
         </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="vs-section" aria-label="Pricing comparison">
+      <h2>Pricing</h2>
+      <div class="vs-pricing-note">
+        <p>TextBlob is free and open-source — but "free" means you pay in infrastructure, Python environment management, NLTK corpus maintenance, and single-process scaling limits. TextLens API charges a flat monthly rate: Free (1,000 req/mo), Starter $9/mo (25,000 req), Pro $29/mo (100,000 req), Enterprise $99/mo (500,000 req).</p>
+        <p>For teams running text analysis across multiple services or languages, or processing batches concurrently, the operational overhead of running TextBlob at scale often exceeds the cost of a SaaS API tier.</p>
+        <p class="disclaimer">TextBlob is open-source software. Infrastructure and operational costs vary by deployment. TextLens API pricing is subject to change — check the <a href="/api/#pricing" style="color:var(--color-secondary);">pricing section</a> for current rates.</p>
       </div>
     </section>
 
@@ -409,12 +364,16 @@ seo       = result[<span class="tl-str">"seo"</span>][<span class="tl-str">"scor
     <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
       <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
-      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96/week npm downloads.</p>
-      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
-      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 1,073 npm downloads last month.</p>
+      <a href="https://buy.stripe.com/plink_1TBlI6DpqJfa4oQbbuRqwXzJ" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Try TextLens API free — no pip install needed</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
     </section>
-    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 16px;">
-      Also comparing: <a href="/api/vs-vader/" style="color:#00E5A0;">VADER vs TextLens API &rarr;</a>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 8px;">
+      Also comparing: <a href="/api/vs-vader/" style="color:#00E5A0;">VADER vs TextLens API &rarr;</a> &nbsp;&middot;&nbsp; <a href="/api/vs-spacy/" style="color:#00E5A0;">spaCy vs TextLens API &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 16px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all comparisons &rarr;</a>
     </p>
   </main>
 
