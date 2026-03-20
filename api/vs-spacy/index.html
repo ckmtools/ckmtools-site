@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="spaCy is a production NLP pipeline for POS tagging, NER, and dependency parsing. TextLens API adds readability scoring (8 formulas), sentiment, and keywords from a REST endpoint — no model downloads, works in any language.">
-  <title>spaCy vs TextLens API — NLP Pipeline vs Content Quality Metrics</title>
+  <meta name="description" content="spaCy requires 20MB–560MB model downloads and is Python-only. TextLens API is a zero-install HTTP call from any language. Compare readability, sentiment, and keyword extraction.">
+  <title>spaCy vs TextLens API — NLP in Python Without the Model Downloads</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="spaCy vs TextLens API — NLP Pipeline vs Content Quality Metrics">
-  <meta property="og:description" content="spaCy is a production NLP pipeline for POS tagging, NER, and dependency parsing. TextLens API adds readability scoring (8 formulas), sentiment, and keywords from a REST endpoint — no model downloads, works in any language.">
+  <meta property="og:title" content="spaCy vs TextLens API — NLP in Python Without the Model Downloads">
+  <meta property="og:description" content="spaCy requires 20MB–560MB model downloads and is Python-only. TextLens API is a zero-install HTTP call from any language. Compare readability, sentiment, and keyword extraction.">
   <meta property="og:url" content="https://ckmtools.dev/api/vs-spacy/">
   <meta property="og:site_name" content="ckmtools">
   <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-spacy-og.png">
   <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-spacy-og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="spaCy vs TextLens API — NLP Pipeline vs Content Quality Metrics">
-  <meta name="twitter:description" content="spaCy is a production NLP pipeline for POS tagging, NER, and dependency parsing. TextLens API adds readability scoring (8 formulas), sentiment, and keywords from a REST endpoint — no model downloads, works in any language.">
+  <meta name="twitter:title" content="spaCy vs TextLens API — NLP in Python Without the Model Downloads">
+  <meta name="twitter:description" content="spaCy requires 20MB–560MB model downloads and is Python-only. TextLens API is a zero-install HTTP call from any language.">
   <link rel="canonical" href="https://ckmtools.dev/api/vs-spacy/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
@@ -228,7 +228,7 @@
         </p>
       </nav>
       <h1>spaCy vs TextLens API</h1>
-      <p class="tagline">spaCy is a production-grade NLP pipeline for linguistic analysis. TextLens API covers the content quality side — readability grades, sentiment scoring, keyword extraction, and SEO metrics — from a REST endpoint that works in Python, Ruby, Go, or any language.</p>
+      <p class="tagline">spaCy is the gold standard for NLP pipelines. TextLens API is the zero-install alternative for readability, sentiment, and keywords.</p>
       <a href="#waitlist" class="vs-jump">Join the waitlist &darr;</a>
     </section>
 
@@ -246,12 +246,27 @@
           </thead>
           <tbody>
             <tr>
-              <td>Named entity recognition (NER)</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td>Install size</td>
+              <td>20MB–560MB (models)</td>
+              <td>Zero install</td>
             </tr>
             <tr>
-              <td>Part-of-speech tagging</td>
+              <td>Languages supported</td>
+              <td>Python only</td>
+              <td>Any language with HTTP</td>
+            </tr>
+            <tr>
+              <td>Readability scores (Flesch-Kincaid, SMOG, Gunning Fog)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td>&#10007; (not built-in)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Named Entity Recognition</td>
               <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
               <td><span class="vs-no" aria-label="No">&#10007;</span></td>
             </tr>
@@ -261,64 +276,24 @@
               <td><span class="vs-no" aria-label="No">&#10007;</span></td>
             </tr>
             <tr>
-              <td>Text classification (custom)</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td>Keyword extraction</td>
+              <td>&#10003; (noun chunks)</td>
+              <td>&#10003; (TF-IDF)</td>
             </tr>
             <tr>
-              <td>Readability scoring (8 formulas)</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Consensus readability grade</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Sentiment analysis</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span> (requires custom model)</td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>TF-IDF keyword extraction</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>SEO scoring</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Reading time estimate</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>Works in Ruby, Go, PHP</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>No model downloads (100MB–560MB)</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
-            </tr>
-            <tr>
-              <td>No GPU or venv setup required</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td>REST API</td>
+              <td>&#10007; (Python library)</td>
               <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
             </tr>
             <tr>
               <td>Free tier</td>
-              <td>Free (Apache 2.0)</td>
-              <td>1,000 req/mo</td>
+              <td>Open source</td>
+              <td>1,000 req/month</td>
             </tr>
             <tr>
-              <td>All content metrics in one call</td>
-              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
-              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td>Model download required</td>
+              <td>Yes (en_core_web_sm = 12MB, en_core_web_lg = 560MB)</td>
+              <td>No</td>
             </tr>
           </tbody>
         </table>
@@ -331,47 +306,26 @@
       <div class="vs-code-compare">
         <div class="vs-code-block">
           <h3>spaCy <span class="vs-lang-tag">Python</span></h3>
-          <pre><code><span class="tl-cmt"># pip install spacy</span>
-<span class="tl-cmt"># python -m spacy download en_core_web_sm  (12MB–560MB)</span>
-<span class="tl-kw">import</span> spacy
-
-nlp = spacy.load(<span class="tl-str">"en_core_web_sm"</span>)
-doc = nlp(<span class="tl-str">"Your text here..."</span>)
-
-<span class="tl-cmt"># Linguistic analysis</span>
-entities = [(ent.text, ent.label_) <span class="tl-kw">for</span> ent <span class="tl-kw">in</span> doc.ents]
-tokens = [(t.text, t.pos_) <span class="tl-kw">for</span> t <span class="tl-kw">in</span> doc]
-
-<span class="tl-cmt"># No readability scores</span>
-<span class="tl-cmt"># No content quality metrics</span>
-<span class="tl-cmt"># No SEO scoring</span></code></pre>
-          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;line-height:1.5;">spaCy gives you deep linguistic structure. Model download required. No readability grades.</p>
+          <pre><code><span class="tl-kw">import</span> spacy
+<span class="tl-cmt"># Requires: pip install spacy &amp;&amp; python -m spacy download en_core_web_sm</span>
+nlp = spacy.load(<span class="tl-str">'en_core_web_sm'</span>)  <span class="tl-cmt"># 12MB download</span>
+doc = nlp(text)
+<span class="tl-cmt"># No built-in readability scores</span>
+<span class="tl-cmt"># Sentiment requires textblob or custom component</span>
+<span class="tl-kw">for</span> token <span class="tl-kw">in</span> doc:
+    print(token.lemma_, token.pos_)</code></pre>
         </div>
         <div class="vs-code-block">
-          <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <h3>TextLens API <span class="vs-lang-tag">Any language</span></h3>
           <pre><code><span class="tl-kw">import</span> requests
-
-result = requests.post(
-    <span class="tl-str">"https://api.ckmtools.dev/v1/analyze"</span>,
-    headers={<span class="tl-str">"X-API-Key"</span>: <span class="tl-str">"your_key"</span>},
-    json={<span class="tl-str">"text"</span>: <span class="tl-str">"Your text here..."</span>}
-).json()
-
-grade    = result[<span class="tl-str">"readability"</span>][<span class="tl-str">"consensus_grade"</span>]
-sentiment = result[<span class="tl-str">"sentiment"</span>][<span class="tl-str">"label"</span>]
-keywords = result[<span class="tl-str">"keywords"</span>][<span class="tl-str">"top_5"</span>]
-seo      = result[<span class="tl-str">"seo"</span>][<span class="tl-str">"score"</span>]</code></pre>
-          <p style="color:var(--text-secondary);font-size:0.875rem;margin:12px 0 0;line-height:1.5;">All content quality metrics in one HTTP call. No model download. Works in any language.</p>
+r = requests.post(<span class="tl-str">'https://api.textlens.dev/v1/analyze'</span>,
+  headers={<span class="tl-str">'X-API-Key'</span>: <span class="tl-str">'your-key'</span>},
+  json={<span class="tl-str">'text'</span>: text})
+result = r.json()
+print(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'flesch_kincaid_grade'</span>])
+print(result[<span class="tl-str">'sentiment'</span>][<span class="tl-str">'label'</span>])  <span class="tl-cmt"># positive/neutral/negative</span>
+print(result[<span class="tl-str">'keywords'</span>][:5])</code></pre>
         </div>
-      </div>
-    </section>
-
-    <!-- Context section -->
-    <section class="vs-section" aria-label="Context">
-      <h2>Different tools, different jobs</h2>
-      <div class="vs-context">
-        <p>spaCy is world-class for linguistic structure: named entity recognition, dependency parsing, part-of-speech tagging. It powers production information extraction pipelines and nothing else comes close for those tasks. But spaCy is not designed for content quality metrics — there is no readability formula, no grade level estimate, no SEO scoring. The models range from 12MB (<code>en_core_web_sm</code>) to 560MB (<code>en_core_web_trf</code>).</p>
-        <p>TextLens API focuses on different questions: Is this text readable for your target audience? What grade level does it require? What keywords does it emphasize? How does it score for SEO quality? These are content metrics, not linguistic structure. It works as a REST endpoint — no model download, no venv, no language requirement.</p>
       </div>
     </section>
 
@@ -382,23 +336,52 @@ seo      = result[<span class="tl-str">"seo"</span>][<span class="tl-str">"score
         <div class="vs-use-card">
           <h3>When to use spaCy</h3>
           <ul>
-            <li>Named entity recognition (people, organizations, locations, dates)</li>
-            <li>Part-of-speech tagging and dependency parsing</li>
-            <li>Building information extraction pipelines</li>
-            <li>Custom ML model training on text</li>
-            <li>Python-only projects where model download is acceptable</li>
-            <li>High-volume local batch NLP processing</li>
+            <li>Full NLP pipelines requiring deep linguistic analysis</li>
+            <li>Named Entity Recognition across documents</li>
+            <li>Dependency parsing and part-of-speech tagging</li>
+            <li>Custom model training on your own corpus</li>
+            <li>spaCy is outstanding for these use cases</li>
           </ul>
         </div>
         <div class="vs-use-card">
           <h3>When to use TextLens API</h3>
           <ul>
-            <li>Readability scoring for content — spaCy has none</li>
-            <li>Content quality metrics for blogs, docs, marketing copy</li>
-            <li>Multi-language stack (Python + Ruby, Go, etc.)</li>
-            <li>Serverless functions where 100MB+ model files hit size limits</li>
-            <li>You want sentiment + keywords + SEO scoring in one call</li>
+            <li>Readability scoring, content quality, sentiment analysis</li>
+            <li>Your stack is Node, Ruby, Go, or PHP — not Python</li>
+            <li>No model downloads or GPU required</li>
+            <li>You want a REST endpoint, not a library to maintain</li>
+            <li>Results from any runtime in milliseconds</li>
           </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use both together -->
+    <section class="vs-section" aria-label="Use both together">
+      <h2>Use both together</h2>
+      <p style="color:var(--text-secondary);margin-bottom:24px;">spaCy for NER + parsing. TextLens API for readability + sentiment.</p>
+      <div class="vs-code-compare" style="grid-template-columns:1fr;">
+        <div class="vs-code-block">
+          <h3>spaCy + TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> spacy
+<span class="tl-kw">import</span> requests
+
+nlp = spacy.load(<span class="tl-str">'en_core_web_sm'</span>)
+text = <span class="tl-str">"Your document text here."</span>
+
+<span class="tl-cmt"># spaCy: NER and dependency parsing</span>
+doc = nlp(text)
+entities = [(ent.text, ent.label_) <span class="tl-kw">for</span> ent <span class="tl-kw">in</span> doc.ents]
+
+<span class="tl-cmt"># TextLens API: readability and sentiment</span>
+r = requests.post(<span class="tl-str">'https://api.textlens.dev/v1/analyze'</span>,
+  headers={<span class="tl-str">'X-API-Key'</span>: <span class="tl-str">'your-key'</span>},
+  json={<span class="tl-str">'text'</span>: text})
+result = r.json()
+
+print(entities)
+print(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'flesch_kincaid_grade'</span>])
+print(result[<span class="tl-str">'sentiment'</span>][<span class="tl-str">'label'</span>])</code></pre>
         </div>
       </div>
     </section>
@@ -407,16 +390,19 @@ seo      = result[<span class="tl-str">"seo"</span>][<span class="tl-str">"score
     <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
       <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
-      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96/week npm downloads.</p>
-      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — the zero-dependency npm package that powers the API.</p>
+      <a href="https://ckmtools.dev/api/" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Learn More &amp; Join the Waitlist</a>
       <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
     </section>
-    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 16px;">
-      Also comparing: <a href="/api/vs-nltk/" style="color:#00E5A0;">NLTK vs TextLens API &rarr;</a>
-    </p>
   </main>
 
   <footer class="site-footer">
+    <p>
+      <a href="/api/">TextLens API</a> &middot;
+      <a href="/api/vs-textstat/">vs textstat</a> &middot;
+      <a href="/api/vs-google-nlp/">vs Google NLP</a> &middot;
+      <a href="/api/alternatives/">All comparisons</a>
+    </p>
     <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
   </footer>
 </body>
