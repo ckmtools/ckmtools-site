@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Add readability scoring, sentiment analysis, and keyword extraction to your pandas DataFrame in 5 lines. No model to deploy. No GPU. No cold starts. REST API that works with requests, httpx, or any HTTP client.">
+  <title>TextLens API for Data Engineers — Text Analysis for Python Pipelines</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens API for Data Engineers — Text Analysis for Python Pipelines">
+  <meta property="og:description" content="Add readability scoring, sentiment analysis, and keyword extraction to your pandas DataFrame in 5 lines. No model to deploy. No GPU. No cold starts.">
+  <meta property="og:url" content="https://ckmtools.dev/api/for-data-engineers/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-for-data-engineers-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-for-data-engineers-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TextLens API for Data Engineers — Text Analysis for Python Pipelines">
+  <meta name="twitter:description" content="Add readability scoring, sentiment analysis, and keyword extraction to your pandas DataFrame in 5 lines. No model to deploy. No GPU. No cold starts.">
+  <link rel="canonical" href="https://ckmtools.dev/api/for-data-engineers/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .api-hero {
+      text-align: center;
+      padding: 80px 24px 64px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .api-hero h1 { font-size: 2rem; margin-bottom: 12px; }
+    .api-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 32px;
+    }
+    .api-hero pre {
+      max-width: 620px;
+      margin: 0 auto 24px;
+      text-align: left;
+    }
+    .hero-social-proof {
+      color: #8B949E;
+      font-size: 0.875rem;
+      margin: 0 0 24px;
+      text-align: center;
+    }
+    .breadcrumb {
+      font-size: 0.8125rem;
+      color: #8B949E;
+      margin-bottom: 16px;
+    }
+    .breadcrumb a { color: #8B949E; text-decoration: none; }
+    .breadcrumb a:hover { color: #00E5A0; }
+    .breadcrumb span { margin: 0 6px; }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .hero-note {
+      color: #484F58;
+      font-size: 0.8rem;
+      margin: 12px 0 0;
+    }
+    .api-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 64px;
+    }
+    .api-section h2 { margin-bottom: 24px; }
+    .section-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-size: 0.9375rem;
+    }
+
+    /* Comparison table */
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      display: block;
+    }
+    .compare-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-primary);
+      padding: 10px 14px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .compare-table thead th:last-child {
+      color: var(--color-primary);
+    }
+    .compare-table tbody td {
+      padding: 10px 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    .compare-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .compare-table tbody td:last-child {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+    .compare-table tbody tr:last-child td { border-bottom: none; }
+    .table-caption {
+      color: #8B949E;
+      font-size: 0.8125rem;
+      margin-top: 12px;
+      line-height: 1.6;
+    }
+    .table-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow-x: auto;
+      overflow-y: hidden;
+      margin-bottom: 16px;
+    }
+
+    /* Feature cards */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+    }
+    .feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      font-size: 1.0625rem;
+    }
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+    }
+
+    /* Code block with label */
+    .example-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .example-block-header {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+    }
+    .example-label {
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+    }
+    .example-block pre {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+    }
+    .example-caption {
+      padding: 12px 20px;
+      color: #8B949E;
+      font-size: 0.8125rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Deterministic callout */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--color-primary);
+      border-radius: 0 8px 8px 0;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .callout p {
+      color: var(--text-secondary);
+      margin: 0;
+      font-size: 0.9375rem;
+      line-height: 1.7;
+    }
+    .callout p + p { margin-top: 12px; }
+
+    /* CTA section */
+    .waitlist-cta {
+      background: #161B22;
+      border: 1px solid #30363D;
+      border-radius: 8px;
+      padding: 48px 32px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 64px;
+    }
+    .waitlist-cta h2 {
+      color: #E6EDF3;
+      margin: 0 0 12px;
+    }
+    .waitlist-cta p {
+      color: #8B949E;
+      margin: 0 0 24px;
+    }
+
+    @media (min-width: 640px) {
+      .api-hero { padding: 120px 24px 80px; }
+      .api-hero h1 { font-size: 2.5rem; }
+      .feature-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 900px) {
+      .feature-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .api-hero { padding: 48px 20px 40px; }
+      .api-hero h1 { font-size: 1.75rem; }
+      .api-section { padding: 0 16px 48px; }
+      .waitlist-cta { padding: 32px 20px; margin: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "TextLens API",
+    "description": "Readability scoring, sentiment analysis, and TF-IDF keyword extraction for Python data pipelines. No model to deploy, no GPU required.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/api/for-data-engineers/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/">TextLens API</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="api-hero">
+      <div class="breadcrumb">
+        <a href="/">ckmtools</a>
+        <span>&rsaquo;</span>
+        <a href="/api/">TextLens API</a>
+        <span>&rsaquo;</span>
+        for Data Engineers
+      </div>
+      <h1>TextLens API for Data Engineers</h1>
+      <p class="tagline">Process text columns in your pandas DataFrames with one API call. Readability grades, AFINN sentiment, TF-IDF keywords — no model to deploy, no GPU to manage, no cold starts.</p>
+      <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads/week</p>
+      <pre><code>import pandas as pd
+import requests
+
+df = pd.read_csv("reviews.csv")
+
+def analyze(text):
+    return requests.post(
+        "https://api.ckmtools.dev/v1/analyze",
+        headers={"X-API-Key": TEXTLENS_KEY},
+        json={"text": text}
+    ).json()
+
+# Analyze 10,000 reviews — no model required
+df["sentiment"] = df["text"].apply(lambda t: analyze(t)["sentiment"]["label"])
+df["grade"]     = df["text"].apply(lambda t: analyze(t)["readability"]["consensus_grade"])
+df["keywords"]  = df["text"].apply(lambda t: analyze(t)["keywords"]["top_5"])</code></pre>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the Waitlist</a>
+      <p class="hero-note">Free tier: 1,000 req/month. No credit card required.</p>
+    </section>
+
+    <!-- Why not spaCy / TextBlob / VADER? -->
+    <section class="api-section">
+      <h2>Why not spaCy / TextBlob / VADER?</h2>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>spaCy</th>
+              <th>TextBlob</th>
+              <th>VADER</th>
+              <th>TextLens API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Readability formulas</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>8 formulas</td>
+            </tr>
+            <tr>
+              <td>Sentiment</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes (AFINN)</td>
+            </tr>
+            <tr>
+              <td>Keywords (TF-IDF)</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Install size</td>
+              <td>20MB–560MB + model</td>
+              <td>100MB+</td>
+              <td>5MB</td>
+              <td>Zero (HTTP call)</td>
+            </tr>
+            <tr>
+              <td>Deterministic output</td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Works in Lambda/serverless</td>
+              <td>Complex</td>
+              <td>Complex</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-caption">All three Python libraries are excellent. TextLens API is not a replacement — it is the option when you want deterministic readability scores AND sentiment AND keyword extraction from one endpoint without installing NLP model files.</p>
+    </section>
+
+    <!-- Use cases -->
+    <section class="api-section">
+      <h2>What data engineers use it for</h2>
+      <div class="feature-grid">
+        <div class="feature-card">
+          <h3>Content quality scoring pipelines</h3>
+          <p>Score readability of articles or product descriptions. Flesch-Kincaid, Gunning Fog, SMOG, consensus grade in one call.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Pre-training data filtering</h3>
+          <p>Filter training corpus by sentiment or readability before fine-tuning. Remove low-quality samples without running a full NLP pipeline.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Feature engineering</h3>
+          <p>Add <code>readability_grade</code>, <code>sentiment_score</code>, <code>keyword_count</code> as features in your classification pipeline.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deterministic section -->
+    <section class="api-section">
+      <h2>Deterministic, not ML</h2>
+      <div class="callout">
+        <p>TextLens API uses algorithmic formulas (Flesch-Kincaid, Dale-Chall, Gunning Fog) and AFINN word lists — not ML models. Same input always returns the same output. Easy to unit test. No model versioning issues. No concept drift.</p>
+        <p>If you need named entity recognition or dependency parsing, use spaCy. If you need readability + sentiment + TF-IDF keywords without model dependencies, TextLens API covers all three.</p>
+      </div>
+    </section>
+
+    <!-- Batch processing -->
+    <section class="api-section">
+      <h2>Batch processing</h2>
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">batch_analyze.py &mdash; threaded with rate limiting</span>
+        </div>
+        <pre><code>import time, requests
+from concurrent.futures import ThreadPoolExecutor
+
+def analyze_batch(texts, api_key, max_workers=5, delay=0.1):
+    def analyze_one(text):
+        time.sleep(delay)
+        r = requests.post("https://api.ckmtools.dev/v1/analyze",
+            headers={"X-API-Key": api_key}, json={"text": text})
+        return r.json()
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        return list(pool.map(analyze_one, texts))
+
+results = analyze_batch(df["review_text"].tolist(), api_key=TEXTLENS_KEY)</code></pre>
+        <div class="example-caption">Free tier: 1,000 req/mo. Starter $9/mo: 10k requests. Pro $29/mo: 100k requests — processes a 100k-row DataFrame in ~30 minutes at max concurrency.</div>
+      </div>
+    </section>
+
+    <!-- vs AWS Comprehend -->
+    <section class="api-section">
+      <h2>vs AWS Comprehend</h2>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>AWS Comprehend</th>
+              <th>TextLens API Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>100,000 requests</td>
+              <td>~$50 (at 500 chars/call)</td>
+              <td>$29/month</td>
+            </tr>
+            <tr>
+              <td>Readability scoring</td>
+              <td>Not available</td>
+              <td>8 formulas</td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td>Not available</td>
+              <td>TF-IDF included</td>
+            </tr>
+            <tr>
+              <td>Pricing model</td>
+              <td>Per character</td>
+              <td>Flat monthly</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-caption">AWS Comprehend pricing estimates are approximate — see <a href="https://aws.amazon.com/comprehend/pricing" style="color:#8B949E;">aws.amazon.com/comprehend/pricing</a>.</p>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <div class="waitlist-cta" id="waitlist">
+      <h2>No model to deploy. No GPU to manage.</h2>
+      <p>Drop TextLens into your data pipeline in 5 minutes. 1,000 free requests, no credit card.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Notify Me When It Launches</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+    </div>
+
+    <!-- Cross-links -->
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:0 0 8px;">
+      General Python examples? <a href="/api/for-python/" style="color:#00E5A0;">See Python-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
+      <a href="/api/" style="color:#00E5A0;">&larr; Back to TextLens API</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>
