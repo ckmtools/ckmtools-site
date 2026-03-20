@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>envscan for Docker — Audit Environment Variables Before Containers Fail</title>
+  <meta name="description" content="Docker deployments fail silently when env vars are missing. envscan scans your Node.js source and docker-compose.yml to find every process.env reference and flags missing ones.">
+  <meta name="keywords" content="docker env vars, docker-compose environment variables, node env validation, docker environment audit, envscan docker, container env check">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/for-docker/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envscan for Docker — Audit Environment Variables Before Containers Fail">
+  <meta property="og:description" content="Docker deployments fail silently when env vars are missing. envscan scans your Node.js source and docker-compose.yml to find every process.env reference and flags missing ones.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/for-docker/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-for-docker-og.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envscan for Docker — Audit Environment Variables Before Containers Fail">
+  <meta name="twitter:description" content="Docker containers fail at runtime when env vars are missing. envscan audits your source and docker-compose.yml before you push.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-for-docker-og.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code and docker-compose.yml to audit environment variables before container deployments fail.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/for-docker/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* envscan for Docker — page-specific styles */
+    .esd-hero {
+      padding-bottom: 48px;
+    }
+    .esd-breadcrumb {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .esd-breadcrumb a {
+      color: var(--text-secondary);
+    }
+    .esd-breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+    .esd-terminal {
+      max-width: 600px;
+      margin: 0 auto 28px;
+      text-align: left;
+    }
+    .esd-terminal .prompt {
+      color: var(--text-tertiary);
+      user-select: none;
+    }
+    .esd-terminal .out-ok {
+      color: var(--text-secondary);
+    }
+    .esd-terminal .out-warn {
+      color: var(--color-warning);
+    }
+    .esd-terminal .out-label {
+      color: var(--color-primary);
+    }
+    .esd-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .esd-section h2 {
+      margin-bottom: 16px;
+    }
+    .esd-desc {
+      color: var(--text-secondary);
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .esd-problem-body {
+      max-width: var(--max-width-prose);
+    }
+    .esd-problem-body p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1em;
+    }
+    .esd-problem-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Feature cards (3-col) */
+    .esd-features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .esd-feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .esd-feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 10px;
+      font-size: 1.0625rem;
+    }
+    .esd-feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Code caption */
+    .esd-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: -12px;
+      margin-bottom: 0;
+      max-width: var(--max-width-prose);
+      line-height: 1.6;
+    }
+
+    /* Waitlist CTA block */
+    .esd-waitlist {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .esd-waitlist h2 {
+      margin-bottom: 12px;
+    }
+    .esd-waitlist p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 640px) {
+      .esd-hero {
+        padding-bottom: 56px;
+      }
+      .esd-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 639px) {
+      .hero.esd-hero {
+        padding-top: 48px;
+      }
+      .esd-terminal code {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .esd-section {
+        padding: 0 16px 48px;
+      }
+      .esd-waitlist {
+        margin: 0 16px 48px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero esd-hero">
+      <p class="esd-breadcrumb">
+        <a href="/">ckmtools</a> /
+        <a href="/envscan/">envscan</a> /
+        for Docker
+      </p>
+      <h1>envscan for Docker</h1>
+      <p class="tagline">Docker containers fail at runtime when env vars are missing — not at build time. envscan scans your source files and docker-compose.yml before you push, so every required var is documented in .env.example before the container starts.</p>
+
+      <pre class="esd-terminal"><code><span class="prompt">$</span> envscan scan --include-yaml docker-compose.yml .
+<span class="out-label">Found 9 environment variables:</span>
+<span class="out-ok">  DATABASE_URL     type: url     src/db.ts:12</span>
+<span class="out-ok">  PORT             type: number  src/server.ts:5</span>
+<span class="out-ok">  JWT_SECRET       type: secret  src/auth.ts:8</span>
+<span class="out-ok">  REDIS_URL        type: url     src/cache.ts:3</span>
+<span class="out-ok">  SMTP_HOST        type: string  src/mailer.ts:15</span>
+<span class="out-ok">  docker-compose:  POSTGRES_PASSWORD, POSTGRES_USER, POSTGRES_DB, APP_PORT</span>
+
+<span class="out-warn">Missing from .env.example: JWT_SECRET, REDIS_URL (2/9 undocumented)</span>
+<span class="out-warn">Exit code: 1</span></code></pre>
+
+      <div style="margin-top: 4px;">
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the waitlist</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:8px 0 0;">Free — we'll email you when it launches</p>
+      </div>
+    </section>
+
+    <!-- The problem -->
+    <section class="esd-section" aria-label="Why Docker deployments break on missing env vars">
+      <h2>Why Docker deployments break on missing env vars</h2>
+      <div class="esd-problem-body">
+        <p>Docker containers exit when a required env var is missing — and the error is often cryptic. "Cannot read property 'host' of undefined" is almost always a missing <code>DATABASE_URL</code>. The container starts, tries to connect, and crashes without telling you why.</p>
+        <p><code>docker-compose.yml</code> references env vars from your host, <code>.env</code> files, and service definitions. They rarely agree with what your Node.js code actually uses. A variable declared under <code>environment:</code> in Compose may not match what <code>process.env</code> references in your source — and nothing checks this at build time.</p>
+        <p>Manual audit: <code>grep -r "process.env"</code> across your codebase, cross-reference with <code>.env.example</code>, repeat for every new engineer who joins. envscan makes it one command that covers both source files and Compose definitions.</p>
+        <p>Add it to your Docker build check and fail fast before the image gets pushed. Catch the gap on your laptop, not in staging.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="esd-section" aria-label="What envscan finds in Docker projects">
+      <h2>What envscan finds in Docker projects</h2>
+      <div class="esd-features-grid">
+        <div class="esd-feature-card">
+          <h3>Source file scanning</h3>
+          <p>Parses every <code>.js</code> and <code>.ts</code> file for <code>process.env.VAR_NAME</code> references. Infers type: <code>_PORT</code> → number, <code>_SECRET</code> / <code>_KEY</code> / <code>_TOKEN</code> → secret (redacted in output), <code>_URL</code> → url, <code>_HOST</code> / <code>_PATH</code> → string.</p>
+        </div>
+        <div class="esd-feature-card">
+          <h3>docker-compose.yml support</h3>
+          <p>Pass <code>--include-yaml</code> and envscan scans your Compose file for <code>environment:</code> blocks, <code>env_file:</code> references, and <code>${VAR}</code> substitution patterns. Maps each variable to service name and line number for easy cross-referencing.</p>
+        </div>
+        <div class="esd-feature-card">
+          <h3>.env.example generation</h3>
+          <p>Generates a documented <code>.env.example</code> with inline comments showing where each var is used. Secret vars are redacted automatically. Run in CI to fail when new vars are added without documentation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Docker build check -->
+    <section class="esd-section" aria-label="Add it to your Docker workflow">
+      <h2>Add it to your Docker workflow</h2>
+      <pre><code><span class="tl-cmt"># Makefile target</span>
+check-env:
+	npx envscan scan --include-yaml docker-compose.yml . --fail-on-undocumented
+
+<span class="tl-cmt"># Run before docker build</span>
+docker-build: check-env
+	docker build -t myapp .
+	docker push myapp:latest</code></pre>
+      <p class="esd-code-caption">Add envscan to your pre-build step. When a developer adds <code>process.env.NEW_SECRET</code> without updating <code>.env.example</code>, the build fails with a clear error — before the image is built or pushed.</p>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section class="esd-section" aria-label="Join the waitlist" id="waitlist">
+      <div class="esd-waitlist">
+        <h2>Join the waitlist</h2>
+        <p>envscan is in development. Join the waitlist and we'll email you when it's ready. Free tier planned: unlimited repo scans, docker-compose.yml support, GitHub Actions CI check.</p>
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Notify Me When It's Ready</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">Free — no credit card required</p>
+      </div>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 32px;">
+      <a href="/envscan/" style="color:#00E5A0;">&larr; Back to envscan overview</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>

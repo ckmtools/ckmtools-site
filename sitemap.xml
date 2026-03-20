@@ -150,6 +150,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://ckmtools.dev/envscan/for-docker/</loc>
+    <lastmod>2026-03-20</lastmod>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://ckmtools.dev/api/for-ruby/</loc>
     <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
