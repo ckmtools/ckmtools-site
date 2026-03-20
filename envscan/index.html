@@ -262,6 +262,22 @@
         grid-template-columns: repeat(3, 1fr);
       }
     }
+
+    @media (max-width: 639px) {
+      /* Tighten hero on mobile so CTA lands high above the fold */
+      .hero.es-hero {
+        padding-top: 48px;
+      }
+      /* Hide the redundant "launching soon" comment — CTA button below says the same thing */
+      .es-install {
+        display: none;
+      }
+      /* Wrap long comment lines instead of requiring horizontal scroll */
+      .es-quickstart code {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+    }
   </style>
 </head>
 <body>
