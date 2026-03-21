@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>envscan for Kubernetes — Audit Environment Variables Before Pods Fail</title>
+  <meta name="description" content="Kubernetes Pods crash silently when env vars are missing from ConfigMaps or Secrets. envscan scans your Node.js source to find every process.env reference and generates a documented .env.example — before kubectl apply.">
+  <meta name="keywords" content="kubernetes env vars, configmap environment variables, node env validation, kubernetes environment audit, envscan kubernetes, pod env check, crashloopbackoff env vars">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/for-kubernetes/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envscan for Kubernetes — Audit Environment Variables Before Pods Fail">
+  <meta property="og:description" content="Kubernetes Pods crash silently when env vars are missing from ConfigMaps or Secrets. envscan scans your Node.js source to find every process.env reference and generates a documented .env.example — before kubectl apply.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/for-kubernetes/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-for-kubernetes-og.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envscan for Kubernetes — Audit Environment Variables Before Pods Fail">
+  <meta name="twitter:description" content="Kubernetes Pods crash silently when env vars are missing from ConfigMaps or Secrets. envscan finds every process.env reference before kubectl apply.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-for-kubernetes-og.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code to audit environment variables before Kubernetes Pod deployments fail. Finds every process.env reference and flags vars missing from ConfigMaps or Secrets.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/for-kubernetes/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* envscan for Kubernetes — page-specific styles */
+    .esk-hero {
+      padding-bottom: 48px;
+    }
+    .esk-breadcrumb {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .esk-breadcrumb a {
+      color: var(--text-secondary);
+    }
+    .esk-breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+    .esk-terminal {
+      max-width: 620px;
+      margin: 0 auto 28px;
+      text-align: left;
+    }
+    .esk-terminal .prompt {
+      color: var(--text-tertiary);
+      user-select: none;
+    }
+    .esk-terminal .out-ok {
+      color: var(--text-secondary);
+    }
+    .esk-terminal .out-warn {
+      color: var(--color-warning);
+    }
+    .esk-terminal .out-label {
+      color: var(--color-primary);
+    }
+    .esk-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .esk-section h2 {
+      margin-bottom: 16px;
+    }
+    .esk-desc {
+      color: var(--text-secondary);
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .esk-problem-body {
+      max-width: var(--max-width-prose);
+    }
+    .esk-problem-body p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1em;
+    }
+    .esk-problem-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Feature cards (3-col) */
+    .esk-features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .esk-feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .esk-feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 10px;
+      font-size: 1.0625rem;
+    }
+    .esk-feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Code caption */
+    .esk-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: -12px;
+      margin-bottom: 0;
+      max-width: var(--max-width-prose);
+      line-height: 1.6;
+    }
+
+    /* Waitlist CTA block */
+    .esk-waitlist {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .esk-waitlist h2 {
+      margin-bottom: 12px;
+    }
+    .esk-waitlist p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 640px) {
+      .esk-hero {
+        padding-bottom: 56px;
+      }
+      .esk-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 639px) {
+      .hero.esk-hero {
+        padding-top: 48px;
+      }
+      .esk-terminal code {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .esk-section {
+        padding: 0 16px 48px;
+      }
+      .esk-waitlist {
+        margin: 0 16px 48px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero esk-hero">
+      <p class="esk-breadcrumb">
+        <a href="/">ckmtools</a> /
+        <a href="/envscan/">envscan</a> /
+        for Kubernetes
+      </p>
+      <h1>envscan for Kubernetes</h1>
+      <p class="tagline">A Pod that references <code>process.env.DATABASE_URL</code> crashes at runtime if that var isn't in your ConfigMap or Secret — not at build time, not at deploy time. envscan finds every <code>process.env</code> reference in your source and flags the ones missing from <code>.env.example</code>, before <code>kubectl apply</code>.</p>
+
+      <pre class="esk-terminal"><code><span class="prompt">$</span> envscan scan .
+<span class="out-label">Found 11 environment variables:</span>
+<span class="out-ok">  DATABASE_URL     type: url     src/db.ts:12</span>
+<span class="out-ok">  PORT             type: number  src/server.ts:5</span>
+<span class="out-ok">  JWT_SECRET       type: secret  src/auth.ts:8</span>
+<span class="out-ok">  REDIS_URL        type: url     src/cache.ts:3</span>
+<span class="out-ok">  K8S_NAMESPACE    type: string  src/metrics.ts:21</span>
+<span class="out-ok">  NODE_ENV         type: string  src/config.ts:2</span>
+<span class="out-ok">  SMTP_HOST        type: string  src/mailer.ts:15</span>
+<span class="out-ok">  SMTP_PORT        type: number  src/mailer.ts:16</span>
+<span class="out-ok">  SENTRY_DSN       type: url     src/errors.ts:4</span>
+<span class="out-ok">  API_RATE_LIMIT   type: number  src/middleware.ts:9</span>
+<span class="out-ok">  LOG_LEVEL        type: string  src/logger.ts:7</span>
+
+<span class="out-warn">Missing from .env.example: JWT_SECRET, REDIS_URL, SENTRY_DSN (3/11 undocumented)</span>
+<span class="out-warn">Exit code: 1</span></code></pre>
+
+      <div style="margin-top: 4px;">
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the waitlist</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:8px 0 0;">Free — we'll email you when it launches</p>
+      </div>
+    </section>
+
+    <!-- The problem -->
+    <section class="esk-section" aria-label="Why Kubernetes deployments break on missing env vars">
+      <h2>Why Kubernetes deployments break on missing env vars</h2>
+      <div class="esk-problem-body">
+        <p>In Kubernetes, env vars come from multiple places: <code>env:</code> blocks in pod specs, <code>envFrom: configMapRef</code>, <code>envFrom: secretRef</code>, and values injected by the cluster itself. None of these automatically match what your Node.js code calls <code>process.env</code>.</p>
+        <p>When a required var is missing from a ConfigMap or Secret, the Pod starts, hits the missing var at runtime, and crashes — <code>CrashLoopBackOff</code>. The error is often a null reference or "Cannot read properties of undefined", not "missing env var".</p>
+        <p>The fix is preventing the mismatch: your code, your ConfigMap, and your <code>.env.example</code> should list the same vars. envscan scans source to build the authoritative list.</p>
+        <p>Add <code>envscan scan . --fail-on-undocumented</code> to your CI pipeline and fail fast before any image is built.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="esk-section" aria-label="What envscan finds in Kubernetes projects">
+      <h2>What envscan finds</h2>
+      <div class="esk-features-grid">
+        <div class="esk-feature-card">
+          <h3>Source file scanning</h3>
+          <p>Parses every <code>.js</code> and <code>.ts</code> file for <code>process.env.VAR_NAME</code> references. Infers type from naming conventions: <code>_PORT</code> &rarr; number, <code>_SECRET</code> / <code>_KEY</code> / <code>_TOKEN</code> &rarr; secret (redacted in <code>.env.example</code>), <code>_URL</code> &rarr; url, everything else &rarr; string.</p>
+        </div>
+        <div class="esk-feature-card">
+          <h3>.env.example generation</h3>
+          <p>Generates a documented <code>.env.example</code> with a comment for each var showing which file and line uses it. Secret vars are redacted (<code>JWT_SECRET=***</code>). Run it once to create the file, then in CI to verify new vars are documented.</p>
+        </div>
+        <div class="esk-feature-card">
+          <h3>CI exit code</h3>
+          <p>Returns exit code 1 when undocumented vars are found. Wire into your Dockerfile build or CI pipeline — if a developer adds <code>process.env.NEW_SECRET</code> without updating <code>.env.example</code>, the build fails with a clear diff.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Kubernetes workflow -->
+    <section class="esk-section" aria-label="Add it to your deployment pipeline">
+      <h2>Add it to your deployment pipeline</h2>
+      <pre><code><span class="tl-cmt"># .github/workflows/deploy.yml</span>
+<span class="tl-str">name</span>: Deploy
+<span class="tl-str">on</span>: [push]
+<span class="tl-str">jobs</span>:
+  <span class="tl-str">env-check</span>:
+    <span class="tl-str">runs-on</span>: ubuntu-latest
+    <span class="tl-str">steps</span>:
+      - <span class="tl-str">uses</span>: actions/checkout@v4
+      - <span class="tl-str">uses</span>: actions/setup-node@v4
+        <span class="tl-str">with</span>:
+          <span class="tl-str">node-version</span>: <span class="tl-str">'20'</span>
+      - <span class="tl-str">name</span>: Check env var documentation
+        <span class="tl-str">run</span>: npx envscan scan . --fail-on-undocumented
+      - <span class="tl-str">name</span>: Build and push image
+        <span class="tl-str">if</span>: success()
+        <span class="tl-str">run</span>: |
+          docker build -t myapp:${{ github.sha }} .
+          docker push myapp:${{ github.sha }}
+      - <span class="tl-str">name</span>: Deploy to Kubernetes
+        <span class="tl-str">if</span>: success()
+        <span class="tl-str">run</span>: kubectl set image deployment/myapp myapp=myapp:${{ github.sha }}</code></pre>
+      <p class="esk-code-caption">envscan runs before the Docker build. If any <code>process.env</code> reference is missing from <code>.env.example</code>, the pipeline stops — before the image is built and before <code>kubectl apply</code> runs.</p>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section class="esk-section" aria-label="Join the waitlist" id="waitlist">
+      <div class="esk-waitlist">
+        <h2>Join the waitlist</h2>
+        <p>envscan is in development. Join the waitlist and we'll email you when it's ready. Free tier planned: scan unlimited repos, GitHub Actions CI check, ConfigMap diff output.</p>
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Notify Me When It's Ready</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">Free — no credit card required</p>
+      </div>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 32px;">
+      <a href="/envscan/" style="color:#00E5A0;">&larr; Back to envscan overview</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>
