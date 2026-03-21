@@ -318,6 +318,44 @@
     /* No JS fallback: show all tab panels */
     .no-js .tab-panel { display: block; }
     .no-js .tab-bar { display: none; }
+
+    /* Waitlist form */
+    .wl-form { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .wl-row { display: flex; gap: 8px; width: 100%; max-width: 400px; }
+    .wl-row input[type="email"] {
+      flex: 1;
+      padding: 11px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      outline: none;
+      min-width: 0;
+    }
+    .wl-row input[type="email"]:focus { border-color: var(--color-primary); }
+    .wl-row button[type="submit"] {
+      background: var(--color-primary);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      padding: 11px 20px;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .wl-row button[type="submit"]:hover { background: var(--color-primary-hover); }
+    .wl-row button[type="submit"]:disabled { opacity: 0.7; cursor: not-allowed; }
+    .wl-subtext { color: var(--text-tertiary); font-size: 0.8rem; margin: 0; }
+    .wl-thanks { text-align: center; }
+    @media (max-width: 420px) {
+      .wl-row { flex-direction: column; }
+      .wl-row button[type="submit"] { width: 100%; }
+    }
   </style>
   <script type="application/ld+json">
   {
@@ -373,10 +411,19 @@
   -H "X-API-Key: your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"text": "Your text here..."}'</code></pre>
-      <div class="hero-actions">
-        <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Get Early Access</a>
-        <a href="#reference" class="btn-outline">API Reference</a>
+      <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)">
+        <div class="wl-row">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Get Early Access</button>
+        </div>
+        <p class="wl-subtext">$0 — no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;margin-top:4px;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
       </div>
+      <p style="margin-top:16px;"><a href="#reference" class="btn-outline" style="margin-left:0;">API Reference</a></p>
+      <p style="margin-top:12px;font-size:0.875rem;"><a href="/api/demo/" style="color:var(--color-primary);">See live demo &rarr;</a></p>
     </section>
 
     <!-- Features -->
@@ -573,8 +620,17 @@ df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['lab
     <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
       <p style="color:#8B949E;margin:0 0 24px;">No model to deploy. No GPU to manage. Drop TextLens into your data pipeline in 5 minutes — 1,000 free requests, no credit card.</p>
-      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
-      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+      <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Get Early Access</button>
+        </div>
+        <p class="wl-subtext">$0 — no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
     </section>
 
     <!-- Pricing -->
@@ -628,8 +684,19 @@ df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['lab
 
     <!-- Free tier signup -->
     <section id="subscribe-free" style="max-width:960px;margin:48px auto;padding:0 24px;text-align:center;">
-      <h2>Get a Free API Key</h2>
-      <p style="color:#8B949E">Email <a href="mailto:agent@ckmtools.dev" style="color:#00E5A0">agent@ckmtools.dev</a> with subject "Free API Key" to receive your key (1,000 requests/month).</p>
+      <h2>Get Early Access</h2>
+      <p style="color:#8B949E;margin-bottom:24px;">Join the waitlist to be first to receive a free API key (1,000 requests/month) at launch.</p>
+      <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Join Waitlist</button>
+        </div>
+        <p class="wl-subtext">$0 — no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
     </section>
 
     <!-- API Reference -->
@@ -675,6 +742,26 @@ df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['lab
   </footer>
 
   <script>
+    function submitWaitlist(e, form) {
+      e.preventDefault();
+      var email = form.querySelector('input[type="email"]').value;
+      var product = form.dataset.product;
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+
+      function showThanks() {
+        document.querySelectorAll('.wl-form').forEach(function(f) { f.style.display = 'none'; });
+        document.querySelectorAll('.wl-thanks').forEach(function(t) { t.style.display = 'block'; });
+      }
+
+      fetch('https://formsubmit.co/ajax/agent@ckmtools.dev', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({email: email, _subject: 'Waitlist: ' + product, _captcha: 'false'})
+      }).then(showThanks).catch(showThanks);
+    }
+
     document.body.classList.remove('no-js');
     document.querySelectorAll('.tab-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {

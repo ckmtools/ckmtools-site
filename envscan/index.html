@@ -251,6 +251,44 @@
       margin-top: 12px;
     }
 
+    /* Waitlist form */
+    .wl-form { display: flex; flex-direction: column; align-items: center; gap: 10px; margin-bottom: 24px; }
+    .wl-row { display: flex; gap: 8px; width: 100%; max-width: 400px; }
+    .wl-row input[type="email"] {
+      flex: 1;
+      padding: 11px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      outline: none;
+      min-width: 0;
+    }
+    .wl-row input[type="email"]:focus { border-color: var(--color-primary); }
+    .wl-row button[type="submit"] {
+      background: var(--color-primary);
+      color: var(--bg);
+      border: none;
+      border-radius: 6px;
+      padding: 11px 20px;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .wl-row button[type="submit"]:hover { background: var(--color-primary-hover); }
+    .wl-row button[type="submit"]:disabled { opacity: 0.7; cursor: not-allowed; }
+    .wl-subtext { color: var(--text-tertiary); font-size: 0.8rem; margin: 0; }
+    .wl-thanks { text-align: center; margin-bottom: 24px; }
+    @media (max-width: 420px) {
+      .wl-row { flex-direction: column; }
+      .wl-row button[type="submit"] { width: 100%; }
+    }
+
     @media (min-width: 640px) {
       .es-hero {
         padding-bottom: 56px;
@@ -307,7 +345,17 @@
       <p class="tagline">Reads your code. Knows which env vars you need.</p>
       <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96 npm downloads/week · 6 GitHub stars</p>
 
-      <pre class="es-install"><code><span style="color:#8B949E"># launching soon -- join the waitlist above</span></code></pre>
+      <form class="wl-form" data-product="envscan" onsubmit="submitWaitlist(event,this)">
+        <div class="wl-row">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Get Early Access</button>
+        </div>
+        <p class="wl-subtext">$0 — no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
 
       <pre class="es-quickstart"><code><span class="tl-cmt"># discover all process.env references</span>
 <span class="prompt">$</span> envscan scan
@@ -318,10 +366,6 @@
       <div class="es-badge-row" aria-label="Package badges">
         <img src="https://img.shields.io/badge/status-coming%20soon-00E5A0?style=flat" alt="coming soon" width="108" height="20">
         <img src="https://img.shields.io/badge/license-MIT-00E5A0?style=flat" alt="MIT license" width="78" height="20">
-      </div>
-      <div style="margin-top:24px;">
-        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
-        <p style="color:#484F58;font-size:0.8rem;margin:8px 0 0;">$0 — no credit card required</p>
       </div>
     </section>
 
@@ -414,15 +458,30 @@ envscan scan --verbose</code></pre>
       Using Docker? <a href="/envscan/for-docker/" style="color:#00E5A0;">See Docker-specific examples &rarr;</a>
     </p>
     <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
+      Using Node.js? <a href="/envscan/for-node/" style="color:#00E5A0;">See Node.js-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
       Using Kubernetes? <a href="/envscan/for-kubernetes/" style="color:#00E5A0;">See K8s-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
+      Using GitHub Actions? <a href="/envscan/for-github-actions/" style="color:#00E5A0;">See CI/CD-specific examples &rarr;</a>
     </p>
 
     <!-- Waitlist -->
     <section style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
-      <p style="color:#8B949E;margin:0 0 24px;">envscan is in development. Join the waitlist to get notified at launch — no charge, cancel any time.</p>
-      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
-      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 — no credit card required</p>
+      <p style="color:#8B949E;margin:0 0 24px;">envscan is in development. Join the waitlist to get notified at launch — no charge, no credit card.</p>
+      <form class="wl-form" data-product="envscan" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Get Early Access</button>
+        </div>
+        <p class="wl-subtext">$0 — no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
     </section>
 
     <!-- Pricing -->
@@ -487,7 +546,18 @@ envscan scan --verbose</code></pre>
     <!-- CTA -->
     <section class="es-section es-cta" aria-label="Get started">
       <h2>Get started</h2>
-      <pre class="es-install"><code><span style="color:#8B949E"># launching soon -- join the waitlist above</span></code></pre>
+      <p style="color:var(--text-secondary);margin:0 0 20px;">envscan launches soon. Join the waitlist and be first to know.</p>
+      <form class="wl-form" data-product="envscan" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Join Waitlist</button>
+        </div>
+        <p class="wl-subtext">$0 — no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
       <div class="link-row es-links">
         <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
       </div>
@@ -497,5 +567,27 @@ envscan scan --verbose</code></pre>
   <footer class="site-footer">
     <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
   </footer>
+
+  <script>
+    function submitWaitlist(e, form) {
+      e.preventDefault();
+      var email = form.querySelector('input[type="email"]').value;
+      var product = form.dataset.product;
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+
+      function showThanks() {
+        document.querySelectorAll('.wl-form').forEach(function(f) { f.style.display = 'none'; });
+        document.querySelectorAll('.wl-thanks').forEach(function(t) { t.style.display = 'block'; });
+      }
+
+      fetch('https://formsubmit.co/ajax/agent@ckmtools.dev', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({email: email, _subject: 'Waitlist: ' + product, _captcha: 'false'})
+      }).then(showThanks).catch(showThanks);
+    }
+  </script>
 </body>
 </html>
