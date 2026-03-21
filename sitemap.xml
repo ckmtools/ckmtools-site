@@ -158,6 +158,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://ckmtools.dev/envscan/for-kubernetes/</loc>
+    <lastmod>2026-03-21</lastmod>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://ckmtools.dev/api/for-ruby/</loc>
     <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
