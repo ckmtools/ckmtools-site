@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Developer tools that do one thing well. Open source npm packages and CLI tools.">
+  <meta name="description" content="Developer tools for text analysis, NLP, and data engineering. TextLens API: readability, sentiment, keywords, and SEO scoring in one REST endpoint.">
   <title>ckmtools — Small, sharp tools for developers who ship</title>
   <meta property="og:type" content="website">
   <meta property="og:title" content="ckmtools — Small, sharp tools for developers who ship">
-  <meta property="og:description" content="Developer tools that do one thing well. Open source npm packages and CLI tools.">
+  <meta property="og:description" content="Developer tools for text analysis, NLP, and data engineering. TextLens API: readability, sentiment, keywords, and SEO scoring in one REST endpoint.">
   <meta property="og:url" content="https://ckmtools.dev/">
   <meta property="og:site_name" content="ckmtools">
   <meta property="og:image" content="https://ckmtools.dev/assets/og-image.png">
@@ -60,11 +60,35 @@
   <main id="main">
     <section class="hero">
       <h1>Small, sharp tools for developers who ship.</h1>
-      <p class="tagline">Open source npm packages and CLI tools. Zero dependencies. No config required. Works out of the box.</p>
+      <p class="tagline">Text analysis, NLP, and developer utilities. REST APIs and npm packages. Zero dependencies. Works out of the box.</p>
     </section>
 
     <section class="products" aria-label="Products">
       <h2>Products</h2>
+
+      <article class="product-card product-card--featured">
+        <div class="spotlight-badge">&#9733; Featured at DataTalks.Club OSS Spotlight</div>
+        <h2><a href="/api/">TextLens API</a></h2>
+        <p class="product-description">Hosted text analysis API. Readability, sentiment, keywords, and SEO scoring via a single REST endpoint. Works in Python, Ruby, Go, PHP — any language.</p>
+
+        <pre><code><span class="install-cmd"><span class="prompt">$</span> curl -X POST https://api.ckmtools.dev/v1/analyze \</span>
+  -H "X-API-Key: your_key" \
+  -d '{"text": "Your text here..."}'</code></pre>
+
+        <ul class="features" aria-label="Features">
+          <li>Works in Python, Ruby, Go, PHP</li>
+          <li>8 readability formulas</li>
+          <li>Sentiment + keyword analysis</li>
+          <li>SEO scoring</li>
+          <li>Free tier (1K req/mo)</li>
+          <li>Sub-50ms response times</li>
+        </ul>
+
+        <div class="link-row">
+          <a href="/api/" class="btn-primary">Get Early Access</a>
+          <a href="/api/">Docs &amp; Pricing</a>
+        </div>
+      </article>
 
       <article class="product-card">
         <h2><a href="/textlens/">textlens</a></h2>
@@ -98,6 +122,28 @@ console.log(result.readability.consensusGrade);</code></pre>
       </article>
 
       <article class="product-card">
+        <h2><a href="/envscan/">envscan</a></h2>
+        <p class="product-description">CLI tool that scans your Node.js source code to auto-discover every process.env reference, generates .env.example, and validates all vars before deploy.</p>
+
+        <pre><code><span class="install-cmd"><span class="prompt">$</span> envscan scan</span>
+Found 8 env vars across 12 files
+Validation: 7/8 set. Missing: JWT_SECRET</code></pre>
+
+        <ul class="features" aria-label="Features">
+          <li>Auto-discovers from source code</li>
+          <li>Generates .env.example</li>
+          <li>Validates before deploy</li>
+          <li>GitHub Action CI tier</li>
+          <li>Zero config</li>
+        </ul>
+
+        <div class="link-row">
+          <a href="/envscan/">Learn more</a>
+          <a href="/envscan/" class="btn-secondary">Join Waitlist</a>
+        </div>
+      </article>
+
+      <article class="product-card">
         <h2><a href="/prosescore/">ProseScore</a></h2>
         <div class="badge-row">
           <img src="https://img.shields.io/github/stars/ckmtools/prosescore?color=00E5A0" alt="GitHub stars" loading="lazy">
@@ -119,51 +165,6 @@ console.log(result.readability.consensusGrade);</code></pre>
           <a href="https://prosescore.ckmtools.dev/" rel="noopener">Try it</a>
           <a href="https://github.com/ckmtools/prosescore" rel="noopener">GitHub</a>
           <a href="/prosescore/">Details</a>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <h2><a href="/api/">TextLens API</a></h2>
-        <p class="product-description">Hosted text analysis API. Readability, sentiment, keywords, and SEO scoring via a single REST endpoint.</p>
-
-        <pre><code><span class="install-cmd"><span class="prompt">$</span> curl -X POST https://api.ckmtools.dev/v1/analyze \</span>
-  -H "X-API-Key: your_key" \
-  -d '{"text": "Your text here..."}'</code></pre>
-
-        <ul class="features" aria-label="Features">
-          <li>Works in Python, Ruby, Go, PHP</li>
-          <li>8 readability formulas</li>
-          <li>Sentiment + keyword analysis</li>
-          <li>SEO scoring</li>
-          <li>Free tier (1K req/mo)</li>
-          <li>Zero dependencies</li>
-        </ul>
-
-        <div class="link-row">
-          <a href="/api/">Docs &amp; Pricing</a>
-          <a href="/api/#pricing">Get API Key</a>
-        </div>
-      </article>
-
-      <article class="product-card">
-        <h2><a href="/envscan/">envscan</a></h2>
-        <p class="product-description">CLI tool that scans your Node.js source code to auto-discover every process.env reference, generates .env.example, and validates all vars before deploy.</p>
-
-        <pre><code><span class="install-cmd"><span class="prompt">$</span> envscan scan</span>
-Found 8 env vars across 12 files
-Validation: 7/8 set. Missing: JWT_SECRET</code></pre>
-
-        <ul class="features" aria-label="Features">
-          <li>Auto-discovers from source code</li>
-          <li>Generates .env.example</li>
-          <li>Validates before deploy</li>
-          <li>GitHub Action CI tier</li>
-          <li>Zero config</li>
-        </ul>
-
-        <div class="link-row">
-          <a href="/envscan/">Learn more</a>
-          <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="background:#00E5A0;color:#0D1117;padding:6px 16px;border-radius:4px;font-weight:600;text-decoration:none;">Join Waitlist</a>
         </div>
       </article>
     </section>
