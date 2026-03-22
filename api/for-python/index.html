@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your Python app. One POST request — no NLP libraries to install.">
-  <title>TextLens API for Python — Readability Scoring, Sentiment, Keywords via HTTP</title>
+  <meta name="description" content="Add readability scoring, sentiment analysis, and keyword extraction to your Python project with one requests call. No NLTK downloads, no spaCy models, no CUDA requirements.">
+  <title>TextLens API for Python — Text Analysis Without the NLP Dependency Stack</title>
   <meta property="og:type" content="website">
-  <meta property="og:title" content="TextLens API for Python — Readability Scoring, Sentiment, Keywords via HTTP">
-  <meta property="og:description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your Python app. One POST request — no NLP libraries to install.">
+  <meta property="og:title" content="TextLens API for Python — Text Analysis Without the NLP Dependency Stack">
+  <meta property="og:description" content="Add readability scoring, sentiment analysis, and keyword extraction to your Python project with one requests call. No NLTK downloads, no spaCy models, no CUDA requirements.">
   <meta property="og:url" content="https://ckmtools.dev/api/for-python/">
   <meta property="og:site_name" content="ckmtools">
-  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-for-python-og.png">
-  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-for-python-og.png">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-og.png">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TextLens API for Python — Readability Scoring, Sentiment, Keywords via HTTP">
-  <meta name="twitter:description" content="Add readability scoring (8 formulas), AFINN sentiment, TF-IDF keyword extraction, and SEO scoring to your Python app. One POST request — no NLP libraries to install.">
+  <meta name="twitter:title" content="TextLens API for Python — Text Analysis Without the NLP Dependency Stack">
+  <meta name="twitter:description" content="Add readability scoring, sentiment analysis, and keyword extraction to your Python project with one requests call. No NLTK downloads, no spaCy models, no CUDA requirements.">
   <link rel="canonical" href="https://ckmtools.dev/api/for-python/">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/style.css">
@@ -33,15 +33,9 @@
       margin: 0 auto 32px;
     }
     .api-hero pre {
-      max-width: 580px;
-      margin: 0 auto 24px;
+      max-width: 600px;
+      margin: 0 auto 28px;
       text-align: left;
-    }
-    .hero-social-proof {
-      color: #8B949E;
-      font-size: 0.875rem;
-      margin: 0 0 24px;
-      text-align: center;
     }
     .breadcrumb {
       font-size: 0.8125rem;
@@ -51,21 +45,46 @@
     .breadcrumb a { color: #8B949E; text-decoration: none; }
     .breadcrumb a:hover { color: #00E5A0; }
     .breadcrumb span { margin: 0 6px; }
-    .btn-cta {
-      display: inline-block;
+
+    /* Waitlist form */
+    .wl-form { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .wl-row { display: flex; gap: 8px; width: 100%; max-width: 420px; }
+    .wl-row input[type="email"] {
+      flex: 1;
+      padding: 11px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      outline: none;
+      min-width: 0;
+    }
+    .wl-row input[type="email"]:focus { border-color: var(--color-primary); }
+    .wl-row button[type="submit"] {
       background: var(--color-primary);
       color: var(--bg);
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 12px 28px;
+      border: none;
       border-radius: 6px;
-      text-decoration: none;
+      padding: 11px 20px;
+      font-family: var(--font-sans);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
       transition: background 0.15s;
     }
-    .btn-cta:hover {
-      background: var(--color-primary-hover);
-      color: var(--bg);
+    .wl-row button[type="submit"]:hover { background: var(--color-primary-hover); }
+    .wl-row button[type="submit"]:disabled { opacity: 0.7; cursor: not-allowed; }
+    .wl-subtext { color: var(--text-tertiary); font-size: 0.8rem; margin: 0; }
+    .wl-thanks { display: none; text-align: center; }
+    @media (max-width: 420px) {
+      .wl-row { flex-direction: column; }
+      .wl-row button[type="submit"] { width: 100%; }
     }
+
+    /* Sections */
     .api-section {
       max-width: var(--max-width-page);
       margin: 0 auto;
@@ -75,28 +94,22 @@
     .section-subtitle {
       color: var(--text-secondary);
       margin-bottom: 24px;
+      font-size: 0.9375rem;
     }
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
+
+    /* Pain section */
+    .pain-text {
+      max-width: var(--max-width-prose);
     }
-    .feature-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 24px;
-    }
-    .feature-card h3 {
-      color: var(--color-primary);
-      margin-bottom: 8px;
-      font-size: 1.0625rem;
-    }
-    .feature-card p {
+    .pain-text p {
       color: var(--text-secondary);
       font-size: 0.9375rem;
-      margin: 0;
+      line-height: 1.8;
+      margin: 0 0 16px;
     }
+    .pain-text p:last-child { margin-bottom: 0; }
+
+    /* Example blocks */
     .example-block {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -115,113 +128,62 @@
       font-size: 0.8125rem;
       color: var(--text-secondary);
     }
-    .example-badge {
-      margin-left: auto;
-      font-size: 0.6875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: #1f6feb33;
-      color: #58a6ff;
-      padding: 2px 8px;
-      border-radius: 4px;
-    }
     .example-block pre {
       margin: 0;
       border: none;
       border-radius: 0;
     }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-    }
-    .price-card {
+
+    /* Response block */
+    .response-block {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 28px;
-      display: flex;
-      flex-direction: column;
+      overflow: hidden;
+      max-width: var(--max-width-prose);
     }
-    .price-card.popular {
-      border-color: var(--color-primary);
-      position: relative;
+    .response-block pre {
+      margin: 0;
+      border: none;
+      border-radius: 0;
     }
-    .popular-badge {
-      position: absolute;
-      top: -1px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--color-primary);
-      color: var(--bg);
-      font-size: 0.6875rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 3px 12px;
-      border-radius: 0 0 4px 4px;
+    .response-caption {
+      padding: 12px 20px;
+      color: #8B949E;
+      font-size: 0.8125rem;
+      border-top: 1px solid var(--border);
+      line-height: 1.6;
     }
-    .price-card h3 { font-size: 1.125rem; margin-bottom: 8px; }
-    .price-amount {
-      font-size: 2rem;
-      font-weight: 700;
-      margin-bottom: 4px;
-    }
-    .price-amount span {
-      font-size: 0.9375rem;
-      font-weight: 400;
-      color: var(--text-secondary);
-    }
-    .price-details {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0 24px;
-      flex: 1;
-    }
-    .price-details li {
-      color: var(--text-secondary);
-      font-size: 0.875rem;
-      padding: 6px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .price-details li:last-child { border-bottom: none; }
-    .price-cta {
-      display: block;
+
+    /* Waitlist CTA */
+    .waitlist-cta {
+      background: #161B22;
+      border: 1px solid #30363D;
+      border-radius: 8px;
+      padding: 48px 32px;
       text-align: center;
-      padding: 10px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      text-decoration: none;
-      transition: background 0.15s, border-color 0.15s;
+      max-width: 680px;
+      margin: 0 auto 64px;
     }
-    .price-cta-primary { background: var(--color-primary); color: var(--bg); }
-    .price-cta-primary:hover { background: var(--color-primary-hover); color: var(--bg); }
-    .price-cta-outline { border: 1px solid var(--border); color: var(--text-primary); }
-    .price-cta-outline:hover { border-color: var(--color-primary); color: var(--color-primary); }
-    .why-not-lib {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-left: 3px solid var(--color-primary);
-      border-radius: 0 8px 8px 0;
-      padding: 24px;
+    .waitlist-cta h2 {
+      color: #E6EDF3;
+      margin: 0 0 12px;
     }
-    .why-not-lib p { color: var(--text-secondary); margin: 0; font-size: 0.9375rem; line-height: 1.7; }
+    .waitlist-cta > p {
+      color: #8B949E;
+      margin: 0 0 24px;
+    }
+
+    /* Responsive */
     @media (min-width: 640px) {
       .api-hero { padding: 120px 24px 80px; }
       .api-hero h1 { font-size: 2.5rem; }
-      .feature-grid { grid-template-columns: repeat(2, 1fr); }
-      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (min-width: 900px) {
-      .feature-grid { grid-template-columns: repeat(3, 1fr); }
-      .pricing-grid { grid-template-columns: repeat(4, 1fr); }
     }
     @media (max-width: 639px) {
       .api-hero { padding: 48px 20px 40px; }
       .api-hero h1 { font-size: 1.75rem; }
       .api-section { padding: 0 16px 48px; }
+      .waitlist-cta { padding: 32px 20px; margin: 0 16px 48px; }
     }
   </style>
   <script type="application/ld+json">
@@ -229,7 +191,7 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "TextLens API",
-    "description": "Readability scoring, sentiment analysis, keyword extraction, and SEO scoring via a single REST endpoint. Python-compatible, no NLP libraries required.",
+    "description": "Readability scoring, sentiment analysis, and keyword extraction for Python projects. One requests call, no NLP model dependencies.",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "url": "https://ckmtools.dev/api/for-python/",
@@ -278,239 +240,186 @@
         for Python
       </div>
       <h1>TextLens API for Python</h1>
-      <p class="tagline">Add text analysis to your Python app in 5 lines. Readability grades (8 formulas), sentiment scoring, keyword extraction, and SEO analysis — no textstat, VADER, or spaCy to install and configure.</p>
-      <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads/week</p>
+      <p class="tagline">Text quality metrics in one <code>requests</code> call. No NLTK corpus downloads, no spaCy language models, no GPU requirements. Works anywhere Python runs.</p>
+
       <pre><code>import requests
 
-result = requests.post(
-    'https://api.ckmtools.dev/v1/analyze',
-    headers={'X-API-Key': 'your_key'},
-    json={'text': 'Your content here...'}
-).json()
+response = requests.post(
+    "https://api.ckmtools.dev/v1/analyze",
+    json={"text": "Your text here"}
+)
+data = response.json()
 
-print(result['readability']['consensus_grade'])  # Grade 8
-print(result['sentiment']['label'])              # positive
-print(result['keywords']['top_5'])               # [content, quality, ...]</code></pre>
-      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" class="btn-cta">Join the Waitlist</a>
-    </section>
+print(data["readability"]["flesch_kincaid_grade"])  # 8.2
+print(data["sentiment"]["label"])                    # "positive"
+print(data["keywords"][:3])                         # ["text", "analysis", "pipeline"]</code></pre>
 
-    <!-- Features -->
-    <section class="api-section" aria-label="Features">
-      <h2>What you get</h2>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <h3>8 Readability Formulas</h3>
-          <p>Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, plus a consensus grade. No single Python library covers all eight.</p>
+      <form class="wl-form" onsubmit="submitWaitlist(event, this)">
+        <input type="hidden" name="_subject" value="TextLens API Waitlist">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
+        <div class="wl-row">
+          <input type="email" name="email" placeholder="you@company.com" required autocomplete="email" aria-label="Email address">
+          <button type="submit">Join Early Access</button>
         </div>
-        <div class="feature-card">
-          <h3>Sentiment + Keywords</h3>
-          <p>AFINN sentiment scoring for long-form content — label, score, and confidence. TF-IDF keyword extraction with relevance scores. SEO quality scoring.</p>
-        </div>
-        <div class="feature-card">
-          <h3>Zero Library Dependencies</h3>
-          <p>No NLTK corpus downloads (150MB+), no spaCy model files (12MB–560MB), no pip deps beyond <code>requests</code>. Works in serverless, CI/CD, and containers.</p>
-        </div>
+        <p class="wl-subtext">Free &mdash; we'll email you when it opens. No spam.</p>
+      </form>
+      <div class="wl-thanks" aria-live="polite">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you when access opens.</p>
       </div>
     </section>
 
-    <!-- Response example -->
-    <section class="api-section">
-      <h2>The response</h2>
-      <p class="section-subtitle">One endpoint returns everything you need:</p>
-      <pre><code>{
+    <!-- Pain section -->
+    <section class="api-section" aria-label="Why Python text analysis is painful">
+      <h2>Why Python text analysis is painful</h2>
+      <div class="pain-text">
+        <p>Installing spaCy means downloading 500MB+ language models before you can run anything. NLTK requires corpus downloads that break silently in CI &mdash; you discover the failure at runtime, not install time. Transformers need CUDA or tolerate 30-second cold starts on CPU. Every option adds a new system dependency to manage across environments, containers, and Lambda layers.</p>
+        <p>For common tasks &mdash; readability scoring, basic sentiment, keyword extraction &mdash; these dependencies are overkill. You just want a number, not a model pipeline with a Docker layer budget.</p>
+        <p>TextLens API wraps these operations in a single REST endpoint. Your code calls <code>requests.post()</code> and gets back a JSON object with all the metrics. No models installed locally, no corpus downloads, no GPU. Your CI pipeline stays lean.</p>
+        <p>Works in Jupyter notebooks, pandas pipelines, FastAPI services, AWS Lambda functions, and CI scripts equally &mdash; anywhere <code>requests</code> runs.</p>
+      </div>
+    </section>
+
+    <!-- Integration patterns -->
+    <section class="api-section" aria-label="Python integration examples">
+      <h2>Drop it into your Python workflow</h2>
+      <p class="section-subtitle">Real integration patterns for the most common Python environments.</p>
+
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">pandas pipeline</span>
+        </div>
+        <pre><code>import pandas as pd
+import requests
+
+def analyze_text(text):
+    r = requests.post("https://api.ckmtools.dev/v1/analyze", json={"text": text})
+    data = r.json()
+    return {
+        "grade_level": data["readability"]["flesch_kincaid_grade"],
+        "sentiment": data["sentiment"]["label"],
+        "keywords": ", ".join(data["keywords"][:5])
+    }
+
+df = pd.read_csv("articles.csv")
+df[["grade_level", "sentiment", "keywords"]] = df["body"].apply(
+    lambda t: pd.Series(analyze_text(t))
+)</code></pre>
+      </div>
+
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">FastAPI endpoint</span>
+        </div>
+        <pre><code>from fastapi import FastAPI
+import requests
+
+app = FastAPI()
+
+@app.post("/analyze")
+async def analyze(text: str):
+    r = requests.post("https://api.ckmtools.dev/v1/analyze", json={"text": text})
+    return r.json()</code></pre>
+      </div>
+
+      <div class="example-block">
+        <div class="example-block-header">
+          <span class="example-label">Jupyter notebook one-liner</span>
+        </div>
+        <pre><code>import requests, json
+
+text = "Paste any text here and get instant readability metrics."
+r = requests.post("https://api.ckmtools.dev/v1/analyze", json={"text": text})
+print(json.dumps(r.json(), indent=2))</code></pre>
+      </div>
+    </section>
+
+    <!-- Response shape -->
+    <section class="api-section" aria-label="API response shape">
+      <h2>What you get back</h2>
+      <p class="section-subtitle">All metrics in a single call. No parsing libraries needed &mdash; just <code>response.json()</code>.</p>
+      <div class="response-block">
+        <pre><code>{
   "readability": {
-    "fleschKincaidGrade": 8.2,
-    "gunningFog": 10.1,
-    "smog": 9.4,
-    "colemanLiau": 11.3,
-    "ari": 9.7,
-    "daleChall": 7.8,
-    "linsearWrite": 8.5,
-    "consensusGrade": "Grade 9",
-    "fleschReadingEase": { "score": 62.3, "interpretation": "Standard" }
+    "flesch_kincaid_grade": 8.2,
+    "flesch_reading_ease": 67.3,
+    "gunning_fog_index": 10.1,
+    "smog_index": 9.4,
+    "automated_readability_index": 8.7
   },
   "sentiment": {
     "label": "positive",
-    "score": 4.2,
-    "confidence": 0.71
+    "score": 0.73
   },
-  "keywords": [
-    { "word": "content", "score": 5.1, "count": 4, "density": 1.87 },
-    { "word": "readability", "score": 4.8, "count": 3, "density": 1.40 }
-  ],
-  "seo": { "score": 74, "grade": "B" },
-  "statistics": { "words": 342, "sentences": 18, "paragraphs": 5 },
-  "meta": { "processing_time_ms": 14 }
+  "keywords": ["text", "analysis", "pipeline", "readability", "api"],
+  "structure": {
+    "sentence_count": 12,
+    "avg_sentence_length": 18.4,
+    "word_count": 221,
+    "paragraph_count": 4
+  }
 }</code></pre>
-    </section>
-
-    <!-- Python patterns -->
-    <section class="api-section" id="examples">
-      <h2>Python patterns</h2>
-
-      <!-- requests -->
-      <div class="example-block">
-        <div class="example-block-header">
-          <span class="example-label">requests &mdash; most common</span>
-          <span class="example-badge">recommended</span>
-        </div>
-        <pre><code>import requests
-import os
-
-class TextLensClient:
-    BASE_URL = 'https://api.ckmtools.dev/v1/analyze'
-
-    def __init__(self, api_key: str):
-        self.session = requests.Session()
-        self.session.headers.update({'X-API-Key': api_key})
-
-    def analyze(self, text: str) -> dict:
-        response = self.session.post(self.BASE_URL, json={'text': text})
-        response.raise_for_status()
-        return response.json()
-
-client = TextLensClient(os.environ['TEXTLENS_KEY'])
-result = client.analyze(article.body)
-
-print(f"Grade: {result['readability']['consensusGrade']}")
-print(f"Sentiment: {result['sentiment']['label']}")
-print(f"SEO score: {result['seo']['score']}/100")</code></pre>
-      </div>
-
-      <!-- httpx async -->
-      <div class="example-block">
-        <div class="example-block-header">
-          <span class="example-label">httpx &mdash; async client</span>
-        </div>
-        <pre><code>import httpx
-import asyncio
-import os
-
-async def analyze_text(text: str) -> dict:
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            'https://api.ckmtools.dev/v1/analyze',
-            headers={'X-API-Key': os.environ['TEXTLENS_KEY']},
-            json={'text': text}
-        )
-        response.raise_for_status()
-        return response.json()
-
-# Analyze multiple documents concurrently
-async def batch_analyze(texts: list[str]) -> list[dict]:
-    tasks = [analyze_text(t) for t in texts]
-    return await asyncio.gather(*tasks)
-
-results = asyncio.run(batch_analyze(articles))</code></pre>
-      </div>
-
-      <!-- urllib stdlib -->
-      <div class="example-block">
-        <div class="example-block-header">
-          <span class="example-label">urllib &mdash; stdlib, zero pip deps</span>
-        </div>
-        <pre><code>import urllib.request
-import json
-import os
-
-def analyze(text: str, api_key: str) -> dict:
-    data = json.dumps({'text': text}).encode('utf-8')
-    req = urllib.request.Request(
-        'https://api.ckmtools.dev/v1/analyze',
-        data=data,
-        headers={
-            'Content-Type': 'application/json',
-            'X-API-Key': api_key,
-        },
-        method='POST'
-    )
-    with urllib.request.urlopen(req) as resp:
-        return json.loads(resp.read())
-
-result = analyze(document, os.environ['TEXTLENS_KEY'])
-print(result['readability']['consensusGrade'])</code></pre>
-      </div>
-    </section>
-
-    <!-- Why not textstat + VADER + spaCy? -->
-    <section class="api-section">
-      <h2>Why not textstat + VADER + spaCy?</h2>
-      <div class="why-not-lib">
-        <p>Three packages, three APIs, three version conflicts. <code>textstat</code> covers readability but skips sentiment. <code>vaderSentiment</code> covers sentiment but not readability. <code>spaCy</code> requires a model download (12MB to 560MB) before you can do anything. And none of them give you SEO scoring. TextLens API covers all of it in a single HTTP call — no corpus downloads, no model files, no dependency resolver headaches. The same endpoint works from Python, Ruby, Go, or any language with an HTTP client.</p>
+        <div class="response-caption">Illustrative response shape. Values computed from your input text &mdash; same input always returns the same output (deterministic, no ML).</div>
       </div>
     </section>
 
     <!-- Waitlist CTA -->
-    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
-      <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
-      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
-      <p style="color:#8B949E;margin:0 0 24px;font-size:0.875rem;">Backed by the textlens npm package &mdash; 96 downloads/week.</p>
-      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
-      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
-    </section>
-
-    <!-- Pricing -->
-    <section class="api-section" id="pricing">
-      <h2>Pricing</h2>
-      <div class="pricing-grid">
-        <div class="price-card">
-          <h3>Free</h3>
-          <div class="price-amount">$0 <span>/mo</span></div>
-          <ul class="price-details">
-            <li>1,000 requests/mo</li>
-            <li>10 req/min rate limit</li>
-            <li>5,000 char max per request</li>
-          </ul>
-          <a href="mailto:agent@ckmtools.dev?subject=Free%20API%20Key" class="price-cta price-cta-outline">Get Started</a>
+    <div class="waitlist-cta" id="waitlist">
+      <h2>Join the early access list</h2>
+      <p>TextLens API is in development. Python SDK in early access includes <code style="color:#00E5A0;">requests</code>-compatible helper methods and pandas integration examples. Join the waitlist and we'll email you when access opens.</p>
+      <form class="wl-form" onsubmit="submitWaitlist(event, this)" style="align-items:center;">
+        <input type="hidden" name="_subject" value="TextLens API Waitlist">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="you@company.com" required autocomplete="email" aria-label="Email address">
+          <button type="submit">Join Early Access</button>
         </div>
-        <div class="price-card">
-          <h3>Starter</h3>
-          <div class="price-amount">$9 <span>/mo</span></div>
-          <ul class="price-details">
-            <li>25,000 requests/mo</li>
-            <li>60 req/min rate limit</li>
-            <li>25,000 char max per request</li>
-          </ul>
-          <a href="https://buy.stripe.com/fZu28rbM6gzv4HZcOcf7i05" class="price-cta price-cta-outline">Subscribe</a>
-        </div>
-        <div class="price-card popular">
-          <div class="popular-badge">Most Popular</div>
-          <h3>Pro</h3>
-          <div class="price-amount">$29 <span>/mo</span></div>
-          <ul class="price-details">
-            <li>100,000 requests/mo</li>
-            <li>120 req/min rate limit</li>
-            <li>100,000 char max per request</li>
-          </ul>
-          <a href="https://buy.stripe.com/14A8wP17sgzv1vNbK8f7i06" class="price-cta price-cta-primary">Subscribe</a>
-        </div>
-        <div class="price-card">
-          <h3>Enterprise</h3>
-          <div class="price-amount">$99 <span>/mo</span></div>
-          <ul class="price-details">
-            <li>500,000 requests/mo</li>
-            <li>300 req/min rate limit</li>
-            <li>500,000 char max per request</li>
-          </ul>
-          <a href="https://buy.stripe.com/8x228rg2m0Ax3DVeWkf7i07" class="price-cta price-cta-outline">Subscribe</a>
-        </div>
+        <p class="wl-subtext">Free &mdash; we'll email you when it opens. No spam.</p>
+      </form>
+      <div class="wl-thanks" aria-live="polite">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you when access opens.</p>
       </div>
-    </section>
+    </div>
 
     <!-- Cross-links -->
     <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:0 0 8px;">
-      Using Ruby? <a href="/api/for-ruby/" style="color:#00E5A0;">See Ruby-specific examples &rarr;</a>
+      Data engineering pipelines? <a href="/api/for-data-engineers/" style="color:#00E5A0;">See pandas/DataFrame examples &rarr;</a>
     </p>
     <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
-      Using Go? <a href="/api/for-go/" style="color:#00E5A0;">See Go-specific examples &rarr;</a>
-    </p>
-    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
-      <a href="/api/alternatives/" style="color:#00E5A0;">See all Python library comparisons &rarr;</a>
+      <a href="/api/" style="color:#00E5A0;">&larr; Back to TextLens API</a>
     </p>
   </main>
 
   <footer class="site-footer">
     <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
   </footer>
+
+  <script>
+    function submitWaitlist(e, form) {
+      e.preventDefault();
+      var email = form.querySelector('input[type="email"]').value;
+      var btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Joining...';
+
+      function showThanks() {
+        document.querySelectorAll('.wl-form').forEach(function(f) { f.style.display = 'none'; });
+        document.querySelectorAll('.wl-thanks').forEach(function(t) { t.style.display = 'block'; });
+      }
+
+      fetch('https://formsubmit.co/ajax/agent@ckmtools.dev', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+        body: JSON.stringify({
+          email: email,
+          _subject: 'TextLens API Waitlist',
+          _captcha: 'false'
+        })
+      }).then(showThanks).catch(showThanks);
+    }
+  </script>
 </body>
 </html>

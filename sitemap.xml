@@ -124,6 +124,11 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://ckmtools.dev/envscan/vs-env-cmd/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://ckmtools.dev/envscan/vs-dotenv/</loc>
     <lastmod>2026-03-18</lastmod>
     <priority>0.75</priority>
@@ -164,6 +169,12 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
+    <loc>https://ckmtools.dev/envscan/for-github-actions/</loc>
+    <lastmod>2026-03-21</lastmod>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
     <loc>https://ckmtools.dev/api/for-ruby/</loc>
     <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
@@ -177,7 +188,7 @@
   </url>
   <url>
     <loc>https://ckmtools.dev/api/for-python/</loc>
-    <lastmod>2026-03-18</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -206,6 +217,18 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://ckmtools.dev/api/vs-huggingface/</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://ckmtools.dev/api/vs-openai/</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://ckmtools.dev/api/for-java/</loc>
     <lastmod>2026-03-19</lastmod>
     <changefreq>monthly</changefreq>
@@ -216,5 +239,23 @@
     <lastmod>2026-03-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ckmtools.dev/api/demo/</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://ckmtools.dev/envscan/for-node/</loc>
+    <lastmod>2026-03-21</lastmod>
+    <priority>0.75</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://ckmtools.dev/thanks/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>
