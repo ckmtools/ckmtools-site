@@ -342,7 +342,7 @@
     <section class="hero es-hero">
       <p class="es-breadcrumb"><a href="/">ckmtools</a> / envscan</p>
       <h1>envscan</h1>
-      <p class="tagline">Stop writing .env.example by hand. envscan scans your Node.js source code, finds every <code>process.env</code> reference, and validates all vars are set before deploy.</p>
+      <p class="tagline">Someone added <code>process.env.STRIPE_KEY</code> last week. Nobody updated <code>.env.example</code>. CI passed. Prod broke at 3am. envscan catches it before deploy — reads your source code automatically, no schema to maintain.</p>
       <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96 npm downloads/week · 6 GitHub stars</p>
 
       <pre class="es-quickstart"><code><span class="tl-cmt"># discover all process.env references</span>
@@ -355,9 +355,9 @@
         <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
         <div class="wl-row">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
-          <button type="submit">Notify me at launch</button>
+          <button type="submit">Notify me when live — it's free</button>
         </div>
-        <p class="wl-subtext">Free CLI &mdash; MIT license &mdash; no credit card</p>
+        <p class="wl-subtext">Free CLI, MIT license &mdash; no credit card, ever</p>
       </form>
       <div class="wl-thanks" style="display:none;">
         <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
@@ -465,6 +465,9 @@ envscan scan --verbose</code></pre>
     </p>
     <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
       Using GitHub Actions? <a href="/envscan/for-github-actions/" style="color:#00E5A0;">See CI/CD-specific examples &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 24px;">
+      Using Python data pipelines? <a href="/envscan/for-data-engineers/" style="color:#00E5A0;">See Airflow + dbt examples &rarr;</a>
     </p>
 
     <!-- Waitlist -->
