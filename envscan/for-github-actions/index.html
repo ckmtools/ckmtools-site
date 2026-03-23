@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>envscan for GitHub Actions — Auto-audit Environment Variables in CI/CD Workflows</title>
+  <meta name="description" content="GitHub Actions workflows are full of undocumented env vars. envscan scans your Node.js source and GitHub Actions YAML to find every process.env reference — and flags the ones missing from .env.example. Automated what took me hours.">
+  <meta name="keywords" content="github actions env vars, github actions environment variables, ci cd env audit, github secrets undocumented, envscan github actions, workflow yaml environment">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/for-github-actions/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envscan for GitHub Actions — Auto-audit Environment Variables in CI/CD Workflows">
+  <meta property="og:description" content="GitHub Actions workflows are full of undocumented env vars. envscan scans your source and workflow YAML to find all of them — automatically.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/for-github-actions/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-for-github-actions-og.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envscan for GitHub Actions — Auto-audit Environment Variables in CI/CD Workflows">
+  <meta name="twitter:description" content="GitHub Actions workflows are full of undocumented env vars. envscan finds all of them — automatically.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-for-github-actions-og.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code and GitHub Actions YAML to audit environment variables. Finds every process.env reference and flags vars missing from .env.example.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/for-github-actions/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* envscan for GitHub Actions — page-specific styles */
+    .esk-hero {
+      padding-bottom: 48px;
+    }
+    .esk-breadcrumb {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .esk-breadcrumb a {
+      color: var(--text-secondary);
+    }
+    .esk-breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+    .esk-terminal {
+      max-width: 640px;
+      margin: 0 auto 28px;
+      text-align: left;
+    }
+    .esk-terminal .prompt {
+      color: var(--text-tertiary);
+      user-select: none;
+    }
+    .esk-terminal .out-ok {
+      color: var(--text-secondary);
+    }
+    .esk-terminal .out-warn {
+      color: var(--color-warning);
+    }
+    .esk-terminal .out-label {
+      color: var(--color-primary);
+    }
+    .esk-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .esk-section h2 {
+      margin-bottom: 16px;
+    }
+    .esk-desc {
+      color: var(--text-secondary);
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .esk-problem-body {
+      max-width: var(--max-width-prose);
+    }
+    .esk-problem-body p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1em;
+    }
+    .esk-problem-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Feature cards (3-col) */
+    .esk-features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .esk-feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .esk-feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 10px;
+      font-size: 1.0625rem;
+    }
+    .esk-feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Code caption */
+    .esk-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: -12px;
+      margin-bottom: 0;
+      max-width: var(--max-width-prose);
+      line-height: 1.6;
+    }
+
+    /* Waitlist CTA block */
+    .esk-waitlist {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .esk-waitlist h2 {
+      margin-bottom: 12px;
+    }
+    .esk-waitlist p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 640px) {
+      .esk-hero {
+        padding-bottom: 56px;
+      }
+      .esk-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 639px) {
+      .hero.esk-hero {
+        padding-top: 48px;
+      }
+      .esk-terminal code {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .esk-section {
+        padding: 0 16px 48px;
+      }
+      .esk-waitlist {
+        margin: 0 16px 48px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero esk-hero">
+      <p class="esk-breadcrumb">
+        <a href="/">ckmtools</a> /
+        <a href="/envscan/">envscan</a> /
+        for GitHub Actions
+      </p>
+      <h1>envscan for GitHub Actions</h1>
+      <p class="tagline">GitHub Actions workflows reference env vars that aren&rsquo;t in <code>.env.example</code>, aren&rsquo;t in your README, and fail silently when they&rsquo;re missing. envscan scans your source files and CI YAML to find all of them &mdash; automatically.</p>
+
+      <pre class="esk-terminal"><code><span class="prompt">$</span> envscan scan --include-yaml .github/workflows/
+<span class="out-label">Found 12 environment variables:</span>
+<span class="out-ok">  DATABASE_URL     type: url     src/db.ts:12</span>
+<span class="out-ok">  PORT             type: number  src/server.ts:5</span>
+<span class="out-ok">  JWT_SECRET       type: secret  src/auth.ts:8</span>
+<span class="out-ok">  NODE_ENV         type: string  src/config.ts:2</span>
+<span class="out-ok">  GH_TOKEN         type: token   .github/workflows/deploy.yml:15</span>
+<span class="out-ok">  SLACK_WEBHOOK    type: url     .github/workflows/notify.yml:8</span>
+<span class="out-ok">  AWS_REGION       type: string  .github/workflows/deploy.yml:22</span>
+<span class="out-ok">  NPM_TOKEN        type: token   .github/workflows/publish.yml:11</span>
+<span class="out-ok">  SENTRY_DSN       type: url     src/errors.ts:4</span>
+<span class="out-ok">  API_RATE_LIMIT   type: number  src/middleware.ts:9</span>
+<span class="out-ok">  SMTP_HOST        type: string  src/mailer.ts:15</span>
+<span class="out-ok">  LOG_LEVEL        type: string  src/logger.ts:7</span>
+
+<span class="out-warn">Missing from .env.example: JWT_SECRET, GH_TOKEN, SLACK_WEBHOOK (3/12 undocumented)</span>
+<span class="out-warn">Exit code: 1</span></code></pre>
+
+      <div style="margin-top: 4px;">
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the waitlist</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:8px 0 0;">Free &mdash; we&rsquo;ll email you when it launches</p>
+      </div>
+    </section>
+
+    <!-- The problem -->
+    <section class="esk-section" aria-label="Why GitHub Actions env vars get undocumented">
+      <h2>Why GitHub Actions env vars get undocumented</h2>
+      <div class="esk-problem-body">
+        <p>Workflow YAML files reference secrets (<code>${{ secrets.GH_TOKEN }}</code>) and env vars (<code>env: PORT: ${{ env.PORT }}</code>) that live outside your codebase in GitHub&rsquo;s secrets store. Nobody updates <code>.env.example</code> when a workflow adds a new secret &mdash; it&rsquo;s a different file in a different context, maintained by different people.</p>
+        <p>When a new engineer forks the repo, runs <code>npm start</code>, and gets &ldquo;Error: JWT_SECRET is not defined&rdquo; &mdash; that&rsquo;s often a workflow secret that was never documented. The app works in CI because the secret exists in GitHub&rsquo;s store, but breaks locally because nobody wrote it down.</p>
+        <p>Manual audits mean grepping through every YAML file and every source file, then cross-referencing against <code>.env.example</code>. That takes hours in a medium-sized repo. envscan makes it one command.</p>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="esk-section" aria-label="What envscan finds in GitHub Actions projects">
+      <h2>What envscan finds</h2>
+      <div class="esk-features-grid">
+        <div class="esk-feature-card">
+          <h3>Source file scanning</h3>
+          <p>Parses every <code>.js</code> and <code>.ts</code> file for <code>process.env.VAR_NAME</code> references. Infers type from naming conventions: <code>_PORT</code> &rarr; number, <code>_SECRET</code> / <code>_KEY</code> / <code>_TOKEN</code> &rarr; secret (redacted in <code>.env.example</code>), <code>_URL</code> &rarr; url, everything else &rarr; string.</p>
+        </div>
+        <div class="esk-feature-card">
+          <h3>GitHub Actions YAML support</h3>
+          <p>When you pass <code>--include-yaml</code>, envscan also scans <code>.github/workflows/*.yml</code> for <code>${{ env.VAR }}</code>, <code>${{ secrets.VAR }}</code>, and hardcoded <code>env:</code> blocks. Maps each var back to the file and line where it&rsquo;s referenced.</p>
+        </div>
+        <div class="esk-feature-card">
+          <h3>.env.example generation</h3>
+          <p>Generates a documented <code>.env.example</code> with comments showing where each var is used. Secret and token vars are redacted so you never accidentally commit real values. Run in CI to verify new vars are documented before merge.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CI integration -->
+    <section class="esk-section" aria-label="Run it in your pipeline">
+      <h2>Run it in your pipeline</h2>
+      <pre><code><span class="tl-cmt"># .github/workflows/validate-env.yml</span>
+<span class="tl-str">name</span>: Validate environment variables
+<span class="tl-str">on</span>: [pull_request]
+<span class="tl-str">jobs</span>:
+  <span class="tl-str">envscan</span>:
+    <span class="tl-str">runs-on</span>: ubuntu-latest
+    <span class="tl-str">steps</span>:
+      - <span class="tl-str">uses</span>: actions/checkout@v4
+      - <span class="tl-str">uses</span>: actions/setup-node@v4
+        <span class="tl-str">with</span>:
+          <span class="tl-str">node-version</span>: <span class="tl-str">'20'</span>
+      - <span class="tl-str">name</span>: Audit env var documentation
+        <span class="tl-str">run</span>: npx envscan scan --include-yaml .github/workflows/ --fail-on-undocumented</code></pre>
+      <p class="esk-code-caption">Add envscan to your PR workflow. When a developer adds <code>process.env.NEW_SECRET</code> or a new workflow secret without updating <code>.env.example</code>, the check fails with a clear error &mdash; before it reaches <code>main</code>.</p>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section class="esk-section" aria-label="Join the waitlist" id="waitlist">
+      <div class="esk-waitlist">
+        <h2>Join the waitlist</h2>
+        <p>envscan is in development. Join the waitlist and we&rsquo;ll email you when it&rsquo;s ready. Free tier planned: scan unlimited repos, GitHub Actions CI check for up to 3 repos.</p>
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Notify Me When It&rsquo;s Ready</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">Free &mdash; no credit card required</p>
+      </div>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 32px;">
+      <a href="/envscan/" style="color:#00E5A0;">&larr; Back to envscan overview</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>

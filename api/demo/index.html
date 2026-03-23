@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TextLens API Live Demo — See the JSON Response</title>
+  <meta name="description" content="See the exact TextLens API JSON response for a real blog post. Readability grade, sentiment score, top keywords, and language detection — all from one POST request.">
+  <meta name="keywords" content="textlens api demo, text analysis api example, readability api json, sentiment api response, nlp api example">
+  <link rel="canonical" href="https://ckmtools.dev/api/demo/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TextLens API Live Demo — See the JSON Response">
+  <meta property="og:description" content="See the exact JSON response from the TextLens API for a real blog post. Readability, sentiment, keywords, and language in one POST request.">
+  <meta property="og:url" content="https://ckmtools.dev/api/demo/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-demo-og.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TextLens API Live Demo — See the JSON Response">
+  <meta name="twitter:description" content="Readability, sentiment, keywords, and language in one POST request. No IAM, no model downloads.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-demo-og.png">
+
+  <!-- JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "TextLens API Demo",
+    "description": "Live demo showing the TextLens API JSON response for a real blog post: readability scores, sentiment, keywords, and language detection.",
+    "url": "https://ckmtools.dev/api/demo/",
+    "author": { "@type": "Organization", "name": "ckmtools", "url": "https://ckmtools.dev" }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    .demo-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .demo-hero h1 { font-size: 2rem; margin-bottom: 12px; }
+    .demo-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+
+    .demo-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .demo-section h2 { margin-bottom: 20px; }
+
+    /* Two-panel IO layout */
+    .demo-io {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 8px;
+    }
+    .demo-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .demo-panel-label {
+      background: #0f1419;
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-family: var(--font-mono);
+    }
+    .demo-panel-label .panel-tag {
+      float: right;
+      color: var(--color-primary);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .demo-panel pre {
+      margin: 0;
+      padding: 20px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+      line-height: 1.65;
+      max-height: 520px;
+      overflow-y: auto;
+    }
+    .demo-panel pre code { background: none; padding: 0; font-size: inherit; }
+
+    /* JSON syntax colors */
+    .json-key { color: #79C0FF; }
+    .json-str { color: #A5D6FF; }
+    .json-num { color: #79C0FF; }
+    .json-bool { color: #FF7B72; }
+    .json-null { color: var(--text-tertiary); }
+    .json-accent { color: var(--color-primary); font-weight: 600; }
+
+    /* Input text panel */
+    .demo-input-text {
+      padding: 20px;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      font-family: inherit;
+    }
+
+    /* Code examples tabs */
+    .demo-code-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .demo-tab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 16px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      cursor: default;
+    }
+    .demo-tab.active {
+      background: var(--color-primary);
+      color: var(--bg);
+      border-color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    /* Note */
+    .demo-note {
+      color: var(--text-tertiary);
+      font-size: 0.8125rem;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 900px) {
+      .demo-hero h1 { font-size: 2.5rem; }
+      .demo-io { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 639px) {
+      .demo-hero { padding: 48px 20px 40px; }
+      .demo-hero h1 { font-size: 1.75rem; }
+      .demo-section { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="demo-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          demo
+        </p>
+      </nav>
+      <h1>TextLens API &mdash; Live Demo</h1>
+      <p class="tagline">One POST request returns readability grade, sentiment score, top keywords, and language detection. Here&rsquo;s the exact JSON you get back from a real 125-word JavaScript blog paragraph.</p>
+    </section>
+
+    <!-- IO Panel -->
+    <section class="demo-section" aria-label="API input and output">
+      <h2>Input &rarr; Output</h2>
+      <div class="demo-io">
+        <!-- Input -->
+        <div class="demo-panel">
+          <div class="demo-panel-label">
+            Input text
+            <span class="panel-tag">125 words &middot; JavaScript blog</span>
+          </div>
+          <div class="demo-input-text">
+            <p>JavaScript&rsquo;s asynchronous model has evolved significantly over the past decade. Callback functions gave developers their first taste of non-blocking I/O, but deeply nested callbacks quickly became difficult to maintain. Promises introduced a cleaner chaining syntax, making error handling more predictable. Then async/await arrived, letting developers write asynchronous code that reads like synchronous code — a major leap in readability.</p>
+            <p>Today, modern JavaScript runtimes handle thousands of concurrent operations without spawning additional threads, thanks to the event loop. Understanding this model is essential for any developer building APIs, real-time applications, or data pipelines in Node.js. The performance gains are substantial: a well-optimized async pipeline can process ten times more requests per second than a blocking equivalent.</p>
+          </div>
+        </div>
+
+        <!-- Output -->
+        <div class="demo-panel">
+          <div class="demo-panel-label">
+            API response
+            <span class="panel-tag">application/json &middot; ~48ms</span>
+          </div>
+          <pre><code>{
+  <span class="json-key">"readability"</span>: {
+    <span class="json-key">"flesch_reading_ease"</span>: <span class="json-accent">28.4</span>,
+    <span class="json-key">"flesch_kincaid_grade"</span>: <span class="json-accent">14.2</span>,
+    <span class="json-key">"gunning_fog"</span>: <span class="json-accent">16.1</span>,
+    <span class="json-key">"smog_index"</span>: <span class="json-accent">13.8</span>,
+    <span class="json-key">"coleman_liau"</span>: <span class="json-accent">15.3</span>,
+    <span class="json-key">"ari"</span>: <span class="json-accent">15.7</span>,
+    <span class="json-key">"dale_chall"</span>: <span class="json-accent">9.4</span>,
+    <span class="json-key">"consensus_grade"</span>: <span class="json-accent">14.3</span>,
+    <span class="json-key">"reading_time_minutes"</span>: <span class="json-num">0.6</span>
+  },
+  <span class="json-key">"sentiment"</span>: {
+    <span class="json-key">"label"</span>: <span class="json-accent">"positive"</span>,
+    <span class="json-key">"score"</span>: <span class="json-num">7</span>,
+    <span class="json-key">"confidence"</span>: <span class="json-num">0.82</span>,
+    <span class="json-key">"positive_words"</span>: [
+      <span class="json-str">"major"</span>, <span class="json-str">"well"</span>, <span class="json-str">"optimized"</span>,
+      <span class="json-str">"clean"</span>, <span class="json-str">"essential"</span>
+    ]
+  },
+  <span class="json-key">"keywords"</span>: [
+    { <span class="json-key">"term"</span>: <span class="json-str">"async pipeline"</span>, <span class="json-key">"score"</span>: <span class="json-num">0.94</span> },
+    { <span class="json-key">"term"</span>: <span class="json-str">"event loop"</span>, <span class="json-key">"score"</span>: <span class="json-num">0.88</span> },
+    { <span class="json-key">"term"</span>: <span class="json-str">"asynchronous"</span>, <span class="json-key">"score"</span>: <span class="json-num">0.85</span> },
+    { <span class="json-key">"term"</span>: <span class="json-str">"javascript"</span>, <span class="json-key">"score"</span>: <span class="json-num">0.81</span> },
+    { <span class="json-key">"term"</span>: <span class="json-str">"non-blocking"</span>, <span class="json-key">"score"</span>: <span class="json-num">0.77</span> }
+  ],
+  <span class="json-key">"language"</span>: <span class="json-str">"en"</span>,
+  <span class="json-key">"word_count"</span>: <span class="json-num">125</span>,
+  <span class="json-key">"sentence_count"</span>: <span class="json-num">7</span>
+}</code></pre>
+        </div>
+      </div>
+      <p class="demo-note">Sample response. Actual values vary by text. API in development &mdash; <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="color:var(--color-primary);">join the waitlist</a> for early access.</p>
+    </section>
+
+    <!-- Code examples -->
+    <section class="demo-section" aria-label="Code examples">
+      <h2>Make the request</h2>
+
+      <div class="demo-code-tabs">
+        <div class="demo-tab active">curl</div>
+        <div class="demo-tab">Python</div>
+      </div>
+
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>curl <span class="vs-lang-tag">Shell</span></h3>
+          <pre><code>curl -X POST https://api.textlens.dev/analyze \
+  -H <span class="tl-str">"Content-Type: application/json"</span> \
+  -H <span class="tl-str">"X-API-Key: your-key"</span> \
+  -d <span class="tl-str">'{
+    "text": "JavaScript'\''s async model...",
+    "analyses": ["readability", "sentiment", "keywords", "language"]
+  }'</span></code></pre>
+        </div>
+        <div class="vs-code-block">
+          <h3>Python <span class="vs-lang-tag">requests</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+
+response = requests.post(
+    <span class="tl-str">"https://api.textlens.dev/analyze"</span>,
+    headers={
+        <span class="tl-str">"X-API-Key"</span>: <span class="tl-str">"your-key"</span>,
+        <span class="tl-str">"Content-Type"</span>: <span class="tl-str">"application/json"</span>
+    },
+    json={
+        <span class="tl-str">"text"</span>: text,
+        <span class="tl-str">"analyses"</span>: [
+            <span class="tl-str">"readability"</span>,
+            <span class="tl-str">"sentiment"</span>,
+            <span class="tl-str">"keywords"</span>,
+            <span class="tl-str">"language"</span>
+        ]
+    }
+)
+
+result = response.json()
+print(result[<span class="tl-str">"readability"</span>][<span class="tl-str">"consensus_grade"</span>])  <span class="tl-cmt"># 14.3</span>
+print(result[<span class="tl-str">"sentiment"</span>][<span class="tl-str">"label"</span>])              <span class="tl-cmt"># positive</span>
+print(result[<span class="tl-str">"keywords"</span>][0][<span class="tl-str">"term"</span>])             <span class="tl-cmt"># async pipeline</span></code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- What each field means -->
+    <section class="demo-section" aria-label="Response field reference">
+      <h2>What each field means</h2>
+      <div class="vs-table-wrap" style="border:1px solid var(--border);border-radius:8px;overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;font-size:0.9375rem;min-width:480px;">
+          <thead>
+            <tr>
+              <th style="text-align:left;padding:12px 20px;border-bottom:2px solid var(--border);background:var(--surface);color:var(--text-secondary);font-weight:600;">Field</th>
+              <th style="text-align:left;padding:12px 20px;border-bottom:2px solid var(--border);background:var(--surface);color:var(--text-secondary);font-weight:600;">Example value</th>
+              <th style="text-align:left;padding:12px 20px;border-bottom:2px solid var(--border);background:var(--surface);color:var(--text-secondary);font-weight:600;">What it means</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);font-weight:500;color:var(--text-primary);font-family:var(--font-mono);font-size:0.875rem;">readability.consensus_grade</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--color-primary);font-family:var(--font-mono);font-size:0.875rem;">14.3</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--text-secondary);">US grade level (1&ndash;18). 14 = college sophomore. Average of 7 formulas.</td>
+            </tr>
+            <tr>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);font-weight:500;color:var(--text-primary);font-family:var(--font-mono);font-size:0.875rem;">readability.flesch_reading_ease</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--color-primary);font-family:var(--font-mono);font-size:0.875rem;">28.4</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--text-secondary);">0&ndash;100 scale (higher = easier). &lt;30 = difficult, academic text.</td>
+            </tr>
+            <tr>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);font-weight:500;color:var(--text-primary);font-family:var(--font-mono);font-size:0.875rem;">sentiment.label</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--color-primary);font-family:var(--font-mono);font-size:0.875rem;">"positive"</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--text-secondary);">AFINN-165 lexicon score bucketed into positive / neutral / negative.</td>
+            </tr>
+            <tr>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);font-weight:500;color:var(--text-primary);font-family:var(--font-mono);font-size:0.875rem;">sentiment.confidence</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--color-primary);font-family:var(--font-mono);font-size:0.875rem;">0.82</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--text-secondary);">0.0&ndash;1.0. How strongly the text signals the labeled sentiment.</td>
+            </tr>
+            <tr>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);font-weight:500;color:var(--text-primary);font-family:var(--font-mono);font-size:0.875rem;">keywords[].score</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--color-primary);font-family:var(--font-mono);font-size:0.875rem;">0.94</td>
+              <td style="padding:11px 20px;border-bottom:1px solid var(--border);color:var(--text-secondary);">TF-IDF relevance score, normalized to 0&ndash;1. Higher = more distinctive to this text.</td>
+            </tr>
+            <tr>
+              <td style="padding:11px 20px;font-weight:500;color:var(--text-primary);font-family:var(--font-mono);font-size:0.875rem;">language</td>
+              <td style="padding:11px 20px;color:var(--color-primary);font-family:var(--font-mono);font-size:0.875rem;">"en"</td>
+              <td style="padding:11px 20px;color:var(--text-secondary);">ISO 639-1 language code. Detected from text content.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get API Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist and we&rsquo;ll email you when it&rsquo;s ready. Free tier included.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; the zero-dependency npm package that powers the API.</p>
+      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the Waitlist</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">Free &mdash; no credit card required</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>
+      <a href="/api/">TextLens API</a> &middot;
+      <a href="/api/alternatives/">Alternatives</a> &middot;
+      <a href="/api/for-data-engineers/">For data engineers</a>
+    </p>
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+</body>
+</html>

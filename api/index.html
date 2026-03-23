@@ -406,12 +406,16 @@
     <section class="api-hero">
       <h1>TextLens API</h1>
       <p class="tagline">Text analysis in one API call. Readability, sentiment, keywords, SEO scoring.</p>
-      <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96 npm downloads/week · 6 GitHub stars</p>
+      <p class="hero-social-proof" style="margin:0 0 8px;">
+        <span style="background:#1a2a1a;border:1px solid #00E5A0;border-radius:4px;padding:3px 10px;font-size:0.8125rem;color:#00E5A0;font-weight:500;">&#9733; Featured in DataTalks.Club OSS Spotlight &mdash; March 2026</span>
+      </p>
+      <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads/week &middot; 6 GitHub stars</p>
       <pre><code>curl -X POST https://api.ckmtools.dev/v1/analyze \
   -H "X-API-Key: your_api_key" \
   -H "Content-Type: application/json" \
   -d '{"text": "Your text here..."}'</code></pre>
       <form id="waitlist" class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)">
+        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
         <div class="wl-row">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit">Get Early Access</button>
@@ -621,6 +625,7 @@ df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['lab
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Join the Waitlist</h2>
       <p style="color:#8B949E;margin:0 0 24px;">No model to deploy. No GPU to manage. Drop TextLens into your data pipeline in 5 minutes — 1,000 free requests, no credit card.</p>
       <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
         <div class="wl-row" style="justify-content:center;">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit">Get Early Access</button>
@@ -687,6 +692,7 @@ df['sentiment'] = df['review_text'].apply(lambda t: analyze(t)['sentiment']['lab
       <h2>Get Early Access</h2>
       <p style="color:#8B949E;margin-bottom:24px;">Join the waitlist to be first to receive a free API key (1,000 requests/month) at launch.</p>
       <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
         <div class="wl-row" style="justify-content:center;">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
           <button type="submit">Join Waitlist</button>

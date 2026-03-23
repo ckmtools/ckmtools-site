@@ -123,6 +123,22 @@
           <p>Azure Text Analytics (Azure AI Language) provides NER, opinion mining, and sentiment — but has no readability scoring. TextLens API adds 8 readability formulas and TF-IDF keywords without an Azure subscription or region-specific endpoint.</p>
           <span class="compare-cta">See full comparison &rarr;</span>
         </a>
+        <a href="/api/vs-huggingface/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>HuggingFace Inference API</h3>
+          </div>
+          <p>HuggingFace Inference API requires model selection for each task and has no readability scoring. TextLens API returns readability grades, sentiment, and keywords from one endpoint — no model to pick, no cold starts, predictable flat pricing.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
+        <a href="/api/vs-openai/" class="compare-card">
+          <div class="compare-card-header">
+            <span class="compare-label">TextLens API vs</span>
+            <h3>OpenAI API (GPT-4o)</h3>
+          </div>
+          <p>OpenAI API can estimate readability scores via prompts — but results are non-deterministic, require prompt engineering, and bill per token. TextLens API returns exact Flesch-Kincaid grades in one REST call, with a fixed JSON schema and flat per-request pricing.</p>
+          <span class="compare-cta">See full comparison &rarr;</span>
+        </a>
       </div>
     </section>
 
@@ -169,23 +185,61 @@
               <td>You need NER, opinion mining, or 120+ language detection on Azure</td>
               <td>You need readability scoring without an Azure subscription</td>
             </tr>
+            <tr>
+              <td>HuggingFace Inference API</td>
+              <td>You need transformer models (summarization, QA, translation, custom fine-tunes)</td>
+              <td>You need readability scoring, predictable latency, and flat pricing</td>
+            </tr>
+            <tr>
+              <td>OpenAI API</td>
+              <td>You need generative AI — summarization, Q&amp;A, rewriting, contextual reasoning</td>
+              <td>You need deterministic readability scores with no prompt engineering or token costs</td>
+            </tr>
           </tbody>
         </table>
       </div>
     </section>
 
     <!-- Waitlist CTA -->
-    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 24px 48px;max-width:680px;margin-left:auto;margin-right:auto;">
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
       <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
       <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
-      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96/week npm downloads.</p>
-      <a href="https://buy.stripe.com/28EcN58zUbfb3DV4hGf7i08" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
-      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 1,073 npm downloads last month.</p>
+      <form style="display:flex;flex-direction:column;gap:12px;align-items:center;" data-product="contentapi" onsubmit="submitWaitlist(event,this)">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" style="flex:1;min-width:220px;padding:10px 14px;background:#0D1117;border:1px solid #30363D;border-radius:6px;color:#E6EDF3;font-size:0.9375rem;">
+          <button type="submit" style="padding:10px 20px;background:#00E5A0;color:#0D1117;font-weight:600;font-size:0.9375rem;border:none;border-radius:6px;cursor:pointer;white-space:nowrap;">Join the Waitlist</button>
+        </div>
+        <p style="color:#484F58;font-size:0.8125rem;margin:0;">$0 &mdash; no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
   </footer>
+
+  <script>
+  function submitWaitlist(e, form) {
+    e.preventDefault();
+    const email = form.querySelector('input[type="email"]').value;
+    const product = form.dataset.product;
+    fetch('https://formsubmit.co/ajax/agent@ckmtools.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, product, _subject: 'TextLens API waitlist signup' })
+    }).then(() => {
+      form.style.display = 'none';
+      form.nextElementSibling.style.display = 'block';
+    }).catch(() => {
+      form.style.display = 'none';
+      form.nextElementSibling.style.display = 'block';
+    });
+  }
+  </script>
 </body>
 </html>

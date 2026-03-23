@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>envscan for Node.js — Find Every process.env Reference in Your Codebase</title>
+  <meta name="description" content="Node.js projects accumulate process.env references over time. New engineers miss one, get a cryptic undefined error, and spend an hour debugging. envscan scans your source to find them all and generates .env.example automatically.">
+  <meta name="keywords" content="nodejs env vars, process.env scanner, dotenv validation, env example generator, environment variables cli, envscan nodejs, node env checker">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/for-node/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="envscan for Node.js — Find Every process.env Reference in Your Codebase">
+  <meta property="og:description" content="Node.js projects accumulate process.env references over time. New engineers miss one, get a cryptic undefined error, and spend an hour debugging. envscan scans your source to find them all and generates .env.example automatically.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/for-node/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-for-node-og.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="envscan for Node.js — Find Every process.env Reference in Your Codebase">
+  <meta name="twitter:description" content="Node.js projects accumulate process.env references over time. New engineers miss one, get a cryptic undefined error, and spend an hour debugging. envscan scans your source to find them all and generates .env.example automatically.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-for-node-og.png">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code to find every process.env reference, generates a .env.example automatically, and fails CI builds when undocumented vars are added.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/for-node/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <style>
+    /* envscan for Node.js — page-specific styles */
+    .esn-hero {
+      padding-bottom: 48px;
+    }
+    .esn-breadcrumb {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+    .esn-breadcrumb a {
+      color: var(--text-secondary);
+    }
+    .esn-breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+    .esn-terminal {
+      max-width: 600px;
+      margin: 0 auto 28px;
+      text-align: left;
+    }
+    .esn-terminal .prompt {
+      color: var(--text-tertiary);
+      user-select: none;
+    }
+    .esn-terminal .out-ok {
+      color: var(--text-secondary);
+    }
+    .esn-terminal .out-warn {
+      color: var(--color-warning);
+    }
+    .esn-terminal .out-label {
+      color: var(--color-primary);
+    }
+    .esn-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .esn-section h2 {
+      margin-bottom: 16px;
+    }
+    .esn-desc {
+      color: var(--text-secondary);
+      max-width: var(--max-width-prose);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+    .esn-problem-body {
+      max-width: var(--max-width-prose);
+    }
+    .esn-problem-body p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin-bottom: 1em;
+    }
+    .esn-problem-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Feature cards (3-col) */
+    .esn-features-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    .esn-feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .esn-feature-card h3 {
+      color: var(--color-primary);
+      margin-bottom: 10px;
+      font-size: 1.0625rem;
+    }
+    .esn-feature-card p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    /* Code caption */
+    .esn-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-top: -12px;
+      margin-bottom: 0;
+      max-width: var(--max-width-prose);
+      line-height: 1.6;
+    }
+
+    /* Waitlist CTA block */
+    .esn-waitlist {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 48px;
+    }
+    .esn-waitlist h2 {
+      margin-bottom: 12px;
+    }
+    .esn-waitlist p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 640px) {
+      .esn-hero {
+        padding-bottom: 56px;
+      }
+      .esn-features-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 639px) {
+      .hero.esn-hero {
+        padding-top: 48px;
+      }
+      .esn-terminal code {
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .esn-section {
+        padding: 0 16px 48px;
+      }
+      .esn-waitlist {
+        margin: 0 16px 48px;
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/blog/">Blog</a>
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero esn-hero">
+      <p class="esn-breadcrumb">
+        <a href="/">ckmtools</a> /
+        <a href="/envscan/">envscan</a> /
+        for Node.js
+      </p>
+      <h1>envscan for Node.js</h1>
+      <p class="tagline">Node.js projects accumulate process.env references over time. New engineers fork the repo, miss a var, get a cryptic undefined error, and spend an hour debugging. envscan scans every .js and .ts file to find them all — and generates the .env.example your README forgot.</p>
+
+      <pre class="esn-terminal"><code><span class="prompt">$</span> envscan scan .
+<span class="out-label">Found 8 environment variables:</span>
+<span class="out-ok">  DATABASE_URL     type: url     src/db.js:23</span>
+<span class="out-ok">  JWT_SECRET       type: secret  src/auth.js:12</span>
+<span class="out-ok">  PORT             type: number  src/server.js:5</span>
+<span class="out-ok">  REDIS_URL        type: url     src/cache.js:8</span>
+<span class="out-ok">  SMTP_HOST        type: string  src/mailer.js:31</span>
+<span class="out-ok">  SMTP_PORT        type: number  src/mailer.js:32</span>
+<span class="out-ok">  API_RATE_LIMIT   type: number  src/middleware.js:7</span>
+<span class="out-ok">  NODE_ENV         type: string  src/config.js:2</span>
+
+<span class="out-warn">Missing from .env.example: JWT_SECRET, REDIS_URL (2/8 undocumented)</span>
+<span class="out-warn">Exit code: 1</span></code></pre>
+
+      <div style="margin-top: 4px;">
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:12px 28px;border-radius:6px;text-decoration:none;font-size:1rem;">Join the waitlist</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:8px 0 0;">Free — we'll email you when it launches</p>
+      </div>
+    </section>
+
+    <!-- The problem -->
+    <section class="esn-section" aria-label="Why Node.js projects lose track of env vars">
+      <h2>Why Node.js projects lose track of env vars</h2>
+      <div class="esn-problem-body">
+        <p>Node.js projects accumulate <code>process.env</code> references across dozens of files as the codebase grows. Each developer adds one, maybe updates the README, maybe doesn't. Six months later the <code>.env.example</code> is missing four vars and nobody knows it.</p>
+        <p>The symptom is always the same: a new engineer clones the repo, runs <code>npm start</code>, and gets "Cannot read properties of undefined (reading 'split')" or "TypeError: Invalid URL" — because <code>DATABASE_URL</code> or <code>REDIS_URL</code> wasn't in the <code>.env.example</code> they copied.</p>
+        <p><code>grep -r "process.env"</code> works once. It doesn't generate <code>.env.example</code>, it doesn't tell you which vars are missing from docs, and it doesn't fail your CI build when someone adds a new one.</p>
+        <p>envscan makes it one command: scan, report, generate. Run it as a <code>prestart</code> hook and stop debugging missing env vars in development.</p>
+      </div>
+    </section>
+
+    <!-- What it does -->
+    <section class="esn-section" aria-label="What envscan finds">
+      <h2>What envscan finds</h2>
+      <div class="esn-features-grid">
+        <div class="esn-feature-card">
+          <h3>Scans .js and .ts files</h3>
+          <p>Reads every source file for <code>process.env.VAR_NAME</code> references. Infers type from naming conventions: <code>_PORT</code> &rarr; number, <code>_SECRET</code> / <code>_KEY</code> / <code>_TOKEN</code> &rarr; secret (redacted in <code>.env.example</code> output), <code>_URL</code> &rarr; url, everything else &rarr; string. Reports file name and line number for each var.</p>
+        </div>
+        <div class="esn-feature-card">
+          <h3>Generates .env.example</h3>
+          <p>Writes a documented <code>.env.example</code> with an inline comment for each var showing which file and line uses it. Secret vars are redacted automatically (<code>JWT_SECRET=***</code>). Run once to bootstrap the file, then in CI to keep it current.</p>
+        </div>
+        <div class="esn-feature-card">
+          <h3>CI integration</h3>
+          <p>Returns exit code 1 when undocumented vars are found. Wire into npm scripts or a GitHub Action — if a developer adds <code>process.env.NEW_SECRET</code> without updating <code>.env.example</code>, the check fails with a clear diff before the PR merges.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- npm scripts section -->
+    <section class="esn-section" aria-label="Wire it into your npm scripts">
+      <h2>Wire it into your npm scripts</h2>
+      <pre><code>{
+  "scripts": {
+    "check-env": "envscan scan . --fail-on-undocumented",
+    "prestart": "npm run check-env",
+    "prebuild": "npm run check-env"
+  }
+}</code></pre>
+      <p class="esn-code-caption"><code>prestart</code> runs before <code>npm start</code>. <code>prebuild</code> runs before <code>npm run build</code>. Any <code>process.env</code> reference that isn't in <code>.env.example</code> causes an immediate exit with a clear error — before your server starts or your bundler runs.</p>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section class="esn-section" aria-label="Join the waitlist" id="waitlist">
+      <div class="esn-waitlist">
+        <h2>Join the waitlist</h2>
+        <p>envscan is in development. Join the waitlist and we'll email you when it's ready. Free tier planned: unlimited repo scans, .env.example generation, GitHub Actions CI check.</p>
+        <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Notify Me When It's Ready</a>
+        <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">Free — no credit card required</p>
+      </div>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 32px;">
+      <a href="/envscan/" style="color:#00E5A0;">&larr; Back to envscan overview</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>env-cmd vs envscan — Per-Environment Loader vs Auto-Discovery</title>
+  <meta name="description" content="env-cmd loads env vars per environment via npm scripts. envscan scans your Node.js source code to auto-discover every process.env reference and validates all vars are set before deploy — no manual list to maintain.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="env-cmd vs envscan — Per-Environment Loader vs Auto-Discovery">
+  <meta property="og:description" content="env-cmd loads env vars per environment via npm scripts. envscan scans your Node.js source code to auto-discover every process.env reference and validates all vars are set before deploy — no manual list to maintain.">
+  <meta property="og:url" content="https://ckmtools.dev/envscan/vs-env-cmd/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/envscan-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="env-cmd vs envscan — Per-Environment Loader vs Auto-Discovery">
+  <meta name="twitter:description" content="env-cmd loads env vars per environment via npm scripts. envscan scans your Node.js source code to auto-discover every process.env reference and validates all vars are set before deploy — no manual list to maintain.">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/envscan-og.png">
+  <link rel="canonical" href="https://ckmtools.dev/envscan/vs-env-cmd/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "envscan",
+    "description": "CLI tool that scans Node.js source code to auto-discover every process.env reference, generates a .env.example, and validates all vars are present before deploy.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "url": "https://ckmtools.dev/envscan/",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://github.com/ckmtools"
+    },
+    "codeRepository": "https://github.com/ckmtools",
+    "programmingLanguage": "JavaScript",
+    "license": "https://opensource.org/licenses/MIT",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 20px;
+      line-height: 1.6;
+    }
+    .vs-jump {
+      font-size: 0.875rem;
+      color: var(--color-primary);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 32px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 480px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: #3FB950;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: #484F58;
+      font-size: 1rem;
+    }
+
+    /* Code comparison */
+    .vs-code-compare {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .vs-code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 24px;
+    }
+    .vs-code-block h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    .vs-code-block pre {
+      margin: 0 0 12px;
+    }
+    .vs-code-caption {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Problem section */
+    .vs-problem-text {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.75;
+      max-width: var(--max-width-prose);
+    }
+
+    /* Together section */
+    .vs-together {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 32px;
+    }
+    .vs-together p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 16px;
+    }
+    .vs-together p:last-child {
+      margin: 0;
+    }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+      .vs-code-compare { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="https://github.com/ckmtools" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/envscan/">envscan</a> /
+          <a href="/envscan/alternatives/">Alternatives</a> /
+          env-cmd vs envscan
+        </p>
+      </nav>
+      <h1>env-cmd vs envscan</h1>
+      <p class="tagline">env-cmd injects env vars from a file when running a command. envscan reads your source code to discover which vars your app actually uses — then validates they're all set before you deploy.</p>
+      <a href="#waitlist" class="vs-jump">Jump to waitlist &darr;</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Side-by-side comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>env-cmd</th>
+              <th>envscan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Auto-discovers process.env calls</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Generates .env.example</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Validates vars present at deploy</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (exits non-zero)</td>
+            </tr>
+            <tr>
+              <td>Per-environment .env files</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (--environments flag)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (not its job)</td>
+            </tr>
+            <tr>
+              <td>CLI command</td>
+              <td>env-cmd -f .env ...</td>
+              <td>npx envscan</td>
+            </tr>
+            <tr>
+              <td>Zero config</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (must define .env file)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Workflow comparison">
+      <h2>The workflow</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>env-cmd</h3>
+          <pre><code><span class="tl-cmt"># Install: npm install env-cmd</span>
+
+<span class="tl-cmt"># package.json scripts</span>
+{
+  "scripts": {
+    "start": "env-cmd -f .env node server.js",
+    "start:staging": "env-cmd -f .env.staging node server.js",
+    "start:prod": "env-cmd -f .env.prod node server.js"
+  }
+}
+
+<span class="tl-cmt"># Loads vars from .env before running node</span>
+<span class="tl-cmt"># No validation — if a var is missing,</span>
+<span class="tl-cmt"># your app finds out at runtime</span></code></pre>
+          <p class="vs-code-caption">env-cmd reads a .env file and injects its contents as environment variables for the subprocess. You define which files to use — it doesn't know which vars your code actually needs.</p>
+        </div>
+        <div class="vs-code-block">
+          <h3>envscan</h3>
+          <pre><code><span class="tl-cmt"># Scan source code for env vars</span>
+$ envscan scan
+Found 8 environment variables:
+  DATABASE_URL    type: url     src/db.ts:12
+  PORT            type: number  src/server.ts:5
+  JWT_SECRET      type: secret  src/auth.ts:8
+
+<span class="tl-cmt"># Generate .env.example from what it finds</span>
+$ envscan generate
+<span class="tl-cmt"># Wrote .env.example (8 vars)</span>
+
+<span class="tl-cmt"># Validate before deploy</span>
+$ envscan validate
+Validation: 7/8 vars set. Missing: JWT_SECRET
+Exit code: 1</code></pre>
+          <p class="vs-code-caption">No config to write. envscan reads your .ts and .js files and knows which vars your app uses. Run validate in CI to catch missing vars before they hit production.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- The loader vs validator distinction -->
+    <section class="vs-section" aria-label="Loader vs validator">
+      <h2>They solve different problems</h2>
+      <p class="vs-problem-text">env-cmd is a <strong style="color:var(--text-primary);">loader</strong>: it takes a .env file and injects its contents before running your command. It doesn't know which env vars your application actually reads from <code>process.env</code> — it just makes a file's contents available.</p>
+      <p class="vs-problem-text" style="margin-top:16px;">envscan is a <strong style="color:var(--text-primary);">discoverer and validator</strong>: it reads your source code to find every <code>process.env.SOMETHING</code> reference, then checks whether those vars are actually set before you deploy. Missing a var? Non-zero exit code stops the deploy.</p>
+      <p class="vs-problem-text" style="margin-top:16px;">The gap env-cmd leaves: if you add <code>process.env.NEW_STRIPE_KEY</code> to your codebase but forget to add it to your .env.prod file, env-cmd has no way to warn you. That var is undefined at runtime — and you find out in production.</p>
+    </section>
+
+    <!-- Use both together -->
+    <section class="vs-section" aria-label="Use both together">
+      <h2>Use both together</h2>
+      <div class="vs-together">
+        <p>env-cmd and envscan are complementary. env-cmd loads your environment variables per-environment (dev, staging, prod). envscan validates that all the vars your code needs are actually present in whatever environment you're loading.</p>
+        <p>Add envscan to your existing env-cmd workflow as a pre-deploy check:</p>
+      </div>
+      <div class="vs-code-block" style="margin-bottom:32px;">
+        <h3>Combined workflow</h3>
+        <pre><code><span class="tl-cmt"># package.json</span>
+{
+  "scripts": {
+    "start": "env-cmd -f .env node server.js",
+    "start:prod": "env-cmd -f .env.prod node server.js",
+
+    <span class="tl-cmt">// Add envscan validate before deploying</span>
+    "predeploy": "envscan validate",
+    "deploy": "env-cmd -f .env.prod node deploy.js"
+  }
+}
+
+<span class="tl-cmt"># envscan validate runs first.</span>
+<span class="tl-cmt"># If any var is missing, deploy never runs.</span>
+<span class="tl-cmt"># env-cmd handles the actual loading.</span></code></pre>
+      </div>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use each tool">
+      <h2>When to use env-cmd</h2>
+      <div class="vs-use-grid" style="margin-bottom:40px;">
+        <div class="vs-use-card">
+          <ul>
+            <li>You need per-environment .env files (dev, staging, prod)</li>
+            <li>You want to inject env vars into npm scripts without a shell export</li>
+            <li>You're using a <code>.env-cmdrc</code> config file with multiple named environments</li>
+            <li>You want a simple loader that works cross-platform (no bash required)</li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>When to use envscan</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <ul>
+            <li>You want to know every env var your Node.js app actually reads from source code</li>
+            <li>You want .env.example generated automatically, not written by hand</li>
+            <li>You want CI to fail when a deploy is missing required env vars</li>
+            <li>You want to audit your codebase for undocumented env var references</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Back link -->
+    <div class="vs-section" style="padding-bottom:24px;">
+      <a href="/envscan/alternatives/" style="color:var(--color-primary);font-size:0.9375rem;">&larr; Back to all envscan comparisons</a>
+    </div>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:48px auto;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">envscan is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96/week npm downloads.</p>
+      <a href="https://buy.stripe.com/aFacN56rM1EB7Ub8xWf7i09" style="display:inline-block;background:#00E5A0;color:#0D1117;font-weight:600;padding:14px 32px;border-radius:6px;text-decoration:none;font-size:1rem;">Get Early Access</a>
+      <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">$0 &mdash; no credit card required</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://github.com/ckmtools" rel="noopener">ckmtools</a> &mdash; 2026</p>
+  </footer>
+</body>
+</html>

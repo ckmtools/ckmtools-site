@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="OpenAI API is general-purpose — it can attempt readability scores but results vary per call, hallucinates syllable counts, and costs scale with token length. TextLens API returns deterministic Flesch-Kincaid, SMOG, Gunning Fog, sentiment, and keywords in one predictable REST call. No prompts. No hallucinations.">
+  <title>OpenAI API vs TextLens API — Text Analysis Comparison</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="OpenAI API vs TextLens API — Text Analysis Comparison">
+  <meta property="og:description" content="OpenAI API requires prompt engineering and can hallucinate readability scores. TextLens API returns deterministic Flesch-Kincaid, sentiment, and keywords in one REST call. No prompts. No variation.">
+  <meta property="og:url" content="https://ckmtools.dev/api/vs-openai/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-openai-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-openai-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OpenAI API vs TextLens API — Text Analysis Comparison">
+  <meta name="twitter:description" content="OpenAI API requires prompt engineering and can hallucinate readability scores. TextLens API returns deterministic results in one REST call.">
+  <link rel="canonical" href="https://ckmtools.dev/api/vs-openai/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 520px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:nth-child(odd) td {
+      background: #0f1419;
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: var(--color-success);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+    }
+    .vs-advantage {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+    .vs-warn {
+      color: #E3B341;
+      font-weight: 500;
+    }
+    .vs-table-note {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: 0 0 32px;
+      padding: 0 4px;
+      line-height: 1.5;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Callout block */
+    .vs-callout {
+      background: #1A1F27;
+      border: 1px solid #30363D;
+      border-left: 3px solid #E3B341;
+      border-radius: 8px;
+      padding: 20px 24px;
+      margin-bottom: 32px;
+    }
+    .vs-callout p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 8px;
+    }
+    .vs-callout p:last-child { margin: 0; }
+
+    /* Pricing note */
+    .vs-pricing-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .vs-pricing-note p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .vs-pricing-note p:last-child {
+      margin: 0;
+    }
+    .vs-pricing-note .disclaimer {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    /* Waitlist form */
+    .wl-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .wl-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .wl-form input[type="email"] {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 14px;
+      background: #0D1117;
+      border: 1px solid #30363D;
+      border-radius: 6px;
+      color: #E6EDF3;
+      font-size: 0.9375rem;
+    }
+    .wl-form input[type="email"]::placeholder { color: #484F58; }
+    .wl-form button {
+      padding: 10px 20px;
+      background: #00E5A0;
+      color: #0D1117;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .wl-form button:hover { background: #00c98a; }
+    .wl-subtext { color: #484F58; font-size: 0.8125rem; margin: 0; }
+    .wl-thanks { display: none; }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "OpenAI API vs TextLens API — Text Analysis Comparison",
+    "description": "OpenAI API requires prompt engineering and can hallucinate readability scores. TextLens API returns deterministic Flesch-Kincaid, sentiment, and keywords in one REST call. No prompts. No variation.",
+    "url": "https://ckmtools.dev/api/vs-openai/",
+    "datePublished": "2026-03-21",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          vs OpenAI API
+        </p>
+      </nav>
+      <h1>OpenAI API vs TextLens API</h1>
+      <p class="tagline">OpenAI's API can answer questions about text — but it wasn't built to score readability. It requires prompt engineering, bills per token, and can produce different grade scores on the same article each call. TextLens API returns deterministic Flesch-Kincaid, SMOG, Gunning Fog, AFINN sentiment, and TF-IDF keywords in one REST call, with a fixed JSON schema that never changes.</p>
+      <a href="#waitlist" class="btn-cta">Join the waitlist</a>
+    </section>
+
+    <!-- Hallucination callout -->
+    <section class="vs-section" aria-label="Key limitation notice">
+      <div class="vs-callout">
+        <p><strong style="color:#E3B341;">The hallucination problem:</strong> Ask GPT-4o "what is the Flesch-Kincaid grade of this text?" and it will give you a number. Ask it again with the same text and you may get a different number. LLMs estimate syllable counts probabilistically — they don't run the formula. For content pipelines where reproducibility matters (audits, A/B testing, compliance), non-deterministic scores are a blocker.</p>
+        <p>TextLens API uses the actual Flesch-Kincaid algorithm. Same input → same output, every time.</p>
+      </div>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Feature comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>OpenAI API (GPT-4o)</th>
+              <th>TextLens API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Readability formulas</td>
+              <td><span class="vs-warn">Approximate — can vary per call</span></td>
+              <td><span class="vs-advantage">8 exact formulas (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus)</span></td>
+            </tr>
+            <tr>
+              <td>Output determinism</td>
+              <td><span class="vs-warn">Non-deterministic (even at temperature=0, output can vary)</span></td>
+              <td><span class="vs-advantage">100% deterministic — same text, same result, always</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (contextual, nuanced — but varies per call)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (AFINN score + label, consistent every call)</td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td><span class="vs-warn">&#10003; but prompt-dependent, no relevance scores</span></td>
+              <td><span class="vs-advantage">&#10003; TF-IDF with ranked relevance scores</span></td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (no built-in SEO metric)</td>
+              <td><span class="vs-advantage">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Prompt engineering required</td>
+              <td>Yes — write, test, and maintain a system prompt for each analysis type</td>
+              <td><span class="vs-advantage">No — POST text, receive structured JSON</span></td>
+            </tr>
+            <tr>
+              <td>Output schema consistency</td>
+              <td>Varies unless enforced with JSON mode + schema in every prompt</td>
+              <td><span class="vs-advantage">Fixed JSON schema, stable across versions</span></td>
+            </tr>
+            <tr>
+              <td>Latency per request</td>
+              <td>Typically 2–10+ seconds (LLM inference)</td>
+              <td><span class="vs-advantage">Sub-100ms (deterministic computation)</span></td>
+            </tr>
+            <tr>
+              <td>Pricing model</td>
+              <td>Per input + output token — cost scales with article length</td>
+              <td><span class="vs-advantage">Per request, flat monthly tiers ($9/$29/$99)</span></td>
+            </tr>
+            <tr>
+              <td>Rate limits</td>
+              <td>Tier-based TPM/RPM limits — can throttle batch jobs</td>
+              <td><span class="vs-advantage">Monthly request quota, no per-minute throttle</span></td>
+            </tr>
+            <tr>
+              <td>Multiple analyses per call</td>
+              <td>&#10007; (each analysis type requires its own prompt)</td>
+              <td><span class="vs-advantage">&#10003; (readability + sentiment + keywords in one request)</span></td>
+            </tr>
+            <tr>
+              <td>Natural language understanding</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (summarization, QA, translation, generation)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Context window</td>
+              <td>128k tokens (GPT-4o)</td>
+              <td>Optimized for document-length text (articles, reports)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vs-table-note">TextLens API uses rule-based algorithms, not LLMs. The trade-off: you lose generative capabilities (summarization, Q&amp;A, generation) but gain deterministic scores, a stable JSON schema, sub-100ms latency, and predictable per-request pricing regardless of text length.</p>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Code comparison">
+      <h2>The code</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>OpenAI API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">from</span> openai <span class="tl-kw">import</span> OpenAI
+
+client = OpenAI(api_key=OPENAI_KEY)
+
+<span class="tl-cmt"># Prompt engineering required — you maintain this</span>
+<span class="tl-cmt"># Response format may drift between model versions</span>
+response = client.chat.completions.create(
+    model=<span class="tl-str">"gpt-4o"</span>,
+    response_format={<span class="tl-str">"type"</span>: <span class="tl-str">"json_object"</span>},
+    messages=[
+        {<span class="tl-str">"role"</span>: <span class="tl-str">"system"</span>, <span class="tl-str">"content"</span>:
+            <span class="tl-str">"Return JSON: flesch_kincaid_grade, "</span>
+            <span class="tl-str">"sentiment (positive/negative/neutral), "</span>
+            <span class="tl-str">"top_keywords array"</span>},
+        {<span class="tl-str">"role"</span>: <span class="tl-str">"user"</span>, <span class="tl-str">"content"</span>: text}
+    ]
+)
+result = response.choices[0].message.content
+<span class="tl-cmt"># Cost: (prompt tokens + text tokens + output tokens)</span>
+<span class="tl-cmt"># Latency: 2–10+ seconds</span>
+<span class="tl-cmt"># Grade may vary if you call again with same text</span></code></pre>
+        </div>
+        <div class="vs-code-block">
+          <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+
+response = requests.post(
+    <span class="tl-str">'https://api.ckmtools.dev/v1/analyze'</span>,
+    headers={<span class="tl-str">'X-API-Key'</span>: TEXTLENS_KEY},
+    json={<span class="tl-str">'text'</span>: text}
+)
+result = response.json()
+
+<span class="tl-cmt"># No prompt to maintain — same call for every article</span>
+<span class="tl-cmt"># Deterministic: call twice, get identical output</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'flesch_kincaid_grade'</span>])  <span class="tl-cmt"># 9.2</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'consensus_grade'</span>])       <span class="tl-cmt"># Grade 9</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'sentiment'</span>][<span class="tl-str">'label'</span>])                 <span class="tl-cmt"># positive</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'keywords'</span>][0][<span class="tl-str">'term'</span>])                <span class="tl-cmt"># 'machine learning'</span>
+<span class="tl-cmt"># Cost: flat per-request (no token counting)</span>
+<span class="tl-cmt"># Latency: &lt;100ms</span></code></pre>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.875rem;margin:16px 0 0;line-height:1.6;">With OpenAI API you're writing NLP prompts and parsing LLM output — both need ongoing maintenance as models update. With TextLens API you're calling an analytics endpoint and reading a stable JSON schema. Same call works whether the article is 100 words or 5,000 words, with no token cost difference.</p>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use each tool">
+      <h2>Which one to use</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <h3>Use OpenAI API when:</h3>
+          <ul>
+            <li>You need generative capabilities — summarization, Q&amp;A, translation, rewriting</li>
+            <li>Your analysis tasks require deep language understanding or contextual reasoning</li>
+            <li>You're already using OpenAI for other tasks and adding text analysis as a side feature</li>
+            <li>You need semantic similarity, classification, or zero-shot labeling</li>
+            <li>Occasional non-determinism in scores is acceptable for your use case</li>
+          </ul>
+        </div>
+        <div class="vs-use-card">
+          <h3>Use TextLens API when:</h3>
+          <ul>
+            <li>You need reproducible readability grades — for audits, A/B tests, compliance, or trend tracking</li>
+            <li>You're scoring content in bulk (10k+ articles) and need predictable per-request costs</li>
+            <li>Latency matters — sub-100ms fits inside a sync pipeline, 5s LLM calls do not</li>
+            <li>You don't want to write, test, and maintain system prompts for text scoring</li>
+            <li>You need Flesch-Kincaid, SMOG, or Gunning Fog by their actual formulas</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data pipeline section -->
+    <section class="vs-section" aria-label="Data pipeline use case">
+      <h2>Text scoring in a data pipeline</h2>
+      <div class="vs-pricing-note">
+        <p>When you're scoring 10,000+ articles for content quality, you need an analytics call — not a language model call. Routing each article through GPT-4o introduces 2–10 second latency per item (vs &lt;100ms with TextLens API), token-variable costs that are hard to budget upfront, and rate limits designed for interactive use rather than batch workloads.</p>
+        <p>TextLens API fits the data pipeline pattern directly: drop it into a pandas <code style="background:#21262D;padding:2px 6px;border-radius:4px;font-size:0.85em;">apply()</code>, a dbt post-hook, or a Spark UDF. One POST per document, one JSON response, every time.</p>
+        <p class="disclaimer">See the <a href="/api/for-data-engineers/" style="color:var(--color-secondary);">TextLens API for data engineers guide</a> for integration patterns with pandas, dbt, and Apache Spark.</p>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="vs-section" aria-label="Pricing comparison">
+      <h2>Pricing</h2>
+      <div class="vs-pricing-note">
+        <p>OpenAI API pricing is per-token: input tokens + output tokens, both billed separately, both scaling with article length. The cost of a single analysis call varies based on how long the text is and how verbose your system prompt is. For variable-length content in production, this makes monthly costs difficult to forecast.</p>
+        <p>TextLens API charges per request regardless of text length. Free tier: 1,000 req/mo. Starter: $9/mo (25,000 req). Pro: $29/mo (100,000 req). Enterprise: $99/mo (500,000 req). A content pipeline running 10,000 articles through readability + sentiment + keyword scoring costs $9/mo flat — one predictable line in the budget.</p>
+        <p class="disclaimer">OpenAI pricing varies by model and changes frequently. Check <a href="https://openai.com/pricing" rel="noopener" style="color:var(--color-secondary);">openai.com/pricing</a> for current rates. TextLens API pricing is in development — join the waitlist for launch pricing.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 1,073 npm downloads last month.</p>
+      <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Join the Waitlist</button>
+        </div>
+        <p class="wl-subtext">$0 &mdash; no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 8px;">
+      Also comparing: <a href="/api/vs-huggingface/" style="color:#00E5A0;">HuggingFace Inference API vs TextLens API &rarr;</a> &nbsp;&middot;&nbsp; <a href="/api/vs-google-nlp/" style="color:#00E5A0;">Google Cloud NL API vs TextLens API &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 16px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all comparisons &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+
+  <script>
+  function submitWaitlist(e, form) {
+    e.preventDefault();
+    const email = form.querySelector('input[type="email"]').value;
+    const product = form.dataset.product;
+    fetch('https://formsubmit.co/ajax/agent@ckmtools.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, product, _subject: 'TextLens API waitlist signup' })
+    }).then(() => {
+      form.style.display = 'none';
+      form.nextElementSibling.style.display = 'block';
+    }).catch(() => {
+      form.style.display = 'none';
+      form.nextElementSibling.style.display = 'block';
+    });
+  }
+  </script>
+</body>
+</html>

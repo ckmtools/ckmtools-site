@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="HuggingFace Inference API requires model selection and returns raw logits — no readability scores. TextLens API returns Flesch-Kincaid, SMOG, Gunning Fog, AFINN sentiment, and TF-IDF keywords in one predictable REST call. No model to pick, no cold starts.">
+  <title>HuggingFace Inference API vs TextLens API — Text Analysis Comparison</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="HuggingFace Inference API vs TextLens API — Text Analysis Comparison">
+  <meta property="og:description" content="HuggingFace Inference API requires model selection and returns raw logits — no readability scores. TextLens API returns readability + sentiment + keywords in one predictable REST call. No model to pick, no cold starts.">
+  <meta property="og:url" content="https://ckmtools.dev/api/vs-huggingface/">
+  <meta property="og:site_name" content="ckmtools">
+  <meta property="og:image" content="https://ckmtools.dev/assets/images/api-vs-huggingface-og.png">
+  <meta name="twitter:image" content="https://ckmtools.dev/assets/images/api-vs-huggingface-og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="HuggingFace Inference API vs TextLens API — Text Analysis Comparison">
+  <meta name="twitter:description" content="HuggingFace Inference API requires model selection and returns raw logits — no readability scores. TextLens API returns readability + sentiment + keywords in one predictable REST call.">
+  <link rel="canonical" href="https://ckmtools.dev/api/vs-huggingface/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .vs-hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+    }
+    .vs-hero h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+    .vs-hero .tagline {
+      color: var(--text-secondary);
+      font-size: 1.0625rem;
+      max-width: var(--max-width-prose);
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: var(--color-primary);
+      color: var(--bg);
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 12px 28px;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-cta:hover {
+      background: var(--color-primary-hover);
+      color: var(--bg);
+    }
+    .vs-section {
+      max-width: var(--max-width-page);
+      margin: 0 auto;
+      padding: 0 24px 56px;
+    }
+    .vs-section h2 {
+      margin-bottom: 20px;
+    }
+
+    /* Comparison table */
+    .vs-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .vs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+      min-width: 520px;
+    }
+    .vs-table thead th {
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+      white-space: nowrap;
+    }
+    .vs-table thead th:nth-child(2) {
+      text-align: center;
+    }
+    .vs-table thead th:nth-child(3) {
+      text-align: center;
+      color: var(--color-primary);
+    }
+    .vs-table tbody td {
+      padding: 11px 20px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .vs-table tbody tr:nth-child(odd) td {
+      background: #0f1419;
+    }
+    .vs-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .vs-table tbody td:first-child {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .vs-table tbody td:nth-child(2),
+    .vs-table tbody td:nth-child(3) {
+      text-align: center;
+    }
+    .vs-check {
+      color: var(--color-success);
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .vs-no {
+      color: var(--text-tertiary);
+      font-size: 1rem;
+    }
+    .vs-advantage {
+      color: var(--color-primary);
+      font-weight: 500;
+    }
+    .vs-table-note {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin: 0 0 32px;
+      padding: 0 4px;
+      line-height: 1.5;
+    }
+
+    /* When-to-use sections */
+    .vs-use-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .vs-use-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+    }
+    .vs-use-card h3 {
+      font-size: 1.0625rem;
+      margin-bottom: 12px;
+    }
+    .vs-use-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .vs-use-card li {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      padding: 5px 0 5px 20px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .vs-use-card li::before {
+      content: "\2713";
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      top: 7px;
+    }
+
+    /* Pricing note */
+    .vs-pricing-note {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-bottom: 16px;
+    }
+    .vs-pricing-note p {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      line-height: 1.7;
+      margin: 0 0 12px;
+    }
+    .vs-pricing-note p:last-child {
+      margin: 0;
+    }
+    .vs-pricing-note .disclaimer {
+      font-size: 0.8125rem;
+      color: var(--text-tertiary);
+      font-style: italic;
+    }
+
+    /* Waitlist form */
+    .wl-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .wl-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .wl-form input[type="email"] {
+      flex: 1;
+      min-width: 220px;
+      padding: 10px 14px;
+      background: #0D1117;
+      border: 1px solid #30363D;
+      border-radius: 6px;
+      color: #E6EDF3;
+      font-size: 0.9375rem;
+    }
+    .wl-form input[type="email"]::placeholder { color: #484F58; }
+    .wl-form button {
+      padding: 10px 20px;
+      background: #00E5A0;
+      color: #0D1117;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .wl-form button:hover { background: #00c98a; }
+    .wl-subtext { color: #484F58; font-size: 0.8125rem; margin: 0; }
+    .wl-thanks { display: none; }
+
+    @media (min-width: 640px) {
+      .vs-hero { padding: 96px 24px 64px; }
+      .vs-hero h1 { font-size: 2.5rem; }
+      .vs-use-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 639px) {
+      .vs-hero { padding: 48px 20px 40px; }
+      .vs-hero h1 { font-size: 1.75rem; }
+      .vs-section { padding: 0 16px 48px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "HuggingFace Inference API vs TextLens API — Text Analysis Comparison",
+    "description": "HuggingFace Inference API requires model selection and returns raw logits — no readability scores. TextLens API returns readability + sentiment + keywords in one predictable REST call. No model to pick, no cold starts.",
+    "url": "https://ckmtools.dev/api/vs-huggingface/",
+    "datePublished": "2026-03-21",
+    "author": {
+      "@type": "Organization",
+      "name": "ckmtools",
+      "url": "https://ckmtools.dev"
+    }
+  }
+  </script>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="/" class="nav-brand" aria-label="ckmtools home">
+        <svg width="32" height="32" viewBox="0 0 512 512" aria-hidden="true">
+          <path d="M 190 155 L 105 256 L 190 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 322 155 L 407 256 L 322 357" stroke="#00E5A0" stroke-width="38" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <path d="M 256 218 L 294 256 L 256 294 L 218 256 Z" fill="#00E5A0"/>
+        </svg>
+        ckmtools
+      </a>
+      <div class="nav-links">
+        <a href="/api/#reference">Docs</a>
+        <a href="https://github.com/ckmtools/textlens" rel="noopener">GitHub</a>
+        <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="vs-hero">
+      <nav aria-label="Breadcrumb">
+        <p class="tl-breadcrumb">
+          <a href="/">ckmtools</a> /
+          <a href="/api/">TextLens API</a> /
+          vs HuggingFace Inference API
+        </p>
+      </nav>
+      <h1>HuggingFace Inference API vs TextLens API</h1>
+      <p class="tagline">HuggingFace Inference API is the fastest way to run transformer models — but it doesn't give you readability grades. If you need Flesch-Kincaid scores, SMOG, or Gunning Fog alongside sentiment, TextLens API returns all of that in one deterministic REST call, with no model to select and no cold start delays.</p>
+      <a href="#waitlist" class="btn-cta">Join the waitlist</a>
+    </section>
+
+    <!-- Comparison table -->
+    <section class="vs-section" aria-label="Feature comparison">
+      <h2>Feature comparison</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>HuggingFace Inference API</th>
+              <th>TextLens API</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Readability formulas</td>
+              <td><span class="vs-no" aria-label="None">None</span></td>
+              <td><span class="vs-advantage">8 (Flesch-Kincaid, Gunning Fog, SMOG, Coleman-Liau, ARI, Dale-Chall, Linsear Write, consensus)</span></td>
+            </tr>
+            <tr>
+              <td>Sentiment analysis</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (model-dependent output, raw logits or labels)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (AFINN score + label, consistent format)</td>
+            </tr>
+            <tr>
+              <td>Keyword extraction</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span> (requires separate model or pipeline)</td>
+              <td><span class="vs-advantage">&#10003; TF-IDF with relevance scores</span></td>
+            </tr>
+            <tr>
+              <td>SEO scoring</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+              <td><span class="vs-advantage">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td>Output format</td>
+              <td>Varies by model — raw logits, label arrays, or JSON blobs</td>
+              <td><span class="vs-advantage">Consistent JSON schema across all analyses</span></td>
+            </tr>
+            <tr>
+              <td>Model selection required</td>
+              <td>Yes — must pick a model (distilbert, roberta, etc.) per task</td>
+              <td><span class="vs-advantage">No — one endpoint, one schema</span></td>
+            </tr>
+            <tr>
+              <td>Cold start latency</td>
+              <td>Up to 20s on free tier (model loading)</td>
+              <td><span class="vs-advantage">No cold starts — deterministic computation</span></td>
+            </tr>
+            <tr>
+              <td>Free tier</td>
+              <td>Rate-limited, no guaranteed SLA</td>
+              <td><span class="vs-advantage">1,000 req/mo (no expiry)</span></td>
+            </tr>
+            <tr>
+              <td>Pricing model</td>
+              <td>Per compute minute (Inference Endpoints) or usage-based</td>
+              <td><span class="vs-advantage">Flat monthly tiers ($9/$29/$99)</span></td>
+            </tr>
+            <tr>
+              <td>Authentication</td>
+              <td>HuggingFace API token + model URL</td>
+              <td><span class="vs-advantage">X-API-Key header</span></td>
+            </tr>
+            <tr>
+              <td>SDK / library required</td>
+              <td>huggingface_hub or requests + model-specific knowledge</td>
+              <td><span class="vs-advantage">HTTP only (curl, fetch, any language)</span></td>
+            </tr>
+            <tr>
+              <td>Multiple analyses per request</td>
+              <td>&#10007; (separate API call per model/task)</td>
+              <td><span class="vs-advantage">&#10003; (readability + sentiment + keywords in one call)</span></td>
+            </tr>
+            <tr>
+              <td>Deep NLP (summarization, QA, translation)</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span> (core strength)</td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+            <tr>
+              <td>Custom model fine-tuning</td>
+              <td><span class="vs-check" aria-label="Yes">&#10003;</span></td>
+              <td><span class="vs-no" aria-label="No">&#10007;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vs-table-note">TextLens API uses rule-based algorithms (Flesch-Kincaid, AFINN, TF-IDF) — not transformer models. The trade-off: completely deterministic output, zero cold starts, and a fixed JSON schema that never changes between API versions.</p>
+    </section>
+
+    <!-- Code comparison -->
+    <section class="vs-section" aria-label="Code comparison">
+      <h2>The code</h2>
+      <div class="vs-code-compare">
+        <div class="vs-code-block">
+          <h3>HuggingFace Inference API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+
+<span class="tl-cmt"># Step 1: pick a sentiment model for your use case</span>
+<span class="tl-cmt"># Options: distilbert-base-uncased-finetuned-sst-2-english,</span>
+<span class="tl-cmt">#          cardiffnlp/twitter-roberta-base-sentiment, etc.</span>
+API_URL = <span class="tl-str">"https://api-inference.huggingface.co/models/"</span>
+         <span class="tl-str">"distilbert-base-uncased-finetuned-sst-2-english"</span>
+
+headers = {<span class="tl-str">"Authorization"</span>: <span class="tl-str">f"Bearer {HF_TOKEN}"</span>}
+
+response = requests.post(API_URL,
+    headers=headers,
+    json={<span class="tl-str">"inputs"</span>: text}
+)
+<span class="tl-cmt"># Returns: [{"label": "POSITIVE", "score": 0.9998}]</span>
+<span class="tl-cmt"># No readability data available here.</span>
+<span class="tl-cmt"># Keyword extraction requires a different model.</span>
+<span class="tl-cmt"># May return 503 if model is loading (cold start).</span></code></pre>
+        </div>
+        <div class="vs-code-block">
+          <h3>TextLens API <span class="vs-lang-tag">Python</span></h3>
+          <pre><code><span class="tl-kw">import</span> requests
+
+response = requests.post(
+    <span class="tl-str">'https://api.ckmtools.dev/v1/analyze'</span>,
+    headers={<span class="tl-str">'X-API-Key'</span>: TEXTLENS_KEY},
+    json={<span class="tl-str">'text'</span>: text}
+)
+result = response.json()
+
+<span class="tl-cmt"># Readability + sentiment + keywords in one call</span>
+<span class="tl-cmt"># Consistent schema — always the same structure</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'flesch_kincaid_grade'</span>])  <span class="tl-cmt"># 9.2</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'readability'</span>][<span class="tl-str">'consensus_grade'</span>])       <span class="tl-cmt"># Grade 9</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'sentiment'</span>][<span class="tl-str">'label'</span>])                 <span class="tl-cmt"># positive</span>
+<span class="tl-kw">print</span>(result[<span class="tl-str">'keywords'</span>][0][<span class="tl-str">'term'</span>])                <span class="tl-cmt"># 'data pipeline'</span></code></pre>
+        </div>
+      </div>
+      <p style="color:var(--text-secondary);font-size:0.875rem;margin:16px 0 0;line-height:1.6;">HuggingFace Inference API requires you to know the right model for the task — and each task (sentiment, summarization, keyword extraction) is a different model, a different URL, and potentially a different output schema. TextLens API has one endpoint, one schema, and bundles readability, sentiment, and keywords into a single request.</p>
+    </section>
+
+    <!-- When to use each -->
+    <section class="vs-section" aria-label="When to use each tool">
+      <h2>Which one to use</h2>
+      <div class="vs-use-grid">
+        <div class="vs-use-card">
+          <h3>Use HuggingFace Inference API when:</h3>
+          <ul>
+            <li>You need transformer-based deep NLP (summarization, question answering, translation)</li>
+            <li>You want to run fine-tuned or custom models without managing infrastructure</li>
+            <li>You need semantic similarity, zero-shot classification, or text generation</li>
+            <li>You're already on the HuggingFace ecosystem and comfortable with model selection</li>
+            <li>You need state-of-the-art accuracy for complex language tasks</li>
+          </ul>
+        </div>
+        <div class="vs-use-card">
+          <h3>Use TextLens API when:</h3>
+          <ul>
+            <li>You need readability grades (Flesch-Kincaid, SMOG, Gunning Fog, ARI)</li>
+            <li>You want consistent, deterministic output that never varies with model updates</li>
+            <li>You're scoring content quality in a data pipeline and need sub-100ms latency</li>
+            <li>You don't want to research or evaluate ML models for each new analysis type</li>
+            <li>You need flat-rate pricing without worrying about compute minutes or token costs</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- For data engineers section -->
+    <section class="vs-section" aria-label="Data pipeline use case">
+      <h2>Adding text quality to your data pipeline</h2>
+      <div class="vs-pricing-note">
+        <p>HuggingFace Inference API is excellent for semantic tasks — but it wasn't designed for content quality scoring in batch pipelines. Cold starts on the free tier can stall an otherwise fast pipeline. And if you want readability alongside sentiment, you need a separate model call, a separate response parse, and separate error handling.</p>
+        <p>TextLens API was designed specifically for this pattern: drop it into a pandas <code style="background:#21262D;padding:2px 6px;border-radius:4px;font-size:0.85em;">apply()</code>, a dbt post-hook, or a Spark UDF. One POST per row, one consistent JSON response. Readability, sentiment, and keyword density all arrive together.</p>
+        <p class="disclaimer">See the <a href="/api/for-data-engineers/" style="color:var(--color-secondary);">TextLens API for data engineers guide</a> for integration patterns with pandas, dbt, and Apache Spark.</p>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="vs-section" aria-label="Pricing comparison">
+      <h2>Pricing</h2>
+      <div class="vs-pricing-note">
+        <p>HuggingFace Inference API free tier is rate-limited with no guaranteed uptime. Dedicated Inference Endpoints start at pay-per-minute compute pricing — good for sustained ML workloads, harder to cost-model for sporadic usage. TextLens API charges a flat monthly rate: Free (1,000 req/mo), Starter $9/mo (25,000 req), Pro $29/mo (100,000 req), Enterprise $99/mo (500,000 req).</p>
+        <p>For a content pipeline running 10,000 articles per month through readability + sentiment + keyword checks: three HuggingFace model calls per article (30,000 calls total) at compute-minute pricing — or one TextLens API call per article (10,000 calls) at Starter tier ($9/mo flat). The math is straightforward.</p>
+        <p class="disclaimer">HuggingFace pricing varies by model, endpoint type, and compute instance. Check <a href="https://huggingface.co/pricing" rel="noopener" style="color:var(--color-secondary);">huggingface.co/pricing</a> for current rates. TextLens API is in development — join the waitlist for launch pricing.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section id="waitlist" style="background:#161B22;border:1px solid #30363D;border-radius:8px;padding:32px;text-align:center;margin:0 auto 48px;max-width:680px;">
+      <h2 style="color:#E6EDF3;margin:0 0 12px;">Get Early Access</h2>
+      <p style="color:#8B949E;margin:0 0 8px;">TextLens API is in development. Join the waitlist to get notified at launch.</p>
+      <p style="color:#8B949E;margin:0 0 24px;">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 1,073 npm downloads last month.</p>
+      <form class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)" style="align-items:center;">
+        <div class="wl-row" style="justify-content:center;">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Join the Waitlist</button>
+        </div>
+        <p class="wl-subtext">$0 &mdash; no credit card required</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
+    </section>
+
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:32px 0 8px;">
+      Also comparing: <a href="/api/vs-openai/" style="color:#00E5A0;">OpenAI API vs TextLens API &rarr;</a> &nbsp;&middot;&nbsp; <a href="/api/vs-google-nlp/" style="color:#00E5A0;">Google Cloud NL API vs TextLens API &rarr;</a> &nbsp;&middot;&nbsp; <a href="/api/vs-aws-comprehend/" style="color:#00E5A0;">AWS Comprehend vs TextLens API &rarr;</a>
+    </p>
+    <p style="text-align:center;color:#8B949E;font-size:0.875rem;margin:8px 0 16px;">
+      <a href="/api/alternatives/" style="color:#00E5A0;">See all comparisons &rarr;</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built by <a href="https://ckmtools.dev">ckmtools</a> &mdash; <a href="https://github.com/ckmtools" rel="noopener">GitHub</a> &middot; <a href="https://www.npmjs.com/~ckmtools" rel="noopener">npm</a> &middot; <a href="https://dev.to/ckmtools" rel="noopener">dev.to</a></p>
+  </footer>
+
+  <script>
+  function submitWaitlist(e, form) {
+    e.preventDefault();
+    const email = form.querySelector('input[type="email"]').value;
+    const product = form.dataset.product;
+    fetch('https://formsubmit.co/ajax/agent@ckmtools.dev', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, product, _subject: 'TextLens API waitlist signup' })
+    }).then(() => {
+      form.style.display = 'none';
+      form.nextElementSibling.style.display = 'block';
+    }).catch(() => {
+      form.style.display = 'none';
+      form.nextElementSibling.style.display = 'block';
+    });
+  }
+  </script>
+</body>
+</html>
