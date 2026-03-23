@@ -342,21 +342,8 @@
     <section class="hero es-hero">
       <p class="es-breadcrumb"><a href="/">ckmtools</a> / envscan</p>
       <h1>envscan</h1>
-      <p class="tagline">Reads your code. Knows which env vars you need.</p>
+      <p class="tagline">Stop writing .env.example by hand. envscan scans your Node.js source code, finds every <code>process.env</code> reference, and validates all vars are set before deploy.</p>
       <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> — 96 npm downloads/week · 6 GitHub stars</p>
-
-      <form class="wl-form" data-product="envscan" onsubmit="submitWaitlist(event,this)">
-        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
-        <div class="wl-row">
-          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
-          <button type="submit">Get Early Access</button>
-        </div>
-        <p class="wl-subtext">$0 — no credit card required</p>
-      </form>
-      <div class="wl-thanks" style="display:none;">
-        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
-        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
-      </div>
 
       <pre class="es-quickstart"><code><span class="tl-cmt"># discover all process.env references</span>
 <span class="prompt">$</span> envscan scan
@@ -364,8 +351,20 @@
 <span class="tl-cmt"># fail if any discovered vars are missing</span>
 <span class="prompt">$</span> envscan validate</code></pre>
 
+      <form class="wl-form" data-product="envscan" onsubmit="submitWaitlist(event,this)">
+        <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
+        <div class="wl-row">
+          <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+          <button type="submit">Notify me at launch</button>
+        </div>
+        <p class="wl-subtext">Free CLI &mdash; MIT license &mdash; no credit card</p>
+      </form>
+      <div class="wl-thanks" style="display:none;">
+        <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
+        <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
+      </div>
+
       <div class="es-badge-row" aria-label="Package badges">
-        <img src="https://img.shields.io/badge/status-coming%20soon-00E5A0?style=flat" alt="coming soon" width="108" height="20">
         <img src="https://img.shields.io/badge/license-MIT-00E5A0?style=flat" alt="MIT license" width="78" height="20">
       </div>
     </section>

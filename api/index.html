@@ -405,29 +405,29 @@
     <!-- Hero -->
     <section class="api-hero">
       <h1>TextLens API</h1>
-      <p class="tagline">Text analysis in one API call. Readability, sentiment, keywords, SEO scoring.</p>
+      <p class="tagline">Stop calling five different libraries. One endpoint returns readability scores, sentiment, keywords, and SEO signals — sub-50ms, no model hosting.</p>
       <p class="hero-social-proof" style="margin:0 0 8px;">
         <span style="background:#1a2a1a;border:1px solid #00E5A0;border-radius:4px;padding:3px 10px;font-size:0.8125rem;color:#00E5A0;font-weight:500;">&#9733; Featured in DataTalks.Club OSS Spotlight &mdash; March 2026</span>
       </p>
       <p class="hero-social-proof">From the team behind <a href="https://github.com/ckmtools/textlens" style="color:#00E5A0;">textlens</a> &mdash; 96 npm downloads/week &middot; 6 GitHub stars</p>
-      <pre><code>curl -X POST https://api.ckmtools.dev/v1/analyze \
-  -H "X-API-Key: your_api_key" \
-  -H "Content-Type: application/json" \
-  -d '{"text": "Your text here..."}'</code></pre>
       <form id="waitlist" class="wl-form" data-product="contentapi" onsubmit="submitWaitlist(event,this)">
         <input type="hidden" name="_next" value="https://ckmtools.dev/thanks/">
         <div class="wl-row">
           <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
-          <button type="submit">Get Early Access</button>
+          <button type="submit">Get Free API Key</button>
         </div>
-        <p class="wl-subtext">$0 — no credit card required</p>
+        <p class="wl-subtext">Free tier: 1,000 requests/month &mdash; no credit card</p>
       </form>
       <div class="wl-thanks" style="display:none;margin-top:4px;">
         <p style="color:#00E5A0;margin:0 0 8px;font-size:1.0625rem;">You're on the list.</p>
         <p style="color:#8B949E;font-size:0.875rem;margin:0;">We'll email you at launch.</p>
       </div>
-      <p style="margin-top:16px;"><a href="#reference" class="btn-outline" style="margin-left:0;">API Reference</a></p>
-      <p style="margin-top:12px;font-size:0.875rem;"><a href="/api/demo/" style="color:var(--color-primary);">See live demo &rarr;</a></p>
+      <p style="margin-top:12px;font-size:0.875rem;"><a href="/api/demo/" style="color:var(--color-primary);">Try the live demo &rarr;</a></p>
+      <pre style="margin-top:24px;"><code>curl -X POST https://api.ckmtools.dev/v1/analyze \
+  -H "X-API-Key: your_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{"text": "Your text here..."}'</code></pre>
+      <p style="margin-top:12px;"><a href="#reference" class="btn-outline" style="margin-left:0;">API Reference</a></p>
     </section>
 
     <!-- Features -->
