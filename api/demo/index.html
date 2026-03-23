@@ -149,6 +149,16 @@
       line-height: 1.5;
     }
 
+    .itw-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      margin-bottom: 8px;
+    }
+    @media (min-width: 640px) {
+      .itw-grid { grid-template-columns: 1fr 1fr; }
+    }
+
     @media (min-width: 900px) {
       .demo-hero h1 { font-size: 2.5rem; }
       .demo-io { grid-template-columns: 1fr 1fr; }
@@ -193,6 +203,26 @@
       </nav>
       <h1>TextLens API &mdash; Live Demo</h1>
       <p class="tagline">One POST request returns readability grade, sentiment score, top keywords, and language detection. Here&rsquo;s the exact JSON you get back from a real 125-word JavaScript blog paragraph.</p>
+    </section>
+
+    <!-- Interactive Widget -->
+    <section class="demo-section" id="try-it">
+      <h2>Try it yourself</h2>
+      <p style="color:var(--text-secondary);margin-bottom:20px;">Paste any text and see instant readability metrics — computed locally using the same algorithms as the TextLens API.</p>
+      <div class="itw-grid">
+        <div class="demo-panel">
+          <div class="demo-panel-label">Your text <span class="panel-tag" id="itw-wc"></span></div>
+          <textarea id="itw-input" placeholder="Paste any text here — a blog post, dataset card, API response..." style="width:100%;min-height:240px;background:var(--surface);color:var(--text-primary);border:none;padding:20px;font-family:inherit;font-size:0.9375rem;line-height:1.7;resize:vertical;outline:none;box-sizing:border-box;"></textarea>
+          <div style="padding:12px 20px;border-top:1px solid var(--border);">
+            <button onclick="itwAnalyze()" style="background:var(--color-primary);color:#0D1117;border:none;padding:8px 24px;border-radius:6px;font-weight:600;font-size:0.9375rem;cursor:pointer;">Analyze</button>
+          </div>
+        </div>
+        <div class="demo-panel">
+          <div class="demo-panel-label">Results <span class="panel-tag" id="itw-grade"></span></div>
+          <div id="itw-results" style="padding:20px;color:var(--text-tertiary);font-size:0.9375rem;text-align:center;padding-top:48px;">Paste text and click Analyze</div>
+        </div>
+      </div>
+      <p style="color:var(--text-tertiary);font-size:0.8125rem;margin-top:8px;">Client-side approximations. The TextLens API also provides sentiment, keyword extraction, and named entity detection.</p>
     </section>
 
     <!-- IO Panel -->
@@ -360,6 +390,55 @@ print(result[<span class="tl-str">"keywords"</span>][0][<span class="tl-str">"te
       <p style="color:#484F58;font-size:0.8rem;margin:16px 0 0;">Free &mdash; no credit card required</p>
     </section>
   </main>
+
+  <script>
+function itwSyll(w){
+  w=w.toLowerCase().replace(/[^a-z]/g,'');
+  if(w.length<=3)return 1;
+  w=w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');
+  var m=w.match(/[aeiouy]{1,2}/g);
+  return m?m.length:1;
+}
+function itwAnalyze(){
+  var text=document.getElementById('itw-input').value.trim();
+  if(!text){return;}
+  var sents=text.split(/[.!?]+/).filter(function(s){return s.trim().length>5;});
+  var words=text.match(/\b[a-zA-Z\-]+\b/g)||[];
+  var syllables=words.reduce(function(n,w){return n+itwSyll(w);},0);
+  var wc=words.length,sc=Math.max(sents.length,1);
+  var aw=wc/sc,as_=syllables/Math.max(wc,1);
+  var fkg=Math.max(0,(0.39*aw)+(11.8*as_)-15.59);
+  var fre=Math.max(0,Math.min(100,206.835-(1.015*aw)-(84.6*as_)));
+  var cx=words.filter(function(w){return itwSyll(w)>=3;}).length;
+  var fog=0.4*(aw+100*(cx/Math.max(wc,1)));
+  var rm=Math.max(1,Math.round(wc/200));
+  var gl=fkg<6?'Easy':fkg<10?'Medium':fkg<14?'Hard':'Very Hard';
+  var gc=fkg<6?'#3FB950':fkg<10?'#00E5A0':fkg<14?'#D29922':'#F85149';
+  document.getElementById('itw-wc').textContent=wc+' words';
+  document.getElementById('itw-grade').textContent=gl;
+  document.getElementById('itw-grade').style.color=gc;
+  function m(lbl,val,sub,col){
+    return '<div style="background:#0D1117;border-radius:6px;padding:14px 16px;margin-bottom:10px;">'+
+      '<div style="color:#8B949E;font-size:0.8125rem;margin-bottom:4px;">'+lbl+'</div>'+
+      '<div style="color:'+col+';font-size:1.25rem;font-weight:600;font-family:var(--font-mono);">'+val+'</div>'+
+      (sub?'<div style="color:#484F58;font-size:0.75rem;margin-top:2px;">'+sub+'</div>':'')+
+      '</div>';
+  }
+  document.getElementById('itw-results').innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+
+    m('FK Grade',fkg.toFixed(1),gl,gc)+
+    m('Reading Ease',fre.toFixed(0)+'/100',fre>60?'readable':'dense',fre>60?'#00E5A0':'#D29922')+
+    m('Gunning Fog',fog.toFixed(1),fog<8?'accessible':'complex',fog<8?'#3FB950':'#D29922')+
+    m('Avg Sentence',aw.toFixed(1)+' words','','#8B949E')+
+    m('Words',wc,'','#8B949E')+
+    m('Read time',rm+' min','','#8B949E')+
+    '</div>';
+}
+(function(){
+  var ta=document.getElementById('itw-input');
+  if(ta)ta.addEventListener('paste',function(){setTimeout(itwAnalyze,60);});
+})();
+</script>
 
   <footer class="site-footer">
     <p>
